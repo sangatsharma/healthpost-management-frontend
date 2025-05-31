@@ -7,9 +7,9 @@ export default function InnerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-row gap-4">
+    <div className="flex min-h-screen justify-start gap-4">
       <HealthPostSidebar />
-      {children}
+      <div className="w-full">{children}</div>
     </div>
   );
 }

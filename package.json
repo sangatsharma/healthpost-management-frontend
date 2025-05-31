@@ -15,11 +15,11 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add",
-      "prettier --write"
+      "prettier --ignore-path .prettierignore --write"
     ],
     "*.{json,css,scss,md}": [
       "git add",
-      "prettier --write"
+      "prettier --ignore-path .prettierignore --write"
     ]
   },
   "dependencies": {

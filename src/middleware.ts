@@ -71,7 +71,7 @@ export async function middleware(request: NextRequest) {
 
   const portal = pathname.split('/')[2];
   if (portal !== token.accountType && portal !== 'unauthorized') {
-    return NextResponse.redirect(
+    return NextResponse.rewrite(
       new URL(`/${locale}/unauthorized`, request.url),
     );
   }
