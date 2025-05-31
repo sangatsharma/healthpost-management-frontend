@@ -3,7 +3,7 @@ echo "🔍 Running pre-commit checks..."
 # Run lint-staged
 npx lint-staged --quiet
 npm run format
-
+git add .
 status=$?
 
 if [ $status -ne 0 ]; then
