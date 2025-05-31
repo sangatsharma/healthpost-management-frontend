@@ -1,0 +1,51 @@
+import { TPermissionResource } from '@/zustand/permissions';
+import en from '../../public/messages/en.json';
+
+type TTranslations = typeof en;
+
+type TLocale = 'en' | 'np';
+
+type TFunc<K extends keyof TTranslations> = (
+  key: keyof TTranslations[K],
+) => string;
+
+type TPermission = {
+  action: string;
+  resource: TPermissionResource;
+  healthPost: string;
+};
+
+type TResponse<T> = {
+  message?: string;
+  data: T;
+};
+type TPaginatedResponse<T> = {
+  message?: string;
+  data: T[];
+  offset: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+type TMenuItem = {
+  key: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+  >;
+  label: string;
+  href?: string;
+  permission?: TPermissionResource;
+  active?: boolean;
+  submenu?: SubMenuItem[];
+};
+
+type SubMenuItem = {
+  key: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+  >;
+  label: string;
+  href: string;
+  permission: TPermissionResource;
+};

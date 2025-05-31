@@ -1,0 +1,14 @@
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged
+npx lint-staged --quiet
+npm run format
+
+status=$?
+
+if [ $status -ne 0 ]; then
+  echo "❌ Lint-staged failed. Commit aborted."
+  exit $status
+else
+  echo "✅ Lint-staged passed. Proceeding with commit."
+fi

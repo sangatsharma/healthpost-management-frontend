@@ -1,0 +1,28 @@
+{
+  "Validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "otp": "Please enter OTP."
+  },
+  "Login": {
+    "logInToYourAccount": "Log in to your account",
+    "email": "Email",
+    "login": "Login",
+    "user_portal": "User Portal",
+    "login_desc": "Login via email to access your health records management dashboard.",
+    "email_placeholder": "Enter your email address",
+    "send_OTP": "Send OTP",
+    "enter_OTP": "Enter the 6-digit verification code that was sent to your email.",
+    "verify_OTP": "Verify OTP",
+    "didn't_receive_OTP": "Didn't receive code ?",
+    "resend_OTP": "Resend OTP"
+  },
+  "HomePage": {
+    "title": "This is Homepage",
+    "subtitle": "Go to order page"
+  },
+  "OrderPage": {
+    "title": "This is order page.",
+    "subtitle": "Only manager and admin can see this."
+  }
+}

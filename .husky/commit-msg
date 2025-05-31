@@ -1,0 +1,20 @@
+# Read the first line of the commit message
+first_line=$(head -n1 "$1")
+
+# Define the allowed types
+types="feat|fix|ci|chore|docs|test|style|refactor|wip|pref|build|revert|remove"
+
+# Validate the commit message format (Conventional Commit) WITHOUT scope
+if ! echo "$first_line" | grep -Eq "^(${types})(!?): .{1,300}$"; then
+  echo "❌ Aborting commit: Invalid commit message format." >&2
+  echo "✅ Expected format: type: short description (max 300 characters)" >&2
+  echo "   Allowed types: $types" >&2
+  exit 1
+fi
+
+# Check commit message length more explicitly
+length=$(echo "$first_line" | cut -c1-301 | wc -c)
+if [ "$length" -gt 300 ]; then
+  echo "❌ Aborting commit: Commit message too long ($length characters)." >&2
+  exit 1
+fi
