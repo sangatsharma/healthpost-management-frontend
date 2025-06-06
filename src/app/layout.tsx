@@ -7,6 +7,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { AuthProvider } from '@/provider/AuthProvider';
 import { QueryProvider } from '@/provider/QueryClientProvider';
 import { ThemeProvider } from '@/provider/ThemeProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -31,6 +32,14 @@ export default async function LocaleLayout({
             <QueryProvider>
               <NextIntlClientProvider>
                 <TooltipProvider>
+                  <Toaster
+                    richColors
+                    toastOptions={{
+                      classNames: {
+                        content: 'text-[16px]',
+                      },
+                    }}
+                  />
                   <AuthProvider>{children}</AuthProvider>
                 </TooltipProvider>
               </NextIntlClientProvider>

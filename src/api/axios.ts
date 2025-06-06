@@ -1,5 +1,6 @@
-import axios from 'axios';
-//todo: change to user API endpoint
+import axios, { isAxiosError } from 'axios';
+import { toast } from 'sonner';
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const api = axios.create({
@@ -10,14 +11,52 @@ export const api = axios.create({
   },
 });
 
-// Optional: response/error interceptor
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
-      // Optionally handle global logout
-      console.warn('Unauthorized - maybe redirect to login');
-    }
+    console.log('Error in axios interceptor:', err);
+    errorHandler(err);
     return Promise.reject(err);
   },
 );
+
+const errorHandler = (error: unknown) => {
+  if (isAxiosError(error)) {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          toast.error(
+            error.response.data.error || 'Session expired. Please log in again',
+          );
+          break;
+        case 403:
+          toast.warning(
+            error.response.data.error ||
+              'You do not have permission to access this resource',
+          );
+          break;
+        case 404:
+          toast.error(
+            error.response.data.error || 'The requested resource was not found',
+          );
+          break;
+        case 500:
+          toast.error(
+            error.response.data.error ||
+              'A server error occurred. Please try again later',
+          );
+          break;
+        default:
+          toast.error(error.response.data.error || 'An error occurred');
+      }
+    } else if (error.request) {
+      // Request was made but no response received
+      toast.error('Network error. Please check your connection');
+    } else {
+      // Something happened in setting up the request
+      toast.error('Request setup error');
+    }
+  } else {
+    toast.error('An unknown error occurred');
+  }
+};

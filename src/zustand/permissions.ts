@@ -7,7 +7,9 @@ export enum Permissions {
   SYSTEM_CONFIG = 'SYSTEM_CONFIG',
 
   // Dashboard access
-  DASHBOARD = 'DASHBOARD',
+  PATIENT_DASHBOARD = 'PATIENT_DASHBOARD',
+  ADMIN_DASHBOARD = 'ADMIN_DASHBOARD',
+  HEALTH_POST_DASHBOARD = 'HEALTH_POST_DASHBOARD',
 
   // Patient management
   PATIENT_RECORDS = 'PATIENT_RECORDS',
@@ -42,7 +44,7 @@ export type TPermissionResource = keyof typeof Permissions;
 export const ROLE_PERMISSIONS: Record<UserRole, Permissions[]> = {
   SUPER_ADMIN: [Permissions.ALL],
   ADMIN: [
-    Permissions.DASHBOARD,
+    Permissions.ADMIN_DASHBOARD,
     Permissions.PATIENT_RECORDS,
     Permissions.USER_MANAGE,
     Permissions.REPORTS_GENERATE,

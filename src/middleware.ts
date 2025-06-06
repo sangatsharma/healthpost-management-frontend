@@ -1,6 +1,6 @@
+import { jwtVerify } from 'jose';
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-import { TUser, UserRole } from './types/user.types';
 import { isPublicRoute } from './constants/routes.constants';
 
 const intlMiddleware = createMiddleware({
@@ -17,22 +17,9 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = await getLocale(request);
   console.log(`Locale: ${locale}, Pathname: ${pathname}`);
-  // const token = await getToken({ req: request });
-  const token: TUser = {
-    role: UserRole.PATIENT,
-    id: '12345',
-    accountType: 'hp',
-    email: 'test@gmail.com',
-    name: {
-      firstName: 'John',
-      lastName: 'Doe',
-    },
-    status: true,
-    permissions: [],
-    healthPostId: 'hp123',
-    phoneNumber: '1234567890',
-  };
-  // const token = null;
+
+  const token = await getToken({ req: request });
+
   console.log('isPublicRoute', isPublicRoute(pathname));
   // Skip auth for public routes
   if (isPublicRoute(pathname) || pathname === '/' || !pathname) {
@@ -51,7 +38,7 @@ export async function middleware(request: NextRequest) {
     // Handle unauthenticated users
     return NextResponse.redirect(
       new URL(
-        `/${locale}/patient/login?callbackUrl=${encodeURIComponent(pathname)}`,
+        `/${locale}/patient/login${pathname.includes('login') ? '' : '?callbackUrl=' + encodeURIComponent(pathname)}`,
         request.url,
       ),
     );
@@ -87,5 +74,27 @@ async function getLocale(request: NextRequest): Promise<string> {
     return ['en', 'np'].includes(locale) ? locale : defaultLocale;
   } catch {
     return defaultLocale;
+  }
+}
+
+// Replace this with your actual secret (must be a Uint8Array)
+const JWT_SECRET = new TextEncoder().encode(process.env.ACCESS_SECRET);
+
+async function getToken({ req }: { req: NextRequest }) {
+  const tokenCookie = req.cookies.get('accessToken');
+  console.log(`Token Cookie: ${tokenCookie ? tokenCookie : 'not found'}`);
+  if (!tokenCookie) return null;
+
+  const tokenStr =
+    typeof tokenCookie === 'string' ? tokenCookie : tokenCookie.value;
+
+  try {
+    // Verify and decode the JWT
+    const { payload } = await jwtVerify(tokenStr, JWT_SECRET);
+
+    return payload;
+  } catch (err) {
+    console.log('JWT verification failed:', err);
+    return null;
   }
 }
