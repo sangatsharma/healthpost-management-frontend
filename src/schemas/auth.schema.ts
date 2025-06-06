@@ -5,7 +5,7 @@ export const authSchema = {
   login: (t: TFunc<'Validation'>) =>
     z
       .object({
-        accountType: z.enum(['patient', 'hp', 'admin']),
+        accountType: z.enum(['PATIENT', 'HP', 'ADMIN']),
         step: z.enum(['email', 'otp']),
         email: z
           .string({ required_error: t('required') })

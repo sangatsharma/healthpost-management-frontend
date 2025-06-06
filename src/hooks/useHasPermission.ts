@@ -12,25 +12,36 @@ export function useHasPermission(
   resource: TPermissionResource,
 ): TPermissionResult {
   const user = useUserStore((state) => state.user);
-  const { role, permissions = [], healthPostId = [] } = user || {};
 
-  const hasReadPermission = permissions.some(
-    (perm: TPermission) =>
-      perm.action === Action.READ &&
-      perm.resource === resource &&
-      perm.healthPost === healthPostId,
-  );
+  // Early return if no user
+  if (!user) {
+    return { hasReadPermission: false, hasWritePermission: false };
+  }
 
-  const hasWritePermission = permissions.some(
-    (perm: TPermission) =>
-      perm.action === Action.WRITE &&
-      perm.resource === resource &&
-      perm.healthPost === healthPostId,
-  );
+  const { role, permissions = [], healthPostId } = user;
 
+  // Super admin has all permissions
   if (role === UserRole.SUPER_ADMIN) {
     return { hasReadPermission: true, hasWritePermission: true };
   }
+
+  // If user doesn't have a healthPostId, they have no permissions
+  if (!healthPostId) {
+    return { hasReadPermission: false, hasWritePermission: false };
+  }
+
+  // Filter permissions that match the resource and healthPost
+  const relevantPermissions = permissions.filter(
+    (perm: TPermission) =>
+      perm.resource === resource && perm.healthPost === healthPostId,
+  );
+
+  const hasReadPermission = relevantPermissions.some(
+    (perm) => perm.action === Action.READ,
+  );
+  const hasWritePermission = relevantPermissions.some(
+    (perm) => perm.action === Action.WRITE,
+  );
 
   return { hasReadPermission, hasWritePermission };
 }

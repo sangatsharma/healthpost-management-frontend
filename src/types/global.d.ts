@@ -1,4 +1,4 @@
-import { TPermissionResource } from '@/zustand/permissions';
+import { Action, TPermissionResource } from '@/zustand/permissions';
 import en from '../../public/messages/en.json';
 
 type TTranslations = typeof en;
@@ -10,13 +10,14 @@ type TFunc<K extends keyof TTranslations> = (
 ) => string;
 
 type TPermission = {
-  action: string;
+  action: Action;
   resource: TPermissionResource;
   healthPost: string;
 };
 
 type TResponse<T> = {
   message?: string;
+  error?: string;
   data: T;
 };
 type TPaginatedResponse<T> = {

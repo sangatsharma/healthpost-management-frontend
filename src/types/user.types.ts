@@ -1,19 +1,19 @@
 import { TPermission } from './global';
 
 export enum UserRole {
-  SUPER_ADMIN = 'SUPER_ADMIN', // Controls entire system across municipalities/districts
-  ADMIN = 'ADMIN', // Controls a single HealthPost or municipality's data
-  PATIENT = 'PATIENT', // Regular system user
-  HEALTH_ASSISTANT = 'HEALTH_ASSISTANT', // Provides basic clinical and preventive services
-  ANM = 'ANM', // Auxiliary Nurse Midwife (maternal, child & reproductive health)
-  LAB_TECHNICIAN = 'LAB_TECHNICIAN', // Handles tests like malaria, blood, etc.
-  FCHV = 'FCHV', // Female Community Health Volunteer (key role in Nepal rural health)
-  INVENTORY_KEEPER = 'INVENTORY_KEEPER', // Handles inventory of medical supplies
-  OFFICE_HELPER = 'OFFICE_HELPER', // No defined permissions by default
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  PATIENT = 'PATIENT',
+  HEALTH_ASSISTANT = 'HEALTH_ASSISTANT',
+  ANM = 'ANM',
+  LAB_TECHNICIAN = 'LAB_TECHNICIAN',
+  FCHV = 'FCHV',
+  INVENTORY_KEEPER = 'INVENTORY_KEEPER',
+  OFFICE_HELPER = 'OFFICE_HELPER',
   ALL = 'ALL',
 }
 
-export type TUserType = 'patient' | 'hp' | 'admin';
+export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
 
 export type TUser = {
   id: number | string;

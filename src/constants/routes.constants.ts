@@ -65,14 +65,14 @@ export const getMenuItems = ({
   itemsFor: TUserType;
 }): TMenuItem[] => {
   switch (itemsFor) {
-    case 'hp':
+    case 'HP':
       return [
         {
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
           href: `hp/dashboard`,
-          permission: Permissions.DASHBOARD,
+          permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
@@ -194,14 +194,14 @@ export const getMenuItems = ({
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];
-    case 'admin':
+    case 'ADMIN':
       return [
         {
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
           href: `admin/dashboard`,
-          permission: Permissions.DASHBOARD,
+          permission: Permissions.ADMIN_DASHBOARD,
         },
         {
           key: 'users',
@@ -217,21 +217,21 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
-          href: `/${itemsFor}/dashboard`,
-          permission: Permissions.DASHBOARD,
+          href: `/patient/test`,
+          permission: Permissions.PATIENT_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
           label: 'Patient Records',
-          href: `/${itemsFor}/records`,
+          href: `/patient/records`,
           permission: Permissions.PATIENT_RECORDS,
         },
         {
           key: 'settings',
           icon: Settings,
           label: 'Settings',
-          href: `/${itemsFor}/settings`,
+          href: `/patient/settings`,
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];

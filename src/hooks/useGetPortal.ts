@@ -11,10 +11,10 @@ export const useGetPathInfo = (): {
   const pathname = usePathname();
   const locale = pathname.split('/')[1] as TLocale;
   if (pathname.startsWith(`/${locale}/hp`)) {
-    return { portal: 'hp', locale: locale, pathname };
+    return { portal: 'HP', locale: locale, pathname };
   } else if (pathname.startsWith(`/${locale}/patient`)) {
-    return { portal: 'patient', locale: locale, pathname };
+    return { portal: 'PATIENT', locale: locale, pathname };
   } else {
-    return { portal: 'admin', locale: locale, pathname };
+    return { portal: 'ADMIN', locale: locale, pathname };
   }
 };

@@ -46,7 +46,7 @@ export default function MobileSidebar({
                     <Stethoscope className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-foreground bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
+                    <h1 className="text-foreground bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold">
                       HealthPost
                     </h1>
                     <p className="text-xs font-semibold text-emerald-600">
