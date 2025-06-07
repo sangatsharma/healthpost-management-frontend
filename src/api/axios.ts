@@ -26,28 +26,30 @@ const errorHandler = (error: unknown) => {
       switch (error.response.status) {
         case 401:
           toast.error(
-            error.response.data.error || 'Session expired. Please log in again',
+            error?.response?.data?.message ||
+              'Session expired. Please log in again',
           );
           break;
         case 403:
           toast.warning(
-            error.response.data.error ||
+            error?.response?.data?.message ||
               'You do not have permission to access this resource',
           );
           break;
         case 404:
           toast.error(
-            error.response.data.error || 'The requested resource was not found',
+            error?.response?.data?.message ||
+              'The requested resource was not found',
           );
           break;
         case 500:
           toast.error(
-            error.response.data.error ||
+            error?.response?.data?.message ||
               'A server error occurred. Please try again later',
           );
           break;
         default:
-          toast.error(error.response.data.error || 'An error occurred');
+          toast.error(error?.response?.data?.message || 'An error occurred');
       }
     } else if (error.request) {
       // Request was made but no response received

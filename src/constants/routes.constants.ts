@@ -22,7 +22,7 @@ import { TUserType } from '@/types/user.types';
 import { TMenuItem } from '@/types/global';
 const LOCALES = ['en', 'np'] as const;
 
-const PUBLIC_PATHS = ['login', '/'] as const;
+const PUBLIC_PATHS = ['login'] as const;
 
 export const PUBLIC_ROUTES: string[] = LOCALES.flatMap((locale) =>
   UserType.flatMap((role) =>
@@ -31,9 +31,11 @@ export const PUBLIC_ROUTES: string[] = LOCALES.flatMap((locale) =>
 );
 
 export function isPublicRoute(pathname: string): boolean {
+  if (pathname.includes('unauthorized') || pathname.includes('404')) {
+    return true;
+  }
   return PUBLIC_ROUTES.some(
-    (route) =>
-      pathname.startsWith(route) || pathname === route.replace(/\/$/, ''), // Handle trailing slashes
+    (route) => pathname === route.replace(/\/$/, ''), // Handle trailing slashes
   );
 }
 
