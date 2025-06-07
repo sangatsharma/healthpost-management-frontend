@@ -31,10 +31,14 @@ export default function SidebarMenuItem({
   onNavigate,
 }: SidebarMenuItemProps) {
   const pathname = usePathname();
+  console.log('SidebarMenuItem pathname:', pathname);
+  const locale = pathname.split('/')[1];
   const isActive =
-    item.href === pathname ||
-    item.submenu?.some((sub) => sub.href === pathname);
-  const hasActiveSubmenu = item.submenu?.some((sub) => sub.href === pathname);
+    `/${locale}/${item.href}` === pathname ||
+    item.submenu?.some((sub) => `/${locale}/${sub.href}` === pathname);
+  const hasActiveSubmenu = item.submenu?.some(
+    (sub) => `/${locale}/${sub.href}` === pathname,
+  );
 
   const handleMainClick = () => {
     if (item.href && onNavigate) {
@@ -79,10 +83,9 @@ export default function SidebarMenuItem({
     <MenuButton
       className={cn(
         'group relative flex w-full cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-        'hover:translate-x-1',
-        isActive || hasActiveSubmenu
-          ? 'border border-emerald-200/50 bg-emerald-50 text-emerald-700 shadow-sm'
-          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+        'text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:translate-x-1',
+        (isActive || hasActiveSubmenu) &&
+          'dark:bg-accent border border-emerald-200/50 bg-emerald-50 text-emerald-400 shadow-sm dark:border-none',
         isCollapsed ? 'justify-center' : 'justify-between',
       )}
       onClick={handleArrowClick}
@@ -110,18 +113,14 @@ export default function SidebarMenuItem({
       <div className="flex items-center">
         <div
           className={cn(
-            'rounded-lg p-1.5 transition-all duration-200',
-            isActive || hasActiveSubmenu
-              ? 'bg-emerald-100/50'
-              : 'group-hover:bg-accent',
+            'group-hover:bg-accent rounded-lg p-1.5 transition-all duration-200',
           )}
         >
           <item.icon
             className={cn(
-              'h-5 w-5 transition-all duration-200',
-              isActive || hasActiveSubmenu
-                ? 'text-emerald-600'
-                : 'text-muted-foreground group-hover:text-accent-foreground',
+              'text-muted-foreground group-hover:text-accent-foreground h-5 w-5 transition-all duration-200',
+              (isActive || hasActiveSubmenu) && 'text-emerald-600',
+
               !isCollapsed && 'mr-3',
             )}
           />

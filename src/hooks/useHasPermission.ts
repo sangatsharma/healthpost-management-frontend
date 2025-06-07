@@ -2,46 +2,83 @@ import { TPermission } from '@/types/global';
 import { UserRole } from '@/types/user.types';
 import { Action, TPermissionResource } from '@/zustand/permissions';
 import { useUserStore } from '@/zustand/useUserDetails';
+import { useState, useEffect } from 'react';
 
 type TPermissionResult = {
   hasReadPermission: boolean;
   hasWritePermission: boolean;
+  isLoading: boolean;
 };
 
 export function useHasPermission(
   resource: TPermissionResource,
 ): TPermissionResult {
   const user = useUserStore((state) => state.user);
+  const userLoaded = useUserStore((state) => state.isLoggedIn);
 
-  // Early return if no user
-  if (!user) {
-    return { hasReadPermission: false, hasWritePermission: false };
-  }
+  const [permissions, setPermissions] = useState<TPermissionResult>({
+    hasReadPermission: false,
+    hasWritePermission: false,
+    isLoading: true,
+  });
 
-  const { role, permissions = [], healthPostId } = user;
+  useEffect(() => {
+    if (!userLoaded) {
+      setPermissions((prev) => ({ ...prev, isLoading: true }));
+      return;
+    }
 
-  // Super admin has all permissions
-  if (role === UserRole.SUPER_ADMIN) {
-    return { hasReadPermission: true, hasWritePermission: true };
-  }
+    // Early return if no user
+    if (!user) {
+      setPermissions({
+        hasReadPermission: false,
+        hasWritePermission: false,
+        isLoading: false,
+      });
+      return;
+    }
 
-  // If user doesn't have a healthPostId, they have no permissions
-  if (!healthPostId) {
-    return { hasReadPermission: false, hasWritePermission: false };
-  }
+    const { role, permissions: userPermissions = [], healthPostId } = user;
 
-  // Filter permissions that match the resource and healthPost
-  const relevantPermissions = permissions.filter(
-    (perm: TPermission) =>
-      perm.resource === resource && perm.healthPost === healthPostId,
-  );
+    // Super admin has all permissions
+    if (role === UserRole.SUPER_ADMIN) {
+      setPermissions({
+        hasReadPermission: true,
+        hasWritePermission: true,
+        isLoading: false,
+      });
+      return;
+    }
 
-  const hasReadPermission = relevantPermissions.some(
-    (perm) => perm.action === Action.READ,
-  );
-  const hasWritePermission = relevantPermissions.some(
-    (perm) => perm.action === Action.WRITE,
-  );
+    // If user doesn't have a healthPostId, they have no permissions
+    if (!healthPostId) {
+      setPermissions({
+        hasReadPermission: false,
+        hasWritePermission: false,
+        isLoading: false,
+      });
+      return;
+    }
 
-  return { hasReadPermission, hasWritePermission };
+    // Filter permissions that match the resource
+    const relevantPermissions = userPermissions.filter(
+      (perm: TPermission) => perm.resource === resource,
+      // && perm.healthPost === healthPostId, // Uncomment if needed
+    );
+
+    const newReadPermission = relevantPermissions.some(
+      (perm) => perm.action === Action.READ || perm.action === Action.WRITE,
+    );
+    const newWritePermission = relevantPermissions.some(
+      (perm) => perm.action === Action.WRITE,
+    );
+
+    setPermissions({
+      hasReadPermission: newReadPermission,
+      hasWritePermission: newWritePermission,
+      isLoading: false,
+    });
+  }, [user, resource, userLoaded]);
+
+  return permissions;
 }

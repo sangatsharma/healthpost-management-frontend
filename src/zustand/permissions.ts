@@ -80,6 +80,7 @@ export enum Action {
   READ = 'READ',
   WRITE = 'WRITE',
 }
+export type TAction = keyof typeof Action;
 
 export const checkPermission = (
   user: TUser,

@@ -26,11 +26,12 @@ export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [seconds, setSeconds] = useState<number>(60);
   const { portal } = useGetPathInfo();
+  console.log('portal', portal);
 
   const getWelcomeMessage = (
     portal: string,
   ): 'admin_portal' | 'patient_portal' | 'healthpost_portal' => {
-    switch (portal) {
+    switch (portal.toLowerCase()) {
       case 'hp':
         return 'healthpost_portal';
       case 'admin':
@@ -79,7 +80,7 @@ export default function LoginPage() {
     isPending: isOtpPending,
     isSuccess,
   } = useMutation({
-    mutationKey: ['login'],
+    mutationKey: ['validateOTP'],
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
