@@ -33,6 +33,7 @@ export default function SidebarMenuItem({
   const pathname = usePathname();
   console.log('SidebarMenuItem pathname:', pathname);
   const locale = pathname.split('/')[1];
+
   const isActive =
     `/${locale}/${item.href}` === pathname ||
     item.submenu?.some((sub) => `/${locale}/${sub.href}` === pathname);

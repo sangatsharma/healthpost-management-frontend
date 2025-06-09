@@ -8,7 +8,6 @@ export default function LanguageSwitcher() {
 
   const switchLanguage = (lang: string) => {
     document.cookie = `NEXT_LOCALE=${lang}; path=/`;
-    console.log(window.location.pathname.split(`/${locale}/`)[1]);
     router.push(`/${lang}/${window.location.pathname.split(`/${locale}/`)[1]}`);
     setLocale(lang);
   };

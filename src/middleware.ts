@@ -46,12 +46,13 @@ export async function middleware(request: NextRequest) {
   // };
   const token = await getToken({ req: request });
 
+  console.log('token', token);
   // Handle public routes
   if (isPublicRoute(pathname) || pathname === '/' || !pathname) {
-    if (token && pathname.includes('/login')) {
+    if (token && isLoginPage(pathname)) {
       return redirectToDashboard(
         locale,
-        token.accountType as string,
+        (token.accountType as string)?.toLocaleLowerCase(),
         request.url,
       );
     }
@@ -59,16 +60,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Handle authentication
-  if (!token && !isLoginPage(pathname, locale)) {
+  if (!token && !isLoginPage(pathname)) {
     return handleUnauthenticated(locale, pathname, request.url);
-  } else {
-    // Prevent authenticated users from accessing login pages
-    return redirectToDashboard(
-      locale,
-      (token?.accountType as string) || 'patient',
-      request.url,
-    );
   }
+  return intlMiddleware(request);
 }
 
 // Helper functions
@@ -80,7 +75,7 @@ async function getLocale(request: NextRequest): Promise<string> {
 
 function redirectToDashboard(locale: string, accountType: string, url: string) {
   return NextResponse.redirect(
-    new URL(`/${locale}/${accountType.toLowerCase()}/`, url),
+    new URL(`/${locale}/${accountType?.toLowerCase()}/`, url),
   );
 }
 
@@ -96,8 +91,8 @@ function handleUnauthenticated(locale: string, pathname: string, url: string) {
   return response;
 }
 
-function isLoginPage(pathname: string, locale: string): boolean {
-  return pathname.includes('/login') || pathname === `/${locale}`;
+function isLoginPage(pathname: string): boolean {
+  return pathname.includes('/login');
 }
 
 function getPortalFromPath(pathname: string): string | null {
