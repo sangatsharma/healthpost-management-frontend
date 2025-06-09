@@ -17,7 +17,7 @@ export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
 
 export type TUser = {
   id: number | string;
-  name: TFullname;
+  fullName: TFullname;
   email: string;
   role: UserRole;
   accountType: TUserType;

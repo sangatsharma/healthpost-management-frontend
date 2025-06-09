@@ -47,8 +47,8 @@ export default function SidebarUserProfile({
     console.log('Clicked:', itemKey);
   };
 
-  // Generate a profile image URL based on user name (for demo purposes)
-  const profileImageUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name?.firstName || 'USER')}`;
+  // Generate a profile image URL based on user fullName (for demo purposes)
+  const profileImageUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.fullName?.firstName || 'USER')}`;
 
   const userButton = (
     <Button
@@ -69,7 +69,7 @@ export default function SidebarUserProfile({
               />
             )}
             <AvatarFallback className="bg-gradient-to-br from-emerald-400 to-emerald-600 text-xs text-white capitalize">
-              {user.name.firstName}
+              {user.fullName.firstName}
             </AvatarFallback>
           </Avatar>
           <div className="border-background absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2 bg-green-400"></div>
@@ -78,7 +78,7 @@ export default function SidebarUserProfile({
           <>
             <div className="min-w-0 flex-1 text-left">
               <p className="text-foreground truncate text-sm font-medium">
-                {user.name.firstName}
+                {user.fullName.firstName}
               </p>
               <p className="truncate text-xs text-emerald-600">{user.role}</p>
             </div>
@@ -114,11 +114,13 @@ export default function SidebarUserProfile({
                       />
                     )}
                     <AvatarFallback className="bg-gradient-to-br from-emerald-400 to-emerald-600 text-white capitalize">
-                      {user.name.firstName}
+                      {user.fullName.firstName}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">{user.name.firstName}</p>
+                    <p className="text-sm font-medium">
+                      {user.fullName.firstName}
+                    </p>
                     <p className="text-muted-foreground text-xs">{user.role}</p>
                   </div>
                 </div>
@@ -147,7 +149,7 @@ export default function SidebarUserProfile({
                 </DropdownMenuItem>
               </DropdownMenuContent>
               <TooltipContent side="right" className="font-medium">
-                {user.name.firstName}
+                {user.fullName.firstName}
                 <div className="text-muted-foreground text-xs">{user.role}</div>
               </TooltipContent>
             </DropdownMenu>
@@ -171,11 +173,11 @@ export default function SidebarUserProfile({
                 />
               )}
               <AvatarFallback className="bg-gradient-to-br from-emerald-400 to-emerald-600 text-white">
-                {user.name.firstName}
+                {user.fullName.firstName}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{user.name.firstName}</p>
+              <p className="text-sm font-medium">{user.fullName.firstName}</p>
               <p className="text-muted-foreground text-xs">{user.role}</p>
               <p className="text-muted-foreground mt-1 text-xs">
                 {user?.permissions?.length} permissions
