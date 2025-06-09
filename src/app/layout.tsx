@@ -8,12 +8,14 @@ import { AuthProvider } from '@/provider/AuthProvider';
 import { QueryProvider } from '@/provider/QueryClientProvider';
 import { ThemeProvider } from '@/provider/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeScript } from '@/components/ThemeScript';
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-poppins',
 });
+
 export default async function LocaleLayout({
   children,
   params,
@@ -26,11 +28,14 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale || 'en'} className={poppins.variable}>
+      <head>
+        <ThemeScript />
+      </head>
       <body className="bg-background text-foreground font-poppins antialiased">
         <ErrorBoundary>
-          <ThemeProvider>
-            <QueryProvider>
-              <NextIntlClientProvider>
+          <QueryProvider>
+            <NextIntlClientProvider>
+              <ThemeProvider>
                 <TooltipProvider>
                   <Toaster
                     richColors
@@ -42,9 +47,9 @@ export default async function LocaleLayout({
                   />
                   <AuthProvider>{children}</AuthProvider>
                 </TooltipProvider>
-              </NextIntlClientProvider>
-            </QueryProvider>
-          </ThemeProvider>
+              </ThemeProvider>
+            </NextIntlClientProvider>
+          </QueryProvider>
         </ErrorBoundary>
       </body>
     </html>

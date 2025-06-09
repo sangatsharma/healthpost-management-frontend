@@ -21,12 +21,13 @@ import { useMutation } from '@tanstack/react-query';
 import { login, verifyOTP } from '@/api/mutation';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/zustand/useUserDetails';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [seconds, setSeconds] = useState<number>(60);
   const { portal } = useGetPathInfo();
-  console.log('portal', portal);
+  const setUser = useUserStore((state) => state.setUser);
 
   const getWelcomeMessage = (
     portal: string,
@@ -84,8 +85,9 @@ export default function LoginPage() {
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
+      if (data) setUser(data.data.user);
       toast.success(data?.message);
-      navigate.push(`/${portal}/dashboard`);
+      navigate.replace(`/${portal.toLocaleLowerCase()}/dashboard`);
     },
   });
 

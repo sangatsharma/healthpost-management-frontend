@@ -23,8 +23,10 @@ export type TUser = {
   accountType: TUserType;
   phoneNumber?: string;
   status: boolean;
-  permissions?: TPermission[];
+  permissions: TPermission[];
   healthPostId?: string;
+  gender?: TGender;
+  profileImage?: string;
 };
 
 export type TFullname = {
@@ -34,3 +36,18 @@ export type TFullname = {
 };
 
 export type TGender = 'MALE' | 'FEMALE' | 'OTHER';
+
+export type TLoginReponse = {
+  success: boolean;
+  message: string;
+  data: {
+    token: {
+      accessToken: string;
+      refreshToken: string;
+    };
+    user: TUser;
+    isVerified: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+};

@@ -1,11 +1,10 @@
 import { api } from '@/api/axios';
-import { TResponse } from '@/types/global';
-import { TUser } from '@/types/user.types';
+import { TLoginReponse } from '@/types/user.types';
 
 import { useQuery } from '@tanstack/react-query';
 
 const fetchUserInfo = async () => {
-  const res = await api.get<TResponse<TUser>>('/user');
+  const res = await api.get<TLoginReponse>('/auth/refresh-token');
   if (res.data) {
     return res.data;
   }

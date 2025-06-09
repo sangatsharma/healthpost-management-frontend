@@ -3,11 +3,11 @@ import en from '../../public/messages/en.json';
 
 type TTranslations = typeof en;
 
-type TLocale = 'en' | 'np';
-
 type TFunc<K extends keyof TTranslations> = (
   key: keyof TTranslations[K],
 ) => string;
+
+type TLocale = 'en' | 'np';
 
 type TPermission = {
   action: TAction;

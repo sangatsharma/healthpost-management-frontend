@@ -26,7 +26,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       router.replace('/unauthorized');
     }
   }, [hasReadPermission, router, isLoading, userLoaded]);
-  console.log('hasReadPermission', hasReadPermission, 'isLoading', isLoading);
   if (!userLoaded || isLoading || !hasReadPermission) return null;
 
   return <>{children}</>;

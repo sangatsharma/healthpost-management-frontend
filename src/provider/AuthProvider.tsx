@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setUser(data.data);
+      setUser(data.data.user);
       // } else if (isSuccess || (isError && !data)) {
       //   setUser(null);
       // router.replace('/login');

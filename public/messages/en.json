@@ -1,9 +1,23 @@
 {
+  "GeneralPages": {
+    "NotFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for doesn't exist or has been moved.",
+      "returnHome": "Return to Home",
+      "contactSupport": "Contact Support"
+    },
+    "unauthorized": {
+      "title": "Access Denied",
+      "description": "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
+    }
+  },
+
   "Validation": {
     "required": "This field is required.",
     "email": "Please enter a valid email address.",
     "otp": "Please enter OTP."
   },
+
   "Login": {
     "logInToYourAccount": "Log in to your account",
     "email": "Email",
@@ -21,12 +35,18 @@
     "logging": "Logging in...",
     "verifying_OTP": "Verifying OTP"
   },
-  "HomePage": {
-    "title": "This is Homepage",
-    "subtitle": "Go to order page"
-  },
-  "OrderPage": {
-    "title": "This is order page.",
-    "subtitle": "Only manager and admin can see this."
+  "AlertDialog": {
+    "action": {
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "ok": "OK",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "dialog": {
+      "confirm": "Confirm",
+      "deleteTitle": "Delete Confirmation",
+      "deleteDescription": "Are you sure you want to delete {item} ?"
+    }
   }
 }
