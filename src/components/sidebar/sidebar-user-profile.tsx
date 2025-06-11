@@ -14,11 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { TUser } from '@/types/user.types';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 interface SidebarUserProfileProps {
   user: TUser;
@@ -53,7 +53,7 @@ export default function SidebarUserProfile({
   const userButton = (
     <Button
       variant="ghost"
-      className={`h-auto w-full justify-start p-3 transition-transform duration-200 hover:translate-x-1 ${
+      className={`h-auto w-full cursor-pointer justify-start p-3 transition-transform duration-200 hover:translate-x-1 ${
         isCollapsed ? 'px-2' : ''
       }`}
     >
@@ -135,6 +135,10 @@ export default function SidebarUserProfile({
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LanguageSwitcher />
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onThemeToggle}>
                   {isDarkMode ? (
                     <Sun className="mr-2 h-4 w-4" />
@@ -148,10 +152,6 @@ export default function SidebarUserProfile({
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
-              <TooltipContent side="right" className="font-medium">
-                {user.fullName.firstName}
-                <div className="text-muted-foreground text-xs">{user.role}</div>
-              </TooltipContent>
             </DropdownMenu>
           </Tooltip>
         </TooltipProvider>
@@ -194,6 +194,10 @@ export default function SidebarUserProfile({
               {item.label}
             </DropdownMenuItem>
           ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <LanguageSwitcher />
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={onThemeToggle}>
             {isDarkMode ? (

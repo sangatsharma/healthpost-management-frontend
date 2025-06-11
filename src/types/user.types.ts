@@ -1,7 +1,7 @@
 import { TPermission } from './global';
 
 export enum UserRole {
-  SUPER_ADMIN = 'SUPER_ADMIN',
+  SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
   PATIENT = 'PATIENT',
   HEALTH_ASSISTANT = 'HEALTH_ASSISTANT',

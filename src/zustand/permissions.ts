@@ -42,7 +42,7 @@ export enum Permissions {
 export type TPermissionResource = keyof typeof Permissions;
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permissions[]> = {
-  SUPER_ADMIN: [Permissions.ALL],
+  SUPERADMIN: [Permissions.ALL],
   ADMIN: [
     Permissions.ADMIN_DASHBOARD,
     Permissions.PATIENT_RECORDS,

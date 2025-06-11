@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       //     lastName: 'Smith',
       //   },
       //   email: 'Sangat202@gmail.com',
-      //   role: UserRole.SUPER_ADMIN,
+      //   role: UserRole.SUPERADMIN,
       //   accountType: 'ADMIN',
       //   phoneNumber: '9806102',
       //   status: true,

@@ -33,8 +33,8 @@ export default async function LocaleLayout({
       </head>
       <body className="bg-background text-foreground font-poppins antialiased">
         <ErrorBoundary>
-          <QueryProvider>
-            <NextIntlClientProvider>
+          <NextIntlClientProvider>
+            <QueryProvider>
               <ThemeProvider>
                 <TooltipProvider>
                   <Toaster
@@ -48,8 +48,8 @@ export default async function LocaleLayout({
                   <AuthProvider>{children}</AuthProvider>
                 </TooltipProvider>
               </ThemeProvider>
-            </NextIntlClientProvider>
-          </QueryProvider>
+            </QueryProvider>
+          </NextIntlClientProvider>
         </ErrorBoundary>
       </body>
     </html>

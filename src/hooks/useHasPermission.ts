@@ -41,7 +41,7 @@ export function useHasPermission(
     const { role, permissions: userPermissions = [], healthPostId } = user;
 
     // Super admin has all permissions
-    if (role === UserRole.SUPER_ADMIN) {
+    if (role === UserRole.SUPERADMIN) {
       setPermissions({
         hasReadPermission: true,
         hasWritePermission: true,

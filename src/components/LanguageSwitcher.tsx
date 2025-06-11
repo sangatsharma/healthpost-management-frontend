@@ -1,14 +1,22 @@
 'use client';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function LanguageSwitcher() {
   const router = useRouter();
+  const pathname = usePathname();
   const [locale, setLocale] = useState('en');
 
   const switchLanguage = (lang: string) => {
     document.cookie = `NEXT_LOCALE=${lang}; path=/`;
-    router.push(`/${lang}/${window.location.pathname.split(`/${locale}/`)[1]}`);
+    router.replace(`/${lang}/${pathname.split(`/${locale}/`)[1]}`);
     setLocale(lang);
   };
 
@@ -22,14 +30,25 @@ export default function LanguageSwitcher() {
   }, []);
 
   return (
-    <div>
-      <select
-        onChange={(e) => switchLanguage((e.target as HTMLSelectElement).value)}
+    <div className="w-full">
+      <Select
         value={locale}
+        onValueChange={(value) => {
+          switchLanguage(value);
+        }}
       >
-        <option value="en">English</option>
-        <option value="np">Nepali</option>
-      </select>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="w-full">
+          <SelectItem key={'en'} value="en" disabled={locale === 'en'}>
+            English{' '}
+          </SelectItem>
+          <SelectItem key={'np'} value="np" disabled={locale === 'np'}>
+            नेपाली
+          </SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

@@ -2,12 +2,9 @@ import { JWTPayload, jwtVerify } from 'jose';
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { isPublicRoute } from './constants/routes.constants';
+import { routing } from './i18n/routing';
 
-const intlMiddleware = createMiddleware({
-  locales: ['en', 'np'],
-  defaultLocale: 'en',
-  localePrefix: 'always',
-});
+const intlMiddleware = createMiddleware(routing);
 
 export const config = {
   matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
@@ -32,7 +29,7 @@ export async function middleware(request: NextRequest) {
   //     lastName: 'Smith',
   //   },
   //   email: 'Sangat202@gmail.com',
-  //   role: 'SUPER_ADMIN',
+  //   role: 'SUPERADMIN',
   //   accountType: 'ADMIN',
   //   phoneNumber: '9806102',
   //   status: true,
