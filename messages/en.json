@@ -35,6 +35,7 @@
     "logging": "Logging in...",
     "verifying_OTP": "Verifying OTP"
   },
+
   "AlertDialog": {
     "action": {
       "delete": "Delete",
@@ -43,10 +44,15 @@
       "yes": "Yes",
       "no": "No"
     },
+
     "dialog": {
       "confirm": "Confirm",
       "deleteTitle": "Delete Confirmation",
-      "deleteDescription": "Are you sure you want to delete {item} ?"
+      "deleteDescription": "Are you sure you want to delete {item} ?",
+      "sureConfirmation": "Are you sure?",
+      "formLostDescription": "This can't be undone. Unsaved changes will be lost.",
+      "keepEditing": "Keep Editing",
+      "cancelForm": "Cancel Form"
     }
   }
 }

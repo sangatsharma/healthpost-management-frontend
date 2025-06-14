@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Timer from '@/components/reusables/Timer';
@@ -22,12 +22,15 @@ import { login, verifyOTP } from '@/api/mutation';
 import { toast } from 'sonner';
 import { useUserStore } from '@/zustand/useUserDetails';
 import { useRouter } from '@/i18n/navigation';
+import { Mail } from 'lucide-react';
+import Loading from './ui/loading';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [seconds, setSeconds] = useState<number>(60);
   const { portal } = useGetPathInfo();
   const setUser = useUserStore((state) => state.setUser);
+  const user = useUserStore();
 
   const getWelcomeMessage = (
     portal: string,
@@ -102,6 +105,19 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    // If user is already logged in, redirect to the dashboard
+    if (user.isLoggedIn) {
+      toast.success(`Welcome back! ${user.user?.fullName?.firstName}`);
+      navigate.push(`/${portal.toLocaleLowerCase()}/dashboard`);
+      return;
+    }
+  }, [user, navigate, portal]);
+
+  if (user.isLoggedIn) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex h-screen w-full items-center justify-center dark:bg-black/20">
       <div
@@ -137,6 +153,7 @@ export default function LoginPage() {
               </label>
               <Input
                 id="email"
+                icon={Mail}
                 autoFocus
                 aria-label={t('email_placeholder')}
                 aria-invalid={!!errors.email}
@@ -144,7 +161,7 @@ export default function LoginPage() {
                 errors={errors.email}
                 {...register('email')}
                 placeholder={t('email_placeholder')}
-                className="h-12 border-emerald-200 bg-emerald-50 px-4 text-base placeholder:text-[16px] focus:border-emerald-500 focus:ring-emerald-200"
+                className="text-[18px] placeholder:text-[16px]"
               />
             </>
           ) : (
@@ -199,7 +216,7 @@ export default function LoginPage() {
             isLoading={isPending || isOtpPending}
             disabled={isPending || isOtpPending}
             message={step === 'email' ? t('logging') : t('verifying_OTP')}
-            className="text-md h-10 w-full cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-500 font-medium text-white hover:from-emerald-700 hover:to-teal-600"
+            className="w-full"
             aria-label={step === 'email' ? t('login') : t('verify_OTP')}
           >
             {step === 'email' ? t('login') : t('verify_OTP')}

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import SidebarMenuItem from './sidebar-menu-item';
 
@@ -26,8 +26,11 @@ export default function SidebarNavigation({
   const pathname = usePathname();
 
   // Auto-manage submenu state based on active route
+  const filteredMenuItems = useMemo(
+    () => filterMenuItems(menuItems, user),
+    [menuItems, user],
+  );
   useEffect(() => {
-    const filteredMenuItems = filterMenuItems(menuItems, user);
     const newOpenMenus: Record<string, boolean> = {};
 
     // Find which submenu contains the active route
@@ -41,7 +44,7 @@ export default function SidebarNavigation({
     });
 
     setOpenMenus(newOpenMenus);
-  }, [pathname, menuItems, user]);
+  }, [pathname, menuItems, user, filteredMenuItems]);
 
   const toggleMenu = (menuKey: string) => {
     setOpenMenus((prev) => ({
@@ -49,9 +52,6 @@ export default function SidebarNavigation({
       [menuKey]: !prev[menuKey],
     }));
   };
-
-  // Filter menu items based on user permissions
-  const filteredMenuItems = filterMenuItems(menuItems, user);
 
   return (
     <div className="flex-1 overflow-x-hidden overflow-y-auto py-2">
