@@ -202,15 +202,15 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
-          href: `admin/dashboard`,
+          href: `dashboard`,
           permission: Permissions.ADMIN_DASHBOARD,
         },
         {
-          key: 'users',
+          key: 'healthpost',
           icon: Users,
-          label: 'User Management',
-          href: `admin/users`,
-          permission: Permissions.USER_MANAGE,
+          label: 'Health Posts',
+          href: `healthpost`,
+          permission: Permissions.HP_MANAGEMENT,
         },
       ];
     default:

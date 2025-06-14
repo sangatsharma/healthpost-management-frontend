@@ -1,8 +1,6 @@
 'use client';
 
 import { ChevronDown } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
@@ -14,6 +12,8 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { TMenuItem } from '@/types/global';
+import { Link } from '@/i18n/navigation';
+import { useGetPathInfo } from '@/hooks/useGetPortal';
 
 interface SidebarMenuItemProps {
   item: TMenuItem;
@@ -30,27 +30,22 @@ export default function SidebarMenuItem({
   onToggle,
   onNavigate,
 }: SidebarMenuItemProps) {
-  const pathname = usePathname();
-  console.log('SidebarMenuItem pathname:', pathname);
-  const locale = pathname.split('/')[1];
-
+  const { locale, portal: userPortal, pathname } = useGetPathInfo();
+  const portal = userPortal.toLowerCase();
+  //todo handle /:id
   const isActive =
-    `/${locale}/${item.href}` === pathname ||
-    item.submenu?.some((sub) => `/${locale}/${sub.href}` === pathname);
+    `/${locale}/${portal}/${item.href}` === pathname ||
+    item.submenu?.some(
+      (sub) => `/${locale}/${portal}/${sub.href}` === pathname,
+    );
   const hasActiveSubmenu = item.submenu?.some(
-    (sub) => `/${locale}/${sub.href}` === pathname,
+    (sub) => `/${locale}/${portal}/${sub.href}` === pathname,
   );
 
   const handleMainClick = () => {
     if (item.href && onNavigate) {
       onNavigate();
     }
-  };
-
-  const handleArrowClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onToggle();
   };
 
   const MenuButton = ({
@@ -84,12 +79,13 @@ export default function SidebarMenuItem({
     <MenuButton
       className={cn(
         'group relative flex w-full cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-        'text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:translate-x-1',
+        'text-muted-foreground',
         (isActive || hasActiveSubmenu) &&
           'dark:bg-accent border border-emerald-200/50 bg-emerald-50 text-emerald-400 shadow-sm dark:border-none',
         isCollapsed ? 'justify-center' : 'justify-between',
+        !isActive && 'hover:bg-accent',
       )}
-      onClick={handleArrowClick}
+      onClick={onToggle}
     >
       {/* Active indicator */}
       <div
@@ -112,21 +108,19 @@ export default function SidebarMenuItem({
       />
 
       <div className="flex items-center">
-        <div
-          className={cn(
-            'group-hover:bg-accent rounded-lg p-1.5 transition-all duration-200',
-          )}
-        >
+        <div className={cn('rounded-lg p-1.5 transition-all duration-200')}>
           <item.icon
             className={cn(
-              'text-muted-foreground group-hover:text-accent-foreground h-5 w-5 transition-all duration-200',
+              'text-muted-foreground h-4 w-4 transition-all duration-200',
               (isActive || hasActiveSubmenu) && 'text-emerald-600',
 
               !isCollapsed && 'mr-3',
             )}
           />
         </div>
-        {!isCollapsed && <span className="ml-2 text-nowrap">{item.label}</span>}
+        {!isCollapsed && (
+          <span className="text-[18px] text-nowrap">{item.label}</span>
+        )}
       </div>
 
       {!isCollapsed && item.submenu && (
@@ -159,7 +153,7 @@ export default function SidebarMenuItem({
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>{menuContent}</TooltipTrigger>
-              <TooltipContent side="right" className="font-medium">
+              <TooltipContent side="right" className="text-sm font-medium">
                 {item.label}
                 {item.submenu && (
                   <div className="text-muted-foreground mt-1 text-xs">
@@ -262,7 +256,7 @@ export default function SidebarMenuItem({
                           )}
                         />
                       </div>
-                      <span className="ml-1">{subItem.label}</span>
+                      <span className="ml-1 text-[14px]">{subItem.label}</span>
                     </Link>
                   </div>
                 );

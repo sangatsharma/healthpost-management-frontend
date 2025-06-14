@@ -32,7 +32,46 @@ export function useGlobalAlert() {
         (isDestructive ? t('action.delete') : t('dialog.confirm')),
       cancelName: cancelText || t('action.cancel'),
       btnAction: onConfirm,
-      cancelAction: onCancel,
+      cancelAction: () => {
+        hideAlertDialog();
+        if (onCancel) {
+          onCancel();
+        }
+      },
+    });
+  };
+
+  const showFormLostDialog = ({
+    title,
+    description,
+    onConfirm,
+    onCancel,
+    confirmText,
+    cancelText,
+    isDestructive = false,
+  }: {
+    title: string;
+    description: string;
+    onConfirm: () => void | Promise<void>;
+    onCancel?: () => void;
+    confirmText?: string;
+    cancelText?: string;
+    isDestructive?: boolean;
+  }) => {
+    showAlertDialog({
+      title,
+      desc: description,
+      btnName:
+        confirmText ||
+        (isDestructive ? t('action.delete') : t('dialog.confirm')),
+      cancelName: cancelText || t('action.cancel'),
+      btnAction: onConfirm,
+      cancelAction: () => {
+        hideAlertDialog();
+        if (onCancel) {
+          onCancel();
+        }
+      },
     });
   };
 
@@ -57,7 +96,12 @@ export function useGlobalAlert() {
       btnName: t('action.delete'),
       cancelName: t('action.cancel'),
       btnAction: onConfirm,
-      cancelAction: onCancel,
+      cancelAction: () => {
+        hideAlertDialog();
+        if (onCancel) {
+          onCancel();
+        }
+      },
       img: '🗑️',
     });
   };
@@ -113,6 +157,7 @@ export function useGlobalAlert() {
   };
 
   return {
+    showFormLostDialog,
     showAlertDialog,
     hideAlertDialog,
     showConfirmDialog,

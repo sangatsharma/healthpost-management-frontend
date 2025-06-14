@@ -1,5 +1,14 @@
 import { TAction, TPermissionResource } from '@/zustand/permissions';
 import en from '../../messages/en.json';
+import '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
+
+declare module '@tanstack/react-table' {
+  interface ColumnMeta {
+    headerClassName?: string;
+    cellClassName?: string;
+  }
+}
 
 type TTranslations = typeof en;
 
@@ -20,6 +29,7 @@ type TResponse<T> = {
   error?: string;
   data: T;
 };
+
 type TPaginatedResponse<T> = {
   message?: string;
   data: T[];
@@ -49,4 +59,57 @@ type SubMenuItem = {
   label: string;
   href: string;
   permission: TPermissionResource;
+};
+
+type dataTableHeaderType = {
+  label: string;
+  className?: string;
+};
+
+type baseButtonType =
+  | {
+      label: string;
+      onClick: () => void;
+      variant?: IbtnVariant;
+      disabled?: boolean;
+      className?: string;
+      icon?: React.ReactNode;
+      isLoading?: boolean;
+    }
+  | false;
+interface ExportFileType {
+  name: string;
+  sheet: string;
+  type: 'csv' | 'xlsx' | 'pdf' | 'txt';
+}
+
+type TToastTexts = Record<
+  string,
+  {
+    title: string;
+    description: string;
+  }
+>;
+
+type ExtendedColumnDef<T, V = T> = ColumnDef<T, V> & {
+  idForRowClick?: keyof T;
+  accessorKey?: DeepKeys<T> | string;
+  map?: {
+    key: string;
+    valueFrom?: DeepKeys<T> | string;
+    mergedValuesFrom?: (DeepKeys<T> | string)[];
+    dataTransformer?: (data: T) => string;
+  };
+};
+
+type TAllowedExportFileTypes = 'csv' | 'pdf' | 'txt' | 'xlsx';
+
+type ActionButtonDataTypes = {
+  icon: LucideIcon;
+  name: string;
+  onClick?: () => void;
+  isTrash?: boolean;
+  hide?: boolean;
+  id?: string;
+  textClassName?: string;
 };

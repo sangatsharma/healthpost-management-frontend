@@ -1,5 +1,5 @@
 import { TMenuItem } from '@/types/global';
-import { TUser, UserRole } from '@/types/user.types';
+import { TUser } from '@/types/user.types';
 
 export enum Permissions {
   // System-wide permissions
@@ -9,8 +9,10 @@ export enum Permissions {
   // Dashboard access
   PATIENT_DASHBOARD = 'PATIENT_DASHBOARD',
   ADMIN_DASHBOARD = 'ADMIN_DASHBOARD',
-  HEALTH_POST_DASHBOARD = 'HEALTH_POST_DASHBOARD',
+  HP_MANAGEMENT = 'HP_MANAGEMENT',
+  ADMIN_MANAGEMENT = 'ADMIN_MANAGEMENT',
 
+  HEALTH_POST_DASHBOARD = 'HEALTH_POST_DASHBOARD',
   // Patient management
   PATIENT_RECORDS = 'PATIENT_RECORDS',
 
@@ -41,40 +43,6 @@ export enum Permissions {
 
 export type TPermissionResource = keyof typeof Permissions;
 
-export const ROLE_PERMISSIONS: Record<UserRole, Permissions[]> = {
-  SUPERADMIN: [Permissions.ALL],
-  ADMIN: [
-    Permissions.ADMIN_DASHBOARD,
-    Permissions.PATIENT_RECORDS,
-    Permissions.USER_MANAGE,
-    Permissions.REPORTS_GENERATE,
-  ],
-  HEALTH_ASSISTANT: [
-    Permissions.PATIENT_RECORDS,
-    Permissions.PRESCRIBE_MEDICATION,
-    Permissions.ORDER_LAB_TESTS,
-    Permissions.VACCINATION_RECORD,
-  ],
-  ANM: [
-    Permissions.MATERNAL_HEALTH_EDIT,
-    Permissions.VACCINATION_RECORD,
-    Permissions.HOME_VISIT_RECORD,
-  ],
-  LAB_TECHNICIAN: [
-    Permissions.LAB_RESULTS_UPLOAD,
-    Permissions.LAB_RESULTS_VERIFY,
-  ],
-  FCHV: [Permissions.COMMUNITY_REPORTS, Permissions.HOME_VISIT_RECORD],
-  INVENTORY_KEEPER: [
-    Permissions.INVENTORY_VIEW,
-    Permissions.INVENTORY_MANAGE,
-    Permissions.MEDICINE_DISPENSE,
-  ],
-  PATIENT: [Permissions.PATIENT_RECORDS],
-  OFFICE_HELPER: [],
-  ALL: [],
-};
-
 // Define actions that can be performed on resources
 export enum Action {
   READ = 'READ',
@@ -87,7 +55,8 @@ export const checkPermission = (
   permission: TPermissionResource,
 ): boolean => {
   return !!user?.permissions?.some(
-    (perm) => perm?.resource === permission || perm.resource === 'ALL',
+    (perm) =>
+      perm?.resource === permission || perm.resource === Permissions.ALL,
   );
 };
 
