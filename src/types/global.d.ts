@@ -1,5 +1,5 @@
 import { TAction, TPermissionResource } from '@/zustand/permissions';
-import en from '../../public/messages/en.json';
+import en from '../../messages/en.json';
 
 type TTranslations = typeof en;
 

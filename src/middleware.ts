@@ -12,12 +12,13 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
+  console.log('Locale from middleware:', locale);
   //check if pathname contains locale
   if (!pathname.startsWith(`/${locale}`)) {
     // If not, redirect to the correct locale path
     const newPathname = `/${locale}${pathname}`;
-    return NextResponse.redirect(new URL(newPathname, request.url), 301);
+    return NextResponse.redirect(new URL(newPathname, request.url));
   }
 
   // Mock token for demonstration - replace with actual token retrieval
@@ -45,15 +46,36 @@ export async function middleware(request: NextRequest) {
 
   console.log('token', token);
   // Handle public routes
-  if (isPublicRoute(pathname) || pathname === '/' || !pathname) {
+  if (
+    isPublicRoute(pathname) ||
+    pathname === '/' ||
+    !pathname ||
+    pathname === `/${locale}`
+  ) {
     if (token && isLoginPage(pathname)) {
+      console.log('Redirecting to dashboard from login page');
       return redirectToDashboard(
         locale,
-        (token.accountType as string)?.toLocaleLowerCase(),
+        (token?.accountType as string)?.toLowerCase(),
+        request.url,
+      );
+    } else if (token) {
+      return redirectToDashboard(
+        locale,
+        (token?.accountType as string)?.toLowerCase(),
         request.url,
       );
     }
-    return intlMiddleware(request);
+  }
+  if (
+    token &&
+    pathname === `/${locale}/${(token.accountType as string)?.toLowerCase()}`
+  ) {
+    return redirectToDashboard(
+      locale,
+      (token?.accountType as string)?.toLowerCase(),
+      request.url,
+    );
   }
 
   // Handle authentication
@@ -64,15 +86,20 @@ export async function middleware(request: NextRequest) {
 }
 
 // Helper functions
-async function getLocale(request: NextRequest): Promise<string> {
-  const defaultLocale = 'en';
+function getLocale(request: NextRequest): string {
+  const storedLocale = request.cookies.get('NEXT_LOCALE');
+
+  console.log('pathName', request.nextUrl.pathname);
   const locale = request.nextUrl.pathname.split('/')[1];
-  return ['en', 'np'].includes(locale) ? locale : defaultLocale;
+  return ['en', 'np'].includes(locale)
+    ? locale
+    : (storedLocale?.value as string) || 'np';
 }
 
 function redirectToDashboard(locale: string, accountType: string, url: string) {
+  console.warn('Redirecting to dashboard:', locale, accountType);
   return NextResponse.redirect(
-    new URL(`/${locale}/${accountType?.toLowerCase()}/`, url),
+    new URL(`/${locale}/${accountType?.toLowerCase()}/dashboard`, url),
   );
 }
 
@@ -84,7 +111,6 @@ function handleUnauthenticated(locale: string, pathname: string, url: string) {
     loginUrl.searchParams.set('callbackUrl', encodeURIComponent(pathname));
   }
   const response = NextResponse.redirect(loginUrl);
-  response.cookies.set('accessToken', '', { path: '/', maxAge: 0 });
   return response;
 }
 
@@ -93,6 +119,7 @@ function isLoginPage(pathname: string): boolean {
 }
 
 function getPortalFromPath(pathname: string): string | null {
+  console.warn('Extracting portal from path:', pathname);
   const parts = pathname.split('/');
   return parts[2] || 'patient';
 }

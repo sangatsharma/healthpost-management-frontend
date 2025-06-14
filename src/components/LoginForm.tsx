@@ -20,8 +20,8 @@ import { authSchema, TAuthSchema } from '@/schemas/auth.schema';
 import { useMutation } from '@tanstack/react-query';
 import { login, verifyOTP } from '@/api/mutation';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/zustand/useUserDetails';
+import { useRouter } from '@/i18n/navigation';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
@@ -87,7 +87,7 @@ export default function LoginPage() {
     onSuccess: (data) => {
       if (data) setUser(data.data.user);
       toast.success(data?.message);
-      navigate.replace(`/${portal.toLocaleLowerCase()}/dashboard`);
+      navigate.push(`/${portal.toLocaleLowerCase()}/dashboard`);
     },
   });
 

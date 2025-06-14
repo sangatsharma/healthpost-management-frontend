@@ -1,56 +1,23 @@
+import { ReactNode } from 'react';
 import './globals.css';
 import { Poppins } from 'next/font/google';
-import { NextIntlClientProvider } from 'next-intl';
-
-import { ErrorBoundary } from '@/components/ErrorBoundry';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { AuthProvider } from '@/provider/AuthProvider';
-import { QueryProvider } from '@/provider/QueryClientProvider';
-import { ThemeProvider } from '@/provider/ThemeProvider';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeScript } from '@/components/ThemeScript';
-
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-poppins',
 });
 
-export default async function LocaleLayout({
+export default function RootLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  children: ReactNode;
+  params: { locale: string };
 }) {
-  // Ensure that the incoming `locale` is valid
-  const { locale } = await params;
-
   return (
-    <html lang={locale || 'en'} className={poppins.variable}>
-      <head>
-        <ThemeScript />
-      </head>
+    <html lang={params?.locale || 'en'} className={poppins.variable}>
       <body className="bg-background text-foreground font-poppins antialiased">
-        <ErrorBoundary>
-          <NextIntlClientProvider>
-            <QueryProvider>
-              <ThemeProvider>
-                <TooltipProvider>
-                  <Toaster
-                    richColors
-                    toastOptions={{
-                      classNames: {
-                        content: 'text-[16px]',
-                      },
-                    }}
-                  />
-                  <AuthProvider>{children}</AuthProvider>
-                </TooltipProvider>
-              </ThemeProvider>
-            </QueryProvider>
-          </NextIntlClientProvider>
-        </ErrorBoundary>
+        {children}
       </body>
     </html>
   );
