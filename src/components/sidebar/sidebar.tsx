@@ -47,7 +47,7 @@ export default function HealthPostSidebar() {
             menuItems={getMenuItems({
               itemsFor: user?.accountType,
             })}
-            user={user!}
+            user={user}
             isCollapsed={isCollapsed}
           />
           <SidebarUserProfile

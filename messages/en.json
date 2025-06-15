@@ -1,0 +1,58 @@
+{
+  "GeneralPages": {
+    "NotFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for doesn't exist or has been moved.",
+      "returnHome": "Return to Home",
+      "contactSupport": "Contact Support"
+    },
+    "unauthorized": {
+      "title": "Access Denied",
+      "description": "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
+    }
+  },
+
+  "Validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "otp": "Please enter OTP."
+  },
+
+  "Login": {
+    "logInToYourAccount": "Log in to your account",
+    "email": "Email",
+    "login": "Login",
+    "admin_portal": "Admin Portal",
+    "patient_portal": "Patient Portal",
+    "healthpost_portal": "HealthPost Portal",
+    "login_desc": "Login via email to access your health records management dashboard.",
+    "email_placeholder": "Enter your email address",
+    "send_OTP": "Send OTP",
+    "enter_OTP": "Enter the 6-digit verification code that was sent to your email.",
+    "verify_OTP": "Verify OTP",
+    "didn't_receive_OTP": "Didn't receive code ?",
+    "resend_OTP": "Resend OTP",
+    "logging": "Logging in...",
+    "verifying_OTP": "Verifying OTP"
+  },
+
+  "AlertDialog": {
+    "action": {
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "ok": "OK",
+      "yes": "Yes",
+      "no": "No"
+    },
+
+    "dialog": {
+      "confirm": "Confirm",
+      "deleteTitle": "Delete Confirmation",
+      "deleteDescription": "Are you sure you want to delete {item} ?",
+      "sureConfirmation": "Are you sure?",
+      "formLostDescription": "This can't be undone. Unsaved changes will be lost.",
+      "keepEditing": "Keep Editing",
+      "cancelForm": "Cancel Form"
+    }
+  }
+}

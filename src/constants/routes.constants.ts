@@ -22,7 +22,7 @@ import { TUserType } from '@/types/user.types';
 import { TMenuItem } from '@/types/global';
 const LOCALES = ['en', 'np'] as const;
 
-const PUBLIC_PATHS = ['login', '/'] as const;
+const PUBLIC_PATHS = ['login'] as const;
 
 export const PUBLIC_ROUTES: string[] = LOCALES.flatMap((locale) =>
   UserType.flatMap((role) =>
@@ -31,9 +31,11 @@ export const PUBLIC_ROUTES: string[] = LOCALES.flatMap((locale) =>
 );
 
 export function isPublicRoute(pathname: string): boolean {
+  if (pathname.includes('unauthorized') || pathname.includes('404')) {
+    return true;
+  }
   return PUBLIC_ROUTES.some(
-    (route) =>
-      pathname.startsWith(route) || pathname === route.replace(/\/$/, ''), // Handle trailing slashes
+    (route) => pathname === route.replace(/\/$/, ''), // Handle trailing slashes
   );
 }
 
@@ -65,14 +67,14 @@ export const getMenuItems = ({
   itemsFor: TUserType;
 }): TMenuItem[] => {
   switch (itemsFor) {
-    case 'hp':
+    case 'HP':
       return [
         {
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
           href: `hp/dashboard`,
-          permission: Permissions.DASHBOARD,
+          permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
@@ -194,21 +196,21 @@ export const getMenuItems = ({
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];
-    case 'admin':
+    case 'ADMIN':
       return [
         {
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
-          href: `admin/dashboard`,
-          permission: Permissions.DASHBOARD,
+          href: `dashboard`,
+          permission: Permissions.ADMIN_DASHBOARD,
         },
         {
-          key: 'users',
+          key: 'healthpost',
           icon: Users,
-          label: 'User Management',
-          href: `admin/users`,
-          permission: Permissions.USER_MANAGE,
+          label: 'Health Posts',
+          href: `healthpost`,
+          permission: Permissions.HP_MANAGEMENT,
         },
       ];
     default:
@@ -217,21 +219,21 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: 'Dashboard',
-          href: `/${itemsFor}/dashboard`,
-          permission: Permissions.DASHBOARD,
+          href: `/patient/test`,
+          permission: Permissions.PATIENT_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
           label: 'Patient Records',
-          href: `/${itemsFor}/records`,
+          href: `/patient/records`,
           permission: Permissions.PATIENT_RECORDS,
         },
         {
           key: 'settings',
           icon: Settings,
           label: 'Settings',
-          href: `/${itemsFor}/settings`,
+          href: `/patient/settings`,
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];

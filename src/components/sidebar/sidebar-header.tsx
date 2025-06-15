@@ -15,7 +15,7 @@ export default function SidebarHeader({
   onToggle,
 }: SidebarHeaderProps) {
   return (
-    <div className="border-border flex h-24 items-center justify-between border-b p-4">
+    <div className="border-border flex h-24 items-center justify-between overflow-clip border-b p-4">
       <div
         className={cn(
           'flex items-center space-x-3 overflow-x-clip p-4 transition-all duration-300',
@@ -37,7 +37,7 @@ export default function SidebarHeader({
         variant="secondary"
         size="icon"
         onClick={onToggle}
-        className="text-xl font-bold"
+        className="hover:bg-muted/50 active:bg-muted/70 cursor-pointer"
       >
         {isCollapsed ? (
           <ChevronRight className="h-16 w-16" />
