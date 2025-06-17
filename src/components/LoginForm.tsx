@@ -16,14 +16,14 @@ import {
 import { useGetPathInfo } from '@/hooks/useGetPortal';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { cn } from '@/lib/utils';
-import { authSchema, TAuthSchema } from '@/schemas/auth.schema';
 import { useMutation } from '@tanstack/react-query';
-import { login, verifyOTP } from '@/api/mutation';
+import { login, verifyOTP } from '@/api/queries';
 import { toast } from 'sonner';
 import { useUserStore } from '@/zustand/useUserDetails';
 import { useRouter } from '@/i18n/navigation';
 import { Mail } from 'lucide-react';
 import Loading from './ui/loading';
+import { getLoginSchema, TLoginSchema } from '@/schemas/auth.schema';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
@@ -47,7 +47,7 @@ export default function LoginPage() {
 
   const t = useTypedTranslations('Login');
   const validation = useTypedTranslations('Validation');
-  const loginSchema = authSchema.login(validation);
+  const loginSchema = getLoginSchema(validation);
 
   const navigate = useRouter();
 
@@ -57,13 +57,13 @@ export default function LoginPage() {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<TAuthSchema['login']>({
+  } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       otp: '',
       step: 'email',
-      accountType: portal,
+      accountType: portal || 'PATIENT',
     },
   });
   const otpValue = watch('otp').split('');
@@ -90,11 +90,11 @@ export default function LoginPage() {
     onSuccess: (data) => {
       if (data) setUser(data.data.user);
       toast.success(data?.message);
-      navigate.push(`/${portal.toLocaleLowerCase()}/dashboard`);
+      navigate.push(`/${portal?.toLocaleLowerCase()}/dashboard`);
     },
   });
 
-  const onSubmit = async (data: TAuthSchema['login']) => {
+  const onSubmit = async (data: TLoginSchema) => {
     if (step === 'email') {
       handleLogin({ email: data.email, accountType: data.accountType });
     } else if (step === 'otp') {
@@ -106,154 +106,153 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    // If user is already logged in, redirect to the dashboard
-    if (user.isLoggedIn) {
-      toast.success(`Welcome back! ${user.user?.fullName?.firstName}`);
-      navigate.push(`/${portal.toLocaleLowerCase()}/dashboard`);
-      return;
+    if (user.isLoggedIn || user.user) {
+      const dashboardPath = `/${user.user?.accountType?.toLowerCase()}/dashboard`;
+      navigate.replace(dashboardPath);
     }
-  }, [user, navigate, portal]);
+  }, [user, portal, navigate]);
 
-  if (user.isLoggedIn) {
+  if (user.isLoggedIn || user.user) {
     return <Loading />;
   }
-
-  return (
-    <div className="flex h-screen w-full items-center justify-center dark:bg-black/20">
-      <div
-        className="w-[420px] rounded-2xl border border-emerald-100 px-8 py-8 text-center shadow-lg shadow-emerald-100 backdrop-blur-sm dark:border-slate-300"
-        role="region"
-        aria-label={t(getWelcomeMessage(portal))}
-      >
-        <header className="mb-4 flex flex-col items-center justify-center">
-          <Image
-            src="/doctor.png"
-            alt={'Hero avatar'}
-            width={150}
-            height={150}
-            className="rounded-full"
-          />
-          <h1 className="mb-3 bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text p-2 text-5xl leading-tight font-bold text-transparent">
-            {t(getWelcomeMessage(portal))}
-          </h1>
-          <p className="mx-auto w-72 text-[18px] dark:text-slate-200">
-            {step === 'email' ? t('login_desc') : t('enter_OTP')}
-          </p>
-        </header>
-
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-3"
-          aria-live="polite"
+  if (!user.user && !user.isLoggedIn) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center dark:bg-black/20">
+        <div
+          className="w-[420px] rounded-2xl border border-emerald-100 px-8 py-8 text-center shadow-lg shadow-emerald-100 backdrop-blur-sm dark:border-slate-300"
+          role="region"
+          aria-label={t(getWelcomeMessage(portal!))}
         >
-          {step === 'email' ? (
-            <>
-              <label htmlFor="email" className="sr-only">
-                {t('email_placeholder')}
-              </label>
-              <Input
-                id="email"
-                icon={Mail}
-                autoFocus
-                aria-label={t('email_placeholder')}
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                errors={errors.email}
-                {...register('email')}
-                placeholder={t('email_placeholder')}
-                className="text-[18px] placeholder:text-[16px]"
-              />
-            </>
-          ) : (
-            <div className="my-4 flex w-full flex-col items-start">
-              <label htmlFor="otp" className="sr-only">
-                {t('enter_OTP')}
-              </label>
-              <InputOTP
-                id="otp"
-                maxLength={6}
-                pattern={'^\\d+$'}
-                autoFocus
-                aria-label={t('enter_OTP')}
-                aria-invalid={!!errors.otp}
-                aria-describedby={errors.otp ? 'otp-error' : undefined}
-                onChange={async (value: string) => {
-                  setValue('otp', value);
-                }}
-              >
-                <InputOTPGroup className="space-x-4">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <InputOTPSlot
-                      autoFocus
-                      key={i}
-                      index={i}
-                      aria-label={`${t('enter_OTP')} ${i + 1}`}
-                      className={cn(
-                        errors.otp && otpValue[i] === undefined
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500 focus-visible:ring-red-200'
-                          : '',
-                        isSuccess &&
-                          'border-green-500 transition-colors duration-300 ease-in-out focus:border-green-500 focus:ring-green-500 focus-visible:ring-green-200',
-                      )}
-                    />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
-              {errors.otp && (
-                <p
-                  id="otp-error"
-                  role="alert"
-                  className="mt-2 text-left text-sm text-red-600"
-                >
-                  {errors.otp.message}
-                </p>
-              )}
-            </div>
-          )}
+          <header className="mb-4 flex flex-col items-center justify-center">
+            <Image
+              src="/doctor.png"
+              alt={'Hero avatar'}
+              width={150}
+              height={150}
+              className="rounded-full"
+            />
+            <h1 className="mb-3 bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text p-2 text-5xl leading-tight font-bold text-transparent">
+              {t(getWelcomeMessage(portal!))}
+            </h1>
+            <p className="mx-auto w-72 text-[18px] dark:text-slate-200">
+              {step === 'email' ? t('login_desc') : t('enter_OTP')}
+            </p>
+          </header>
 
-          <Button
-            type="submit"
-            isLoading={isPending || isOtpPending}
-            disabled={isPending || isOtpPending}
-            message={step === 'email' ? t('logging') : t('verifying_OTP')}
-            className="w-full"
-            aria-label={step === 'email' ? t('login') : t('verify_OTP')}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-3"
+            aria-live="polite"
           >
-            {step === 'email' ? t('login') : t('verify_OTP')}
-          </Button>
-
-          {step === 'otp' && (
-            <div className="flex items-center justify-center gap-1 text-sm dark:text-slate-200">
-              <p>{t("didn't_receive_OTP")}</p>
-              {seconds === 0 ? (
-                <Button
-                  onClick={() => {
-                    setSeconds(60);
+            {step === 'email' ? (
+              <>
+                <label htmlFor="email" className="sr-only">
+                  {t('email_placeholder')}
+                </label>
+                <Input
+                  id="email"
+                  icon={Mail}
+                  autoFocus
+                  aria-label={t('email_placeholder')}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  errors={errors.email}
+                  {...register('email')}
+                  placeholder={t('email_placeholder')}
+                  className="w-full text-[18px] placeholder:text-[16px]"
+                />
+              </>
+            ) : (
+              <div className="my-4 flex w-full flex-col items-start">
+                <label htmlFor="otp" className="sr-only">
+                  {t('enter_OTP')}
+                </label>
+                <InputOTP
+                  id="otp"
+                  maxLength={6}
+                  pattern={'^\\d+$'}
+                  autoFocus
+                  aria-label={t('enter_OTP')}
+                  aria-invalid={!!errors.otp}
+                  aria-describedby={errors.otp ? 'otp-error' : undefined}
+                  onChange={async (value: string) => {
+                    setValue('otp', value);
                   }}
-                  type="button"
-                  variant="ghost"
-                  className="p-1 font-medium text-blue-400 underline transition-colors hover:text-blue-700"
-                  aria-label={t('resend_OTP')}
                 >
-                  {t('resend_OTP')}
-                </Button>
-              ) : (
-                <span
-                  aria-live="polite"
-                  className="ml-2 inline-block text-blue-400"
-                  aria-atomic="true"
-                >
-                  <Timer
-                    seconds={seconds}
-                    setSeconds={setSeconds}
-                    className="inline"
-                  />
-                </span>
-              )}
-            </div>
-          )}
-        </form>
+                  <InputOTPGroup className="space-x-4">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <InputOTPSlot
+                        autoFocus
+                        key={i}
+                        index={i}
+                        aria-label={`${t('enter_OTP')} ${i + 1}`}
+                        className={cn(
+                          errors.otp && otpValue[i] === undefined
+                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500 focus-visible:ring-red-200'
+                            : '',
+                          isSuccess &&
+                            'border-green-500 transition-colors duration-300 ease-in-out focus:border-green-500 focus:ring-green-500 focus-visible:ring-green-200',
+                        )}
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                {errors.otp && (
+                  <p
+                    id="otp-error"
+                    role="alert"
+                    className="mt-2 text-left text-sm text-red-600"
+                  >
+                    {errors.otp.message}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              isLoading={isPending || isOtpPending}
+              disabled={isPending || isOtpPending}
+              message={step === 'email' ? t('logging') : t('verifying_OTP')}
+              className="w-full"
+              aria-label={step === 'email' ? t('login') : t('verify_OTP')}
+            >
+              {step === 'email' ? t('login') : t('verify_OTP')}
+            </Button>
+
+            {step === 'otp' && (
+              <div className="flex items-center justify-center gap-1 text-sm dark:text-slate-200">
+                <p>{t("didn't_receive_OTP")}</p>
+                {seconds === 0 ? (
+                  <Button
+                    onClick={() => {
+                      setSeconds(60);
+                    }}
+                    type="button"
+                    variant="ghost"
+                    className="p-1 font-medium text-blue-400 underline transition-colors hover:text-blue-700"
+                    aria-label={t('resend_OTP')}
+                  >
+                    {t('resend_OTP')}
+                  </Button>
+                ) : (
+                  <span
+                    aria-live="polite"
+                    className="ml-2 inline-block text-blue-400"
+                    aria-atomic="true"
+                  >
+                    <Timer
+                      seconds={seconds}
+                      setSeconds={setSeconds}
+                      className="inline"
+                    />
+                  </span>
+                )}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

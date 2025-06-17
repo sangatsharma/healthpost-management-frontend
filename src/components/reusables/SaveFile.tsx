@@ -76,6 +76,7 @@ const SaveFile: React.FC<TProps> = ({
       isOpen={isOpen}
       toggleModal={() => toggleModal((prev) => !prev)}
       className="max-w-[300px] p-4"
+      isFormDirty={true}
     >
       <div className="flex flex-col gap-4 p-4">
         <div className="space-y-2">
@@ -84,7 +85,6 @@ const SaveFile: React.FC<TProps> = ({
           </Label>
           <Input
             id="filename"
-            className="text-[20px]"
             onChange={(e) =>
               setFileInfo((prevState) => ({
                 ...prevState,

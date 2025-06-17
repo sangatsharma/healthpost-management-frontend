@@ -1,32 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { TTranslations } from '@/types/global';
+import { TTranslations, TTypeFunction } from '@/types/global';
 import { useTranslations as useRawTranslations } from 'next-intl';
-
-// Recursive key type
-type Join<K, P> = K extends string | number
-  ? P extends string | number
-    ? `${K}.${P}`
-    : never
-  : never;
-
-type NestedKeyOf<ObjectType extends object, Depth extends number = 5> = [
-  Depth,
-] extends [never]
-  ? never
-  : {
-      [Key in keyof ObjectType &
-        (string | number)]: ObjectType[Key] extends object
-        ? Join<Key, NestedKeyOf<ObjectType[Key], Prev[Depth]>>
-        : Key;
-    }[keyof ObjectType & (string | number)];
-
-type Prev = [never, 0, 1, 2, 3, 4, 5];
+import { useLocalizedNumber } from './useLocalizedNumber';
 
 export function useTypedTranslations<N extends keyof TTranslations>(
   namespace: N,
-) {
+): TTypeFunction<N> {
   const t = useRawTranslations(namespace as string);
-  type Keys = NestedKeyOf<TTranslations[N]>;
+  const formatNumber = useLocalizedNumber();
 
-  return (key: Keys, values?: Record<string, any>) => t(key as string, values);
+  return ((key, options = {}) => {
+    const localizedOptions: Record<string, string> = {};
+
+    for (const [k, v] of Object.entries(options)) {
+      localizedOptions[k] = typeof v === 'number' ? formatNumber(v) : String(v);
+    }
+
+    return t(key as string, localizedOptions);
+  }) as TTypeFunction<N>;
 }

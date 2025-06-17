@@ -4,7 +4,7 @@ import { TUserType } from '@/types/user.types';
 import { usePathname } from 'next/navigation';
 
 export const useGetPathInfo = (): {
-  portal: TUserType;
+  portal: TUserType | null;
   locale: TLocale;
   pathname: string;
 } => {
@@ -14,7 +14,8 @@ export const useGetPathInfo = (): {
     return { portal: 'HP', locale: locale, pathname };
   } else if (pathname.startsWith(`/${locale}/patient`)) {
     return { portal: 'PATIENT', locale: locale, pathname };
-  } else {
+  } else if (locale && pathname.startsWith(`/${locale}/admin`)) {
     return { portal: 'ADMIN', locale: locale, pathname };
   }
+  return { portal: null, locale: locale, pathname };
 };

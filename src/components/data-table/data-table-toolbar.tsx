@@ -1,4 +1,4 @@
-import { Search, SearchIcon, Share } from 'lucide-react';
+import { SearchIcon, Share } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -37,34 +37,21 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center">
         {header && <h4 className={cn(header.className)}>{header.label}</h4>}
       </div>
-      {!showSearch && (
-        <Button
-          variant={'outline'}
-          onClick={() => setShowSearch(true)}
-          className="cursor-text text-gray-400"
-        >
-          <Search className="h-4 w-4" />
-          Search
-        </Button>
-      )}
-      <div
-        className={cn(
-          'flex items-center transition-all duration-300',
-          showSearch ? 'max-w-xs' : 'max-w-0 overflow-hidden',
-        )}
-      >
+
+      <div className="flex w-full cursor-text justify-end">
         <Input
-          autoFocus
           onBlur={() => setShowSearch(false)}
+          onClick={() => setShowSearch(true)}
           ref={ref}
           placeholder="Search"
-          className={`transition-all duration-300 ${
-            showSearch ? 'max-w-sm' : 'max-w-0'
+          className={`origin-right transition-all duration-300 ease-out ${
+            showSearch ? 'w-64' : 'w-5'
           }`}
           icon={SearchIcon}
           onChange={(e) => table.setGlobalFilter(e.target.value)}
         />
       </div>
+
       {addButton && (
         <Button onClick={addButton.onClick}>
           {addButton.icon}
@@ -72,14 +59,14 @@ export function DataTableToolbar<TData>({
         </Button>
       )}
       {hasExport && (
-        <Button variant={'ghost'} onClick={() => setSaveModal((prev) => !prev)}>
+        <Button
+          variant={'outline'}
+          onClick={() => setSaveModal((prev) => !prev)}
+        >
           <Share className="mr-2 h-4 w-4" />
           Export
         </Button>
       )}
-      {/*
-            // <DataTableViewOptions table={table} />
-              */}
     </div>
   );
 }

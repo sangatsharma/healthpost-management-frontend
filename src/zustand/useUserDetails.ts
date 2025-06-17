@@ -6,6 +6,8 @@ type TUserStore = {
   setUser: (user: TUser | null) => void;
   isLoggedIn: boolean;
   logOut: () => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 const getInitialData = (set: {
@@ -23,11 +25,12 @@ const getInitialData = (set: {
 }): TUserStore => ({
   user: null,
   setUser: (user) => {
-    set({ user });
-    set({ isLoggedIn: !!user });
+    set({ isLoggedIn: !!user, isLoading: false, user });
   },
   isLoggedIn: false,
   logOut: () => set({ user: null, isLoggedIn: false }),
+  isLoading: true,
+  setIsLoading: (isLoading) => set({ isLoading }),
 });
 
 export const useUserStore = create<TUserStore>((set) => getInitialData(set));

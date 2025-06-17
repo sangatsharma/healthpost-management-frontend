@@ -3,6 +3,7 @@ import { UserRole } from '@/types/user.types';
 import { Action, TPermissionResource } from '@/zustand/permissions';
 import { useUserStore } from '@/zustand/useUserDetails';
 import { useState, useEffect } from 'react';
+import { useGetPathInfo } from './useGetPortal';
 
 type TPermissionResult = {
   hasReadPermission: boolean;
@@ -15,6 +16,7 @@ export function useHasPermission(
 ): TPermissionResult {
   const user = useUserStore((state) => state.user);
   const userLoaded = useUserStore((state) => state.isLoggedIn);
+  const { portal } = useGetPathInfo();
 
   const [permissions, setPermissions] = useState<TPermissionResult>({
     hasReadPermission: false,
@@ -41,7 +43,7 @@ export function useHasPermission(
     const { role, permissions: userPermissions = [], healthPostId } = user;
 
     // Super admin has all permissions
-    if (role === UserRole.SUPERADMIN) {
+    if (role === UserRole.SUPERADMIN && portal?.toLowerCase() === 'admin') {
       setPermissions({
         hasReadPermission: true,
         hasWritePermission: true,
