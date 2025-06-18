@@ -8,7 +8,9 @@ import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
+import { AddHealthPostModal } from './_components/HealthPostModal';
 
 type THealthpost = {
   id: string;
@@ -20,6 +22,8 @@ type THealthpost = {
 };
 
 export default function Page() {
+  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+
   const ActionOptions = (row: Row<THealthpost>): ActionButtonDataTypes[] => [
     {
       name: 'Edit',
@@ -220,11 +224,17 @@ export default function Page() {
           addButton={{
             label: 'Add Hospital',
             icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () => () => {},
+            onClick: () => setIsOpenAddModal(true),
           }}
           onRowClick={() => () => {}}
         />
       </div>
+      {isOpenAddModal && (
+        <AddHealthPostModal
+          isOpen={isOpenAddModal}
+          toggleModal={() => setIsOpenAddModal(false)}
+        />
+      )}
     </ProtectedRoute>
   );
 }

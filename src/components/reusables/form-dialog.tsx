@@ -55,6 +55,7 @@ const FormDialog: React.FC<TProps> = ({
         onConfirm: () => {
           toggleModal();
         },
+
         cancelText: t('dialog.keepEditing'),
         confirmText: t('dialog.cancelForm'),
       });
@@ -69,13 +70,13 @@ const FormDialog: React.FC<TProps> = ({
         <DialogTrigger>{trigger}</DialogTrigger>
         <DialogContent
           className={cn(
-            'flex h-fit max-w-screen-2xl flex-col justify-between p-0 md:max-w-2xl',
+            'flex h-fit max-w-screen-2xl flex-col justify-between md:max-w-2xl',
             className,
           )}
         >
           {props.title ? (
             <div>
-              <DialogHeader className="space-y-5">
+              <DialogHeader className="mb-10 space-y-5">
                 <DialogTitle className="text-center text-2xl font-normal">
                   {props.title}
                 </DialogTitle>
@@ -98,7 +99,10 @@ const FormDialog: React.FC<TProps> = ({
               <Button
                 onClick={resetAction.onClick && resetAction.onClick}
                 variant={resetAction.variant || 'ghost'}
-                className={cn('space-x-2', resetAction.className)}
+                className={cn(
+                  'cursor-pointer space-x-2',
+                  resetAction.className,
+                )}
               >
                 {resetAction.icon} {resetAction.label}
               </Button>
@@ -108,7 +112,10 @@ const FormDialog: React.FC<TProps> = ({
                 onClick={mutateAction.onClick && mutateAction.onClick}
                 type="submit"
                 variant={mutateAction.variant || 'default'}
-                className={cn('space-x-2', mutateAction.className)}
+                className={cn(
+                  'cursor-pointer space-x-2',
+                  mutateAction.className,
+                )}
                 disabled={mutateAction.disabled}
                 isLoading={mutateAction.isLoading}
               >

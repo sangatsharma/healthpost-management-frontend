@@ -15,7 +15,19 @@
   "Validation": {
     "required": "This field is required.",
     "email": "Please enter a valid email address.",
-    "otp": "Please enter OTP."
+    "otp": "Please enter OTP.",
+    "minLength": "Minimum {min} characters required.",
+    "maxLength": "Maximum {max} characters allowed.",
+    "Healthpost": {
+      "name": "HealthPost name is required.",
+      "wardNo": "HealthPost ward number is required.",
+      "municipality": "HealthPost municipality is required.",
+      "location": "HealthPost location is required.",
+      "phone": "HealthPost phone number is invalid.",
+      "email": "HealthPost email is required.",
+      "description": "HealthPost description is required.",
+      "status": "HealthPost status is required."
+    }
   },
 
   "Login": {

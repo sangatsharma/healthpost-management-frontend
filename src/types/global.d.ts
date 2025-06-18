@@ -1,7 +1,8 @@
 import { TAction, TPermissionResource } from '@/zustand/permissions';
-import en from '../../messages/en.json';
 import '@tanstack/react-table';
 import { ColumnDef } from '@tanstack/react-table';
+import en from '../../messages/en.json';
+import { NestedKeyOf } from 'next-intl';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta {
@@ -14,6 +15,13 @@ type TTranslations = typeof en;
 
 type TFunc<K extends keyof TTranslations> = (
   key: keyof TTranslations[K],
+) => string;
+
+type TTypeFunction<N extends keyof TTranslations> = <
+  K extends NestedKeyOf<TTranslations[N]>,
+>(
+  key: K,
+  options?: Record<string, string | number>,
 ) => string;
 
 type TLocale = 'en' | 'np';
@@ -112,4 +120,17 @@ type ActionButtonDataTypes = {
   hide?: boolean;
   id?: string;
   textClassName?: string;
+};
+
+type TBtnVariant =
+  | 'link'
+  | 'default'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost';
+
+type TLabelValue = {
+  label: string;
+  value: string;
 };

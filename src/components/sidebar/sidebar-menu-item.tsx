@@ -31,7 +31,7 @@ export default function SidebarMenuItem({
   onNavigate,
 }: SidebarMenuItemProps) {
   const { locale, portal: userPortal, pathname } = useGetPathInfo();
-  const portal = userPortal.toLowerCase();
+  const portal = userPortal?.toLowerCase();
   //todo handle /:id
   const isActive =
     `/${locale}/${portal}/${item.href}` === pathname ||

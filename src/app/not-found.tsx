@@ -2,10 +2,10 @@ import { FileWarning } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useTranslations } from 'next-intl';
 
 export default function NotFoundPage() {
-  const t = useTypedTranslations('GeneralPages');
+  const t = useTranslations('GeneralPages');
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center rounded-2xl">

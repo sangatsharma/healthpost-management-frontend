@@ -127,3 +127,43 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-thin-custom::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Fully transparent track */
+.scrollbar-thin-custom::-webkit-scrollbar-track,
+.scrollbar-thin-custom::-webkit-scrollbar-track-piece {
+  background: transparent !important;
+}
+
+/* Thumb styling */
+.scrollbar-thin-custom::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 120, 0.3);
+  border-radius: 6px;
+}
+
+/* Thumb in dark mode */
+.dark .scrollbar-thin-custom::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200, 0.2);
+}
+
+/* Optional: for Firefox */
+.scrollbar-thin-custom {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.3) transparent;
+}
+
+.dark .scrollbar-thin-custom {
+  scrollbar-color: rgba(200, 200, 200, 0.2) transparent;
+}

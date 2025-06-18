@@ -11,17 +11,19 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { getMenuItems } from '@/constants/routes.constants';
 import { useTheme } from '@/provider/ThemeProvider';
 import { useUserStore } from '@/zustand/useUserDetails';
+import { useGetPathInfo } from '@/hooks/useGetPortal';
 
 export default function HealthPostSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const user = useUserStore((state) => state.user);
+  const { portal } = useGetPathInfo();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  if (!user) {
+  if (!user || user.accountType.toLowerCase() !== portal?.toLowerCase()) {
     return null;
   }
 
@@ -37,7 +39,7 @@ export default function HealthPostSidebar() {
       {/* Desktop Sidebar */}
       <TooltipProvider delayDuration={300}>
         <div
-          className={`bg-background border-border hidden h-screen border-r duration-300 md:flex ${
+          className={`bg-background border-border hidden h-screen border-r duration-300 md:flex dark:bg-[#181818] ${
             isCollapsed ? 'w-16' : 'w-64'
           } flex-col shadow-sm`}
         >

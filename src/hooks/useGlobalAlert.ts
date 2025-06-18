@@ -66,6 +66,7 @@ export function useGlobalAlert() {
         (isDestructive ? t('action.delete') : t('dialog.confirm')),
       cancelName: cancelText || t('action.cancel'),
       btnAction: onConfirm,
+      img: '/cancelEdit.png',
       cancelAction: () => {
         hideAlertDialog();
         if (onCancel) {

@@ -53,32 +53,24 @@ export function GlobalAlertDialog() {
       open={isOpen}
       onOpenChange={(open) => !open && hideAlertDialog()}
     >
-      <AlertDialogContent className="sm:max-w-[425px]">
+      <AlertDialogContent className="w-fit">
         <AlertDialogHeader>
-          {img && (
-            <div className="mb-4 flex justify-center">
-              <div
-                className="relative"
-                style={{
-                  width: imgSize || 80,
-                  height: imgSize || 80,
-                }}
-              >
+          {title && (
+            <AlertDialogTitle className="mb-2 flex flex-col items-center gap-4 text-center text-3xl">
+              {title}
+              {img && (
                 <Image
                   src={img || '/placeholder.svg'}
                   alt="Alert image"
-                  fill
                   className="object-contain"
-                  sizes={`${imgSize || 80}px`}
+                  width={imgSize || 120}
+                  height={imgSize || 120}
                 />
-              </div>
-            </div>
-          )}
-          {title && (
-            <AlertDialogTitle className="text-center">{title}</AlertDialogTitle>
+              )}
+            </AlertDialogTitle>
           )}
           {desc && (
-            <AlertDialogDescription className="text-center">
+            <AlertDialogDescription className="text-center text-[18px] font-semibold">
               {desc}
             </AlertDialogDescription>
           )}
