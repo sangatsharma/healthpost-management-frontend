@@ -121,3 +121,16 @@ type ActionButtonDataTypes = {
   id?: string;
   textClassName?: string;
 };
+
+type TBtnVariant =
+  | 'link'
+  | 'default'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost';
+
+type TLabelValue = {
+  label: string;
+  value: string;
+};

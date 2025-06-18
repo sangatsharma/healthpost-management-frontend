@@ -16,6 +16,8 @@ import { queryKeys } from '@/api/queryKeys';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import FormWrapper from '@/components/reusables/form-wrapper';
+import { PhoneInput } from '@/components/ui/phone-input';
+import { SelectMultiple } from '@/components/reusables/SelectMultiple';
 
 type TProps = {
   isOpen: boolean;
@@ -57,7 +59,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     defaultValues: {
       name: '',
       location: '',
-      adminId: '',
+
       email: '',
       phone: '',
       municipality: '',
@@ -114,7 +116,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
               <FormField
                 control={form.control}
                 name="name"
@@ -162,7 +164,62 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 name="wardNo"
                 render={({ field }) => (
                   <FormWrapper label="Ward No" isRequired>
-                    <Input {...field} required />
+                    <Input {...field} type="number" required />
+                  </FormWrapper>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="adminId"
+                render={({ field }) => (
+                  <FormWrapper label="Select Admin" isRequired>
+                    <SelectMultiple
+                      options={[
+                        { label: 'admin1', value: 'admin1' },
+                        { label: 'admin2', value: 'admin2' },
+                        { label: 'admin1', value: 'admin1' },
+                        { label: 'admin2', value: 'admin2' },
+                        { label: 'admin1', value: 'admin1' },
+                        { label: 'admin2', value: 'admin2' },
+                        { label: 'admin1', value: 'admin1' },
+                        { label: 'admin2', value: 'admin2' },
+                        { label: 'admin1', value: 'admin1' },
+                        { label: 'admin2', value: 'admin2' },
+                      ]}
+                      placeholder="Select Admin"
+                      Values={
+                        field?.value
+                          ? [{ label: field.value, value: field.value }]
+                          : []
+                      }
+                      maxSelection={1}
+                      onValueChange={(value) => {
+                        if (value.length === 0) {
+                          form.setValue('adminId', '');
+                          return;
+                        }
+                        form.setValue('adminId', value[0]?.value || '');
+                      }}
+                      {...field}
+                    />
+                  </FormWrapper>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormWrapper label="Phone Number" isRequired>
+                    <PhoneInput
+                      {...field}
+                      defaultCountry="NP"
+                      placeholder="Enter Phone Number"
+                      required
+                      countrySelectProps={{
+                        disabled: true,
+                      }}
+                    />
                   </FormWrapper>
                 )}
               />

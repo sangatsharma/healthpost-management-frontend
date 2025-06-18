@@ -103,7 +103,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="space-y-2">
         <DataTableToolbar
           table={table}
           addButton={addButton}
@@ -111,9 +111,9 @@ export function DataTable<TData extends { id: string }, TValue>({
           hasExport={hasExport}
           setSaveModal={setSaveModal}
         />
-        <div className="overflow-clip rounded-md border">
+        <div className="mt-4 overflow-clip rounded-md border">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-[#c3f3dd] dark:bg-[#131313]">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -121,9 +121,10 @@ export function DataTable<TData extends { id: string }, TValue>({
                       <TableHead
                         key={header.id}
                         colSpan={header.colSpan}
-                        className={
-                          header.column.columnDef.meta?.headerClassName
-                        }
+                        className={cn(
+                          header.column.columnDef.meta?.headerClassName,
+                          'py-3',
+                        )}
                       >
                         {header.isPlaceholder
                           ? null
@@ -142,6 +143,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
+                    className="transition-colors odd:bg-[#fffefef6] even:bg-[#f6fbfd] hover:bg-[#ecfdf5] data-[state=selected]:bg-[#f4f7ef] dark:odd:bg-[#1f1f1f] dark:even:bg-[#181717] dark:hover:bg-[#2b2b2b] dark:data-[state=selected]:bg-[#262626]"
                     data-state={row.getIsSelected() && 'selected'}
                     onClick={(e) => {
                       e.preventDefault();

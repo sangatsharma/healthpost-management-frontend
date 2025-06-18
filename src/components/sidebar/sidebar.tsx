@@ -18,7 +18,6 @@ export default function HealthPostSidebar() {
   const { theme, toggleTheme } = useTheme();
   const user = useUserStore((state) => state.user);
   const { portal } = useGetPathInfo();
-  console.log('portal', portal);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -40,7 +39,7 @@ export default function HealthPostSidebar() {
       {/* Desktop Sidebar */}
       <TooltipProvider delayDuration={300}>
         <div
-          className={`bg-background border-border hidden h-screen border-r duration-300 md:flex ${
+          className={`bg-background border-border hidden h-screen border-r duration-300 md:flex dark:bg-[#181818] ${
             isCollapsed ? 'w-16' : 'w-64'
           } flex-col shadow-sm`}
         >

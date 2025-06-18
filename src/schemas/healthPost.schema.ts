@@ -1,5 +1,6 @@
 import { basicValidator } from '@/lib/validators';
 import { TTypeFunction } from '@/types/global';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
 
 export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
@@ -35,10 +36,13 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
     phone: z.coerce
       .string()
       .trim()
-      .min(10, {
+      .min(13, {
         message: t('Healthpost.phone'),
       })
-      .refine((val) => /^\d+$/.test(val), {
+      .max(14, {
+        message: t('Healthpost.phone'),
+      })
+      .refine(() => isValidPhoneNumber, {
         message: t('Healthpost.phone'),
       }),
     wardNo: z.coerce

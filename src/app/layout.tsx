@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const locale = useLocale();
   return (
     <html lang={locale || 'en'} className={poppins.variable}>
-      <body className="bg-background text-foreground font-poppins antialiased">
+      <body className="bg-background text-foreground font-poppins antialiased transition-colors duration-300">
         {children}
       </body>
     </html>
