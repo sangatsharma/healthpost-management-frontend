@@ -11,6 +11,7 @@ export default function Page() {
       <div>
         <h1>{t('NotFound.title')}</h1>
         <p>Welcome to the healthpost dashboard!</p>
+        <p>Welcome to the healthpost dashboard!</p>
         <LanguageSwitcher />
       </div>
     </ProtectedRoute>
