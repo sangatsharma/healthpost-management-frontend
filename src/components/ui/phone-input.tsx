@@ -27,16 +27,19 @@ type PhoneInputProps = Omit<
 > &
   Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
     onChange?: (value: RPNInput.Value) => void;
+    error?: boolean;
   };
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-    ({ className, onChange, value, ...props }, ref) => {
+    ({ className, onChange, value, error, ...props }, ref) => {
       return (
         <RPNInput.default
           ref={ref}
           className={cn(
             'flex w-fit rounded-md border border-emerald-200',
+            error &&
+              'border-red-500 focus:border-red-500 focus:ring-red-500 focus-visible:ring-red-200',
             className,
           )}
           flagComponent={FlagComponent}
@@ -194,11 +197,11 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
 
   return (
-    <span className="= flex h-8 w-8 items-center justify-center rounded-sm border-emerald-200 bg-emerald-50 [&_svg:not([class*='size-'])]:size-full">
+    <span className="dark:bg-input/30 flex h-8 w-8 items-center justify-center gap-1 rounded-sm border-emerald-200 bg-emerald-50 [&_svg:not([class*='size-'])]:size-full">
       {Flag && (
         <>
           <Flag title={countryName} />
-          <span className="text-black">{country}</span>
+          <span className="text-foreground">{country}</span>
         </>
       )}
     </span>

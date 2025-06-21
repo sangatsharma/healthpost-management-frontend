@@ -20,12 +20,7 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
       minLength: 4,
       maxLength: 100,
     }),
-    adminId: z
-      .string({
-        required_error: t('required'),
-        invalid_type_error: t('required'),
-      })
-      .uuid(),
+
     email: basicValidator({
       translationFunction: t,
       required: true,

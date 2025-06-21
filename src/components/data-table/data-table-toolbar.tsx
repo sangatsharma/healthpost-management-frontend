@@ -34,9 +34,9 @@ export function DataTableToolbar<TData>({
 
   return (
     <div className="flex items-center justify-between gap-2">
-      <div className="flex flex-1 items-center">
-        {header && <h4 className={cn(header.className)}>{header.label}</h4>}
-      </div>
+      {header && (
+        <h4 className={cn(header.className, 'text-nowrap')}>{header.label}</h4>
+      )}
 
       <div className="flex w-full cursor-text justify-end">
         <Input

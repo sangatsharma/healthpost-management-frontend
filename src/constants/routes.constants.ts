@@ -17,6 +17,7 @@ import {
   BarChart3,
   DollarSign,
   TrendingUp,
+  HeartPlusIcon,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem } from '@/types/global';
@@ -207,9 +208,16 @@ export const getMenuItems = ({
         },
         {
           key: 'healthpost',
-          icon: Users,
+          icon: HeartPlusIcon,
           label: 'Health Posts',
           href: `healthpost`,
+          permission: Permissions.HP_MANAGEMENT,
+        },
+        {
+          key: 'staffs',
+          icon: Users,
+          label: 'Staff Management',
+          href: `staffs`,
           permission: Permissions.HP_MANAGEMENT,
         },
       ];

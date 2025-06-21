@@ -20,6 +20,8 @@
     "maxLength": "Maximum {max} characters allowed.",
     "phone": "Phone number is invalid.",
     "status": "Status is required.",
+    "minSelection": "Please select at least {min} option.",
+    "maxSelection": "You can only select up to {max} options.",
     "Healthpost": {
       "name": "HealthPost name is required.",
       "wardNo": "HealthPost ward number is required.",

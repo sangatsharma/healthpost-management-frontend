@@ -23,6 +23,12 @@ export enum Status {
   INACTIVE = 'INACTIVE',
 }
 
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+}
+
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
 
 export type TUser = {
