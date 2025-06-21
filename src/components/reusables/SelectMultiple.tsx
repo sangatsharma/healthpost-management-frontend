@@ -266,7 +266,7 @@ export const SelectMultiple = React.forwardRef<
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              'dark:bg-background flex h-auto min-h-10 w-[250px] items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 p-1 hover:bg-emerald-50/30 active:scale-100',
+              'dark:bg-background flex h-auto min-h-10 w-full max-w-[300px] items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 p-1 hover:bg-emerald-50/30 active:scale-100',
               className,
             )}
             onKeyUp={handleKeyDown}

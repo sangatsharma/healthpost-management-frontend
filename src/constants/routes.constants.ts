@@ -99,7 +99,7 @@ export const getMenuItems = ({
               key: 'inventory',
               icon: Package,
               label: 'Inventory',
-              href: `$hp/pharmacy/inventory`,
+              href: `hp/pharmacy/inventory`,
               permission: Permissions.MEDICINE_DISPENSE,
             },
             {

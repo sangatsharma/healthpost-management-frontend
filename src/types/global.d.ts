@@ -29,7 +29,7 @@ type TLocale = 'en' | 'np';
 type TPermission = {
   action: TAction;
   resource: TPermissionResource;
-  healthPost: string;
+  // healthPost: string;
 };
 
 type TResponse<T> = {

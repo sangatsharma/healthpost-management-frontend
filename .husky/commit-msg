@@ -1,3 +1,4 @@
+#!/bin/sh
 # Read the first line of the commit message
 first_line=$(head -n1 "$1")
 

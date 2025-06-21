@@ -18,6 +18,11 @@ export function middleware(request: NextRequest) {
     const newPathname = `/${locale}${pathname}`;
     return NextResponse.redirect(new URL(newPathname, request.url));
   }
+  const portal = request.cookies.get('portal')?.value || 'patient';
+  if (pathname === `/${locale}`) {
+    const newPathname = `/${locale}/${portal}/dashboard`;
+    return NextResponse.redirect(new URL(newPathname, request.url));
+  }
 
   // Just forward request to intlMiddleware (does i18n routing, etc.)
   return intlMiddleware(request);

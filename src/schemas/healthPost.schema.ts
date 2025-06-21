@@ -1,5 +1,6 @@
-import { basicValidator } from '@/lib/validators';
+import { basicValidator, createFileUploadValidator } from '@/lib/validators';
 import { TTypeFunction } from '@/types/global';
+import { Status } from '@/types/user.types';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
 
@@ -37,13 +38,13 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
       .string()
       .trim()
       .min(13, {
-        message: t('Healthpost.phone'),
+        message: t('phone'),
       })
       .max(14, {
-        message: t('Healthpost.phone'),
+        message: t('phone'),
       })
       .refine(() => isValidPhoneNumber, {
-        message: t('Healthpost.phone'),
+        message: t('phone'),
       }),
     wardNo: z.coerce
       .number({
@@ -60,9 +61,13 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
       minLength: 1,
       maxLength: 200,
     }),
-    status: z.enum(['ACTIVE', 'INACTIVE'], {
-      required_error: t('Healthpost.status'),
-      invalid_type_error: t('Healthpost.status'),
+    status: z.nativeEnum(Status, {
+      required_error: t('status'),
+      invalid_type_error: t('status'),
+    }),
+    images: createFileUploadValidator({
+      required: true,
+      message: t('required'),
     }),
     createdAt: z.string().optional(),
     id: z.string().uuid().optional(),

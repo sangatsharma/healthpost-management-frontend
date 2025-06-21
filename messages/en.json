@@ -18,15 +18,20 @@
     "otp": "Please enter OTP.",
     "minLength": "Minimum {min} characters required.",
     "maxLength": "Maximum {max} characters allowed.",
+    "phone": "Phone number is invalid.",
+    "status": "Status is required.",
     "Healthpost": {
       "name": "HealthPost name is required.",
       "wardNo": "HealthPost ward number is required.",
       "municipality": "HealthPost municipality is required.",
       "location": "HealthPost location is required.",
-      "phone": "HealthPost phone number is invalid.",
+
       "email": "HealthPost email is required.",
-      "description": "HealthPost description is required.",
-      "status": "HealthPost status is required."
+      "description": "HealthPost description is required."
+    },
+    "Admin": {
+      "email": "Admin email is required.",
+      "phone": "Admin phone number is invalid."
     }
   },
 
