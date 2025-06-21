@@ -27,7 +27,9 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
               <div className="flex min-h-screen justify-start gap-4">
                 <GlobalAlertDialog />
                 <HealthPostSidebar />
-                <div className="w-full">{children}</div>
+                <div className="h-screen w-full overflow-scroll">
+                  {children}
+                </div>
               </div>
             </AuthProvider>
           </TooltipProvider>
