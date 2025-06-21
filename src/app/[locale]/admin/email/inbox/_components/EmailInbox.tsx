@@ -76,25 +76,30 @@ const EmailInbox = () => {
             className="w-full rounded bg-gray-200 p-2 text-gray-800"
           />
         </div>
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className="mb-4 rounded-lg bg-gray-50 p-4 text-gray-800"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">{msg.name}</h3>
-              <span className="text-gray-500">{msg.time}</span>
+        <div className="max-h-96 overflow-y-auto">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className="mb-4 rounded-lg bg-gray-50 p-4 text-gray-800"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium">{msg.name}</h3>
+                <span className="text-gray-500">{msg.time}</span>
+              </div>
+              <p className="mt-2">{msg.content}</p>
+              <div className="mt-2 font-light text-white">
+                {msg.attachments.map((attachment, i) => (
+                  <span
+                    key={i}
+                    className="mr-2 rounded-sm border-0 bg-blue-600 p-1"
+                  >
+                    {attachment}
+                  </span>
+                ))}
+              </div>
             </div>
-            <p className="mt-2">{msg.content}</p>
-            <div className="mt-2 text-blue-500">
-              {msg.attachments.map((attachment, i) => (
-                <span key={i} className="mr-2">
-                  {attachment}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import {
   BarChart3,
   DollarSign,
   TrendingUp,
+  Mail,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem } from '@/types/global';
@@ -55,10 +56,13 @@ export const HEALTHPOST_ROUTES = [
   '/inventory',
 ];
 
+export const EMAIL_ROUTES = ['/email/inbox', '/email/new'];
+
 export const PROTECTED_ROUTES = [
   ...ADMIN_ROUTES,
   ...HEALTHPOST_ROUTES,
   ...PATIENT_ROUTES,
+  ...EMAIL_ROUTES,
 ];
 
 export const getMenuItems = ({
@@ -211,6 +215,27 @@ export const getMenuItems = ({
           label: 'Health Posts',
           href: `healthpost`,
           permission: Permissions.HP_MANAGEMENT,
+        },
+        {
+          key: 'email',
+          icon: Mail,
+          label: 'Email',
+          submenu: [
+            {
+              key: 'email',
+              icon: FileText,
+              label: 'Inbox',
+              href: 'email/inbox',
+              permission: Permissions.HP_MANAGEMENT,
+            },
+            {
+              key: 'new',
+              icon: FileText,
+              label: 'new',
+              href: 'new',
+              permission: Permissions.HP_MANAGEMENT,
+            },
+          ],
         },
       ];
     default:
