@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (isSuccess && data && user.isLoading) {
       console.log('AuthProvider useEffect triggered', user);
       setUser(data.data.user);
+      document.cookie = `portal=${data.data?.user?.accountType?.toLowerCase()}; path=/;`;
       setIsLoading(false);
     }
 

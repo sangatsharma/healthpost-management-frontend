@@ -13,6 +13,16 @@ export enum UserRole {
   ALL = 'ALL',
 }
 
+export enum UserType {
+  PATIENT = 'PATIENT',
+  HP = 'HP',
+  ADMIN = 'ADMIN',
+}
+export enum Status {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
 
 export type TUser = {

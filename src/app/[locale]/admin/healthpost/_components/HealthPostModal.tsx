@@ -19,6 +19,9 @@ import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { SelectMultiple } from '@/components/reusables/SelectMultiple';
 
+import { FileUploader } from '@/components/reusables/image-uploader';
+import { Status } from '@/types/user.types';
+
 type TProps = {
   isOpen: boolean;
   toggleModal: () => void;
@@ -35,7 +38,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     queryKey: queryKeys.healthPost.singleHealthPost(healthPostId || ''),
     queryFn: () =>
       fetchHealthPostInfo({
-        healthPostId,
+        healthPostId: healthPostId!,
       }),
     enabled: !!healthPostId,
   });
@@ -59,11 +62,11 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     defaultValues: {
       name: '',
       location: '',
-
+      images: [],
       email: '',
       phone: '',
       municipality: '',
-      status: 'ACTIVE',
+      status: Status.ACTIVE,
       createdAt: '',
       id: '',
     },
@@ -78,11 +81,12 @@ export const AddHealthPostModal: React.FC<TProps> = ({
 
   const onSubmit = (data: THealthPostSchema): void => {
     mutateHealthPost({
-      healthPostId: healthPostId || null,
+      healthPostId: healthPostId || undefined,
       data: {
         ...data,
         id: healthPostId || undefined,
       },
+      method: healthPostId ? 'PUT' : 'POST',
     });
     reset();
     toggleModal();
@@ -92,6 +96,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     reset();
     toggleModal();
   };
+  console.log('Health Post Data:', form.getValues());
 
   return (
     <React.Fragment>
@@ -116,7 +121,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
+            <div className="grid w-[38vw] grid-cols-2 gap-4 xl:grid-cols-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -223,6 +228,26 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   </FormWrapper>
                 )}
               />
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field }) => (
+                    <FormWrapper label="Images" isRequired>
+                      <FileUploader
+                        onChange={field.onChange}
+                        defaultValue={field.value || []}
+                        allowFile={true}
+                        allowImage
+                        showPreview
+                        maxFiles={5}
+                        maxSize={10 * 1024 * 1024} // 10MB
+                        name="images"
+                      />
+                    </FormWrapper>
+                  )}
+                />
+              </div>
             </div>
           </form>
         </Form>

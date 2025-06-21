@@ -35,11 +35,14 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
       return (
         <RPNInput.default
           ref={ref}
-          className={cn('flex rounded-md border border-emerald-200', className)}
+          className={cn(
+            'flex w-fit rounded-md border border-emerald-200',
+            className,
+          )}
           flagComponent={FlagComponent}
           countrySelectComponent={CountrySelect}
           inputComponent={InputComponent}
-          smartCaret={false}
+          smartCaret={true}
           value={value || undefined}
           /**
            * Handles the onChange event.
@@ -64,7 +67,7 @@ const InputComponent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Input
     className={cn(
-      'w-[190px] rounded-s-none rounded-e-lg border-none',
+      'w-full flex-1 rounded-s-none rounded-e-lg border-none',
       className,
     )}
     {...props}
@@ -98,7 +101,7 @@ const CountrySelect = ({
         <Button
           type="button"
           variant="outline"
-          className="flex gap-1 rounded-s-lg rounded-e-none px-1 focus:z-10"
+          className="flex w-20 gap-1 rounded-s-lg rounded-e-none px-1 focus:z-10"
           disabled={disabled}
         >
           <FlagComponent
@@ -113,7 +116,7 @@ const CountrySelect = ({
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className="p-0">
         <Command>
           <CommandInput
             value={searchValue}
@@ -191,8 +194,13 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
 
   return (
-    <span className="flex h-4 w-6 overflow-hidden rounded-sm border-emerald-200 bg-emerald-50 [&_svg:not([class*='size-'])]:size-full">
-      {Flag && <Flag title={countryName} />}
+    <span className="= flex h-8 w-8 items-center justify-center rounded-sm border-emerald-200 bg-emerald-50 [&_svg:not([class*='size-'])]:size-full">
+      {Flag && (
+        <>
+          <Flag title={countryName} />
+          <span className="text-black">{country}</span>
+        </>
+      )}
     </span>
   );
 };

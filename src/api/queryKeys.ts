@@ -12,4 +12,8 @@ export const queryKeys = {
     healthPosts: ['healthPosts'],
     singleHealthPost: (id: string) => ['healthPost', id],
   },
+  staff: {
+    staffs: ['staffs'],
+    singleStaff: (id: string) => ['staff', id],
+  },
 };
