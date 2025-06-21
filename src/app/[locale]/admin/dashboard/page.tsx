@@ -36,15 +36,17 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { useState } from 'react';
+import { useLocale } from 'next-intl';
 
-interface DashboardProps {
-  params: {
-    locale: string;
-  };
-}
+// interface DashboardProps {
+//   params: {
+//     locale: string;
+//   };
+// }
 
-export default function AdminDashboard({ params }: DashboardProps) {
-  const { locale } = params;
+export default function AdminDashboard() {
+  // const { locale } = params;
+  const locale = useLocale();
   // const t = useTypedTranslations('GeneralPages')
   const isNepali = locale === 'np';
 
