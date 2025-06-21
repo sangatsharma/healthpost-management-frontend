@@ -206,7 +206,6 @@ export const SelectMultiple = React.forwardRef<
         setSelectedValues(matchedOptions || []);
       }
     }, [Values, JSON.stringify(defaultValue), JSON.stringify(options)]);
-
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>,
     ): void => {
@@ -266,7 +265,7 @@ export const SelectMultiple = React.forwardRef<
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              'dark:bg-background flex h-auto min-h-10 w-full max-w-[300px] items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 p-1 hover:bg-emerald-50/30 active:scale-100',
+              'dark:bg-input/30 flex h-auto min-h-10 w-full max-w-[300px] items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 p-1 hover:bg-emerald-50/30 active:scale-100',
               className,
             )}
             onKeyUp={handleKeyDown}
@@ -281,33 +280,30 @@ export const SelectMultiple = React.forwardRef<
                     const IconComponent = option?.icon;
 
                     return (
-                      <>
-                        <Badge
-                          key={single.value + idx}
-                          className={cn(
-                            'z-50 font-normal whitespace-normal',
-                            multiSelectVariants({ variant }),
-                          )}
-                          style={{ animationDuration: `${animation}s` }}
+                      <Badge
+                        key={single.value + idx}
+                        className={cn(
+                          'z-50 font-normal whitespace-normal',
+                          multiSelectVariants({ variant }),
+                        )}
+                        style={{ animationDuration: `${animation}s` }}
+                      >
+                        {IconComponent && (
+                          <IconComponent className="mr-2 h-4 w-4" />
+                        )}
+                        {option?.label}
+                        <span
+                          role="button"
+                          tabIndex={-1}
+                          className="z-50 ml-2 h-4 w-4 cursor-pointer border-none bg-transparent p-0"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            toggleOption(single);
+                          }}
                         >
-                          {IconComponent && (
-                            <IconComponent className="mr-2 h-4 w-4" />
-                          )}
-                          {option?.label}
-                          <button
-                            type="button"
-                            tabIndex={-1}
-                            className="z-50 ml-2 h-4 w-4 cursor-pointer border-none bg-transparent p-0"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              event.preventDefault();
-                              toggleOption(single);
-                            }}
-                          >
-                            <XCircle />
-                          </button>
-                        </Badge>
-                      </>
+                          <XCircle />
+                        </span>
+                      </Badge>
                     );
                   })}
                   {selectedValues.length > maxCount && (
@@ -335,18 +331,17 @@ export const SelectMultiple = React.forwardRef<
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <button
-                    type="button"
+                  <span
+                    role="button"
                     tabIndex={-1}
                     className="text-foreground z-50 mx-2 h-4 w-4 cursor-pointer border-none bg-transparent p-0"
                     onClick={(event) => {
                       event.stopPropagation();
-                      event.preventDefault();
                       handleClear();
                     }}
                   >
                     <XIcon />
-                  </button>
+                  </span>
                   <ChevronDown
                     className={cn(
                       'text-muted-foreground h-4 cursor-pointer',
@@ -366,12 +361,13 @@ export const SelectMultiple = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="popover-content-width-full border-input shadow-select scrollbar-thin-custom -mt-2 overflow-hidden rounded-[0.5rem] border p-2"
+          className="popover-content-width-full border-input shadow-select -mt-2 rounded-[0.5rem] border p-2"
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
           side={props.side}
         >
           <Command
+            // className="z-10 h-72"
             filter={(value, search) => {
               if (value.includes(search.toLowerCase())) {
                 return 1;
@@ -379,7 +375,6 @@ export const SelectMultiple = React.forwardRef<
 
               return 0;
             }}
-            className="z-10 max-h-[300px] overflow-y-auto"
           >
             <CommandInput
               placeholder="Search here"
@@ -404,7 +399,7 @@ export const SelectMultiple = React.forwardRef<
                 {isLoading ? (
                   <Loading />
                 ) : (
-                  <ScrollArea>
+                  <ScrollArea className="z-10 h-56 overflow-y-auto">
                     {options.map((option, index) => {
                       const isSelected = selectedValues.some(
                         (selected) => selected.value === option.value,
@@ -417,7 +412,7 @@ export const SelectMultiple = React.forwardRef<
                           key={option.value}
                           value={escapedValue + index}
                           onSelect={() => toggleOption(option)}
-                          className="group cursor-pointer content-stretch p-3"
+                          className="group content-stretch p-3"
                           disabled={
                             maxSelection
                               ? selectedValues.length >= maxSelection

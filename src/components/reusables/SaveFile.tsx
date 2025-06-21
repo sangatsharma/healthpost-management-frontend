@@ -91,6 +91,8 @@ const SaveFile: React.FC<TProps> = ({
                 name: e.target.value,
               }))
             }
+            className="w-full bg-emerald-50"
+            placeholder="Enter file name"
           />
         </div>
 
@@ -107,7 +109,7 @@ const SaveFile: React.FC<TProps> = ({
               }))
             }
           >
-            <SelectTrigger className="!h-12 w-full">
+            <SelectTrigger className="!h-12 w-full bg-emerald-50">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

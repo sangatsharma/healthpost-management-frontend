@@ -17,7 +17,6 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
-import { SelectMultiple } from '@/components/reusables/SelectMultiple';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { Status } from '@/types/user.types';
@@ -174,43 +173,6 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="adminId"
-                render={({ field }) => (
-                  <FormWrapper label="Select Admin" isRequired>
-                    <SelectMultiple
-                      options={[
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                      ]}
-                      placeholder="Select Admin"
-                      Values={
-                        field?.value
-                          ? [{ label: field.value, value: field.value }]
-                          : []
-                      }
-                      maxSelection={1}
-                      onValueChange={(value) => {
-                        if (value.length === 0) {
-                          form.setValue('adminId', '');
-                          return;
-                        }
-                        form.setValue('adminId', value[0]?.value || '');
-                      }}
-                      {...field}
-                    />
-                  </FormWrapper>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="phone"

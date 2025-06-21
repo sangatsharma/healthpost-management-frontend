@@ -1,6 +1,6 @@
 import { basicValidator, createFileUploadValidator } from '@/lib/validators';
 import { TTypeFunction } from '@/types/global';
-import { Status, UserRole, UserType } from '@/types/user.types';
+import { Gender, Status, UserRole, UserType } from '@/types/user.types';
 import { Action, Permissions } from '@/zustand/permissions';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
@@ -48,29 +48,46 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
       .refine(() => isValidPhoneNumber, {
         message: t('phone'),
       }),
-    role: z.nativeEnum(UserRole, {
+    status: z.nativeEnum(Status, {
+      invalid_type_error: t('required'),
+      message: t('required'),
       required_error: t('required'),
     }),
-    gender: z.nativeEnum(UserRole, {
+    role: z.nativeEnum(UserRole, {
+      invalid_type_error: t('required'),
+      message: t('required'),
+      required_error: t('required'),
+    }),
+    gender: z.nativeEnum(Gender, {
+      invalid_type_error: t('required'),
+      message: t('required'),
       required_error: t('required'),
     }),
     accountType: z.nativeEnum(UserType, {
+      invalid_type_error: t('required'),
+      message: t('required'),
       required_error: t('required'),
     }),
-    status: z.nativeEnum(Status, {
-      required_error: t('status'),
-      invalid_type_error: t('status'),
-    }),
-    permissions: z.array(
-      z.object({
-        action: z.nativeEnum(Action),
-        resource: z.nativeEnum(Permissions),
-      }),
-      {
+    healthPostId: z
+      .string({
         required_error: t('required'),
         invalid_type_error: t('required'),
-      },
-    ),
+      })
+      .uuid(),
+    permissions: z
+      .array(
+        z.object({
+          action: z.nativeEnum(Action),
+          resource: z.nativeEnum(Permissions),
+        }),
+        {
+          required_error: t('required'),
+          invalid_type_error: t('required'),
+        },
+      )
+      .min(1, {
+        message: t('required'),
+      }),
     profileImages: createFileUploadValidator({
       required: false,
     }),
