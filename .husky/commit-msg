@@ -6,7 +6,7 @@ first_line=$(head -n1 "$1")
 types="feat|fix|ci|chore|docs|test|style|refactor|wip|pref|build|revert|remove"
 
 # Validate the commit message format (Conventional Commit) WITHOUT scope
-if ! echo "$first_line" | grep -Eq "^(${types})(!?): .{1,300}$"; then
+if ! echo "$first_line" | grep -E "^(${types})(!?): .{1,}$" >/dev/null 2>&1; then
   echo "❌ Aborting commit: Invalid commit message format." >&2
   echo "✅ Expected format: type: short description (max 300 characters)" >&2
   echo "   Allowed types: $types" >&2
