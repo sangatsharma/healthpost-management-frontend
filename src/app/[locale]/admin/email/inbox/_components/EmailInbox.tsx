@@ -59,10 +59,6 @@ const EmailInbox = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 text-gray-800">
-      <header className="mb-6 rounded-lg bg-purple-600 p-4 text-white">
-        <h1 className="text-xl">Good Afternoon, Admin</h1>
-        <p className="text-sm">En 2025/5/18 9:00 PM</p>
-      </header>
       <div className="rounded-lg bg-white p-6 shadow-md">
         <div className="mb-4">
           <h2 className="text-lg">

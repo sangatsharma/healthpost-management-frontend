@@ -3,10 +3,6 @@ import { File, Image, Link, Signature } from 'lucide-react';
 const Email = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <header className="mb-6 rounded-lg bg-purple-600 p-4 text-white">
-        <h1 className="text-xl">Good Afternoon, Admin</h1>
-        <p className="text-sm">En 2025/5/18 9:00 PM</p>
-      </header>
       <div className="rounded-lg bg-white p-6 shadow-md">
         <div className="mb-4 flex justify-between">
           <button className="rounded bg-purple-600 px-4 py-2 text-white">
