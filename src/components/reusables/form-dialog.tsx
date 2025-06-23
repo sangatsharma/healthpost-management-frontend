@@ -1,5 +1,6 @@
+'use client';
 import { Loader2 } from 'lucide-react';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -64,18 +65,42 @@ const FormDialog: React.FC<TProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.onkeydown = (e) => {
+        // Trigger the submit action if Enter is pressed
+        if (
+          e.key === 'Enter' &&
+          isOpen &&
+          isFormDirty &&
+          mutateAction &&
+          mutateAction.onClick
+        ) {
+          e.preventDefault();
+          mutateAction.onClick();
+        }
+      };
+    }
+    // Optionally, clean up on unmount
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.onkeydown = null;
+      }
+    };
+  }, [isOpen, mutateAction, isFormDirty]);
+
   return (
     <div className="relative">
       <Dialog open={isOpen} onOpenChange={handleModalClose}>
         <DialogTrigger>{trigger}</DialogTrigger>
         <DialogContent
           className={cn(
-            'flex h-fit max-w-screen-2xl flex-col justify-between md:max-w-2xl',
+            'scrollbar-thin-custom flex h-fit max-h-[90vh] max-w-screen-2xl flex-col justify-between md:max-w-2xl',
             className,
           )}
         >
           {props.title ? (
-            <div>
+            <div className="max-h-[80vh] overflow-y-auto">
               <DialogHeader className="mb-10 space-y-5">
                 <DialogTitle className="text-center text-2xl font-normal">
                   {props.title}
@@ -84,10 +109,10 @@ const FormDialog: React.FC<TProps> = ({
               {children}
             </div>
           ) : (
-            <>
+            <div className="max-h-[80vh] overflow-y-auto">
               {props.header}
               {children}
-            </>
+            </div>
           )}
           {isLoading && (
             <div className="bg-opacity-90 absolute inset-0 flex items-center justify-center bg-white">

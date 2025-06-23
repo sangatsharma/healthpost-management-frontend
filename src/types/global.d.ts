@@ -1,4 +1,8 @@
-import { TAction, TPermissionResource } from '@/zustand/permissions';
+import {
+  Action,
+  Permissions,
+  TPermissionResource,
+} from '@/zustand/permissions';
 import '@tanstack/react-table';
 import { ColumnDef } from '@tanstack/react-table';
 import en from '../../messages/en.json';
@@ -12,6 +16,9 @@ declare module '@tanstack/react-table' {
 }
 
 type TTranslations = typeof en;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TAny = any;
 
 type TFunc<K extends keyof TTranslations> = (
   key: keyof TTranslations[K],
@@ -27,8 +34,8 @@ type TTypeFunction<N extends keyof TTranslations> = <
 type TLocale = 'en' | 'np';
 
 type TPermission = {
-  action: TAction;
-  resource: TPermissionResource;
+  action: Action;
+  resource: Permissions;
   // healthPost: string;
 };
 

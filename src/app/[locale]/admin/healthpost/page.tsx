@@ -7,45 +7,67 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
-import { Delete, Edit, Plus } from 'lucide-react';
+import { Edit, Plus, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { AddHealthPostModal } from './_components/HealthPostModal';
-
-type THealthpost = {
-  id: string;
-  name: string;
-  email: string;
-  status: string;
-  role: string;
-  createdAt: string;
-};
+import { THealthPost } from '@/types/healthpost.types';
+import { useQuery } from '@tanstack/react-query';
+import { fetchHealthPostInfo } from '@/api/queries';
+import { queryKeys } from '@/api/queryKeys';
+import { useGlobalAlert } from '@/hooks/useGlobalAlert';
+import { useHealthPostMutation } from '@/api/mutation';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 export default function Page() {
-  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+  const [isOpenAddModal, setIsOpenAddModal] = useState<{
+    isOpen: boolean;
+    healthPostId?: string;
+  }>({
+    isOpen: false,
+    healthPostId: undefined,
+  });
 
-  const ActionOptions = (row: Row<THealthpost>): ActionButtonDataTypes[] => [
+  const t = useTypedTranslations('GeneralPages');
+
+  const { showDeleteConfirmDialog } = useGlobalAlert();
+  const { mutateHealthPost } = useHealthPostMutation({
+    onSuccess: () => {
+      toast.success('Health Post deleted successfully!');
+    },
+  });
+
+  const ActionOptions = (row: Row<THealthPost>): ActionButtonDataTypes[] => [
     {
       name: 'Edit',
       icon: Edit,
       onClick: () => {
-        toast.success('Edit action clicked for row: ' + row.original.name);
-        // Implement edit functionality here
+        setIsOpenAddModal({
+          isOpen: true,
+          healthPostId: row.original.id,
+        });
       },
     },
     {
       name: 'Delete',
       isTrash: true,
-      icon: Delete,
+      icon: Trash,
 
       onClick: () => {
-        toast.error('Delete action clicked for row: ' + row.original.name);
-        // Implement delete functionality here
+        showDeleteConfirmDialog({
+          onConfirm() {
+            mutateHealthPost({
+              healthPostId: row.original.id,
+              method: 'DELETE',
+            });
+          },
+          itemName: row.original.name,
+        });
       },
     },
   ];
 
-  const columns: ExtendedColumnDef<THealthpost>[] = [
+  const columns: ExtendedColumnDef<THealthPost>[] = [
     {
       id: 'select',
       map: {
@@ -84,7 +106,7 @@ export default function Page() {
         valueFrom: 'name',
       },
       accessorKey: 'name',
-      header: () => 'Name',
+      header: () => t('HealthPost.name'),
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <span className="truncate font-medium">{row.getValue('name')}</span>
@@ -93,12 +115,21 @@ export default function Page() {
     },
     {
       map: {
+        key: 'WardNo',
+        valueFrom: 'wardNo',
+      },
+      accessorKey: 'wardNo',
+      header: () => t('HealthPost.wardNo'),
+      cell: ({ row }) => <span>{row.original.wardNo}</span>,
+    },
+    {
+      map: {
         key: 'Email',
         valueFrom: 'email',
       },
       accessorKey: 'email',
-      header: () => 'Email',
-      cell: ({ row }: { row: Row<THealthpost> }) => (
+      header: () => t('HealthPost.email'),
+      cell: ({ row }) => (
         <span className="text-muted-foreground">{row.getValue('email')}</span>
       ),
     },
@@ -108,14 +139,12 @@ export default function Page() {
         valueFrom: 'status',
       },
       accessorKey: 'status',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
+      header: () => t('HealthPost.status'),
       cell: ({ row }) => {
         const status = row.getValue('status');
         return (
           <span
-            className={status === 'active' ? 'text-green-600' : 'text-red-600'}
+            className={status === 'ACTIVE' ? 'text-green-600' : 'text-red-600'}
           >
             {row?.original?.status}
           </span>
@@ -124,24 +153,40 @@ export default function Page() {
     },
     {
       map: {
-        key: 'Role',
-        valueFrom: 'role',
+        key: 'Municipality',
+        valueFrom: 'municipality',
       },
-      accessorKey: 'role',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Role" />
-      ),
-      cell: ({ row }) => <span>{row.original.role}</span>,
+      accessorKey: 'municipality',
+      header: () => t('HealthPost.municipality'),
+      cell: ({ row }) => <span>{row.original.municipality}</span>,
     },
     {
       map: {
+        key: 'Location',
+        valueFrom: 'location',
+      },
+      accessorKey: 'location',
+      header: () => t('HealthPost.location'),
+      cell: ({ row }) => <span>{row.original.location}</span>,
+    },
+    {
+      map: {
+        key: 'Phone',
+        valueFrom: 'phone',
+      },
+      accessorKey: 'phone',
+      header: () => t('HealthPost.phone'),
+      cell: ({ row }) => <span>{row.original.phone}</span>,
+    },
+
+    {
+      map: {
         key: 'Created At',
-        valueFrom: 'createdAt',
+        dataTransformer: (data) =>
+          data.createdAt ? new Date(data?.createdAt).toLocaleDateString() : '-',
       },
       accessorKey: 'createdAt',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Created At" />
-      ),
+      header: () => t('HealthPost.createdAt'),
       cell: ({ row }) => (
         <span>{new Date(row.getValue('createdAt')).toLocaleDateString()}</span>
       ),
@@ -151,7 +196,7 @@ export default function Page() {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Actions"
+          title={t('actions')}
           className="mr-10 flex justify-end"
         />
       ),
@@ -164,48 +209,14 @@ export default function Page() {
       enableHiding: false,
     },
   ];
-  const data = [
-    {
-      id: '1',
-      name: 'Alice Johnson',
-      email: 'alice@example.com',
-      status: 'active',
-      role: 'Admin',
-      createdAt: '2025-05-10T14:23:00',
-    },
-    {
-      id: '2',
-      name: 'पृष्ठ फेला परेन',
-      email: 'bob@example.com',
-      status: 'inactive',
-      role: 'User',
-      createdAt: '2025-04-18T09:00:00',
-    },
-    {
-      id: '3',
-      name: 'Carol Taylor',
-      email: 'carol@example.com',
-      status: 'active',
-      role: 'Moderator',
-      createdAt: '2025-06-01T12:45:00',
-    },
-    {
-      id: '4',
-      name: 'David Lee',
-      email: 'david@example.com',
-      status: 'active',
-      role: 'User',
-      createdAt: '2025-03-30T17:10:00',
-    },
-    {
-      id: '5',
-      name: 'Emma Wilson',
-      email: 'emma@example.com',
-      status: 'inactive',
-      role: 'Admin',
-      createdAt: '2025-01-22T08:15:00',
-    },
-  ];
+
+  const { data } = useQuery({
+    queryKey: queryKeys.healthPost.healthPosts,
+    queryFn: async () =>
+      fetchHealthPostInfo({
+        healthPostId: undefined,
+      }),
+  });
 
   return (
     <ProtectedRoute requiredPermission={Permissions.HP_MANAGEMENT}>
@@ -213,26 +224,36 @@ export default function Page() {
         <DataTable
           columns={columns}
           header={{
-            label: 'HealthPosts',
+            label: t('SidebarItems.healthpost'),
             className: 'text-2xl font-bold mb-4',
           }}
-          data={data}
+          data={(data?.data as THealthPost[]) || []}
           utils={{
             showPagination: true,
             hasExport: true,
           }}
           addButton={{
-            label: 'Add Hospital',
+            label: t('HealthPost.addHealthPost'),
             icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () => setIsOpenAddModal(true),
+            onClick: () =>
+              setIsOpenAddModal({
+                isOpen: true,
+                healthPostId: undefined,
+              }),
           }}
           onRowClick={() => () => {}}
         />
       </div>
       {isOpenAddModal && (
         <AddHealthPostModal
-          isOpen={isOpenAddModal}
-          toggleModal={() => setIsOpenAddModal(false)}
+          isOpen={isOpenAddModal.isOpen}
+          healthPostId={isOpenAddModal.healthPostId}
+          toggleModal={() =>
+            setIsOpenAddModal({
+              isOpen: false,
+              healthPostId: undefined,
+            })
+          }
         />
       )}
     </ProtectedRoute>

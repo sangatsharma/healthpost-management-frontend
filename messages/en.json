@@ -1,5 +1,9 @@
 {
   "GeneralPages": {
+    "actions": "Actions",
+    "reset": "Reset",
+    "images": "Images",
+    "search": "Search",
     "NotFound": {
       "title": "Page Not Found",
       "description": "The page you are looking for doesn't exist or has been moved.",
@@ -9,6 +13,35 @@
     "unauthorized": {
       "title": "Access Denied",
       "description": "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
+    },
+    "SidebarItems": {
+      "dashboard": "Dashboard",
+      "healthpost": "Health Posts",
+      "patients": "Patients",
+      "staffsmanagement": "Staffs Management"
+    },
+    "HealthPost": {
+      "name": "HealthPost Name",
+      "wardNo": "Ward no",
+      "municipality": "Municipality",
+      "location": "Location",
+      "email": "Email",
+      "description": "Description",
+      "status": "Status",
+      "phone": "Contact Number",
+      "createdAt": "Created At",
+      "addHealthPost": "Add New HealthPost",
+      "editHealthPost": "Update HealthPost",
+      "number": "{number}"
+    },
+    "User": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "role": "Role",
+      "accountType": "Account Type",
+      "permissions": "Permissions",
+      "gender": "Gender",
+      "profileImage": "Profile Image"
     }
   },
 
@@ -20,6 +53,8 @@
     "maxLength": "Maximum {max} characters allowed.",
     "phone": "Phone number is invalid.",
     "status": "Status is required.",
+    "minSelection": "Please select at least {min} option.",
+    "maxSelection": "You can only select up to {max} options.",
     "Healthpost": {
       "name": "HealthPost name is required.",
       "wardNo": "HealthPost ward number is required.",

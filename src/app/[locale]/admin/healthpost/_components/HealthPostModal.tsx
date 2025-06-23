@@ -9,32 +9,31 @@ import {
   getHealthPostSchema,
   THealthPostSchema,
 } from '@/schemas/healthPost.schema';
-import { useSearchParams } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchHealthPostInfo, mutateHealthPostInfo } from '@/api/queries';
+import { useQuery } from '@tanstack/react-query';
+import { fetchHealthPostInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
-import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
-import { SelectMultiple } from '@/components/reusables/SelectMultiple';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { Status } from '@/types/user.types';
+import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
+import { useHealthPostMutation } from '@/api/mutation';
+import { FormSelect } from '@/components/reusables/form-select';
 
 type TProps = {
   isOpen: boolean;
   toggleModal: () => void;
+  healthPostId?: string;
 };
 
 export const AddHealthPostModal: React.FC<TProps> = ({
   isOpen,
   toggleModal,
+  healthPostId,
 }) => {
-  const searchParams = useSearchParams();
-  const healthPostId = searchParams.get('healthPostId');
-
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: queryKeys.healthPost.singleHealthPost(healthPostId || ''),
     queryFn: () =>
       fetchHealthPostInfo({
@@ -43,18 +42,18 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     enabled: !!healthPostId,
   });
 
-  const { mutate: mutateHealthPost, isPending } = useMutation({
-    mutationKey: queryKeys.healthPost.healthPosts,
-    mutationFn: mutateHealthPostInfo,
-    retry: false,
-    onSuccess: () => {
-      toast.success(
-        `Health Post ${healthPostId ? 'updated' : 'created'} successfully!`,
-      );
-    },
+  const handleExit = (): void => {
+    reset();
+    toggleModal();
+  };
+
+  const { mutateHealthPost, isPending } = useHealthPostMutation({
+    onSuccess: handleExit,
   });
 
   const t = useTypedTranslations('Validation');
+  const t2 = useTypedTranslations('GeneralPages');
+
   const HealthPostSchema = getHealthPostSchema(t);
 
   const form = useForm<THealthPostSchema>({
@@ -67,10 +66,16 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       phone: '',
       municipality: '',
       status: Status.ACTIVE,
-      createdAt: '',
-      id: '',
+      wardNo: '',
     },
-    values: healthPostId && !isLoading ? data : undefined,
+    values:
+      healthPostId &&
+      !isLoading &&
+      isSuccess &&
+      data?.data &&
+      !Array.isArray(data.data)
+        ? (data?.data as THealthPostSchema)
+        : undefined,
   });
 
   const {
@@ -78,55 +83,54 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     reset,
     formState: { dirtyFields },
   } = form;
-
   const onSubmit = (data: THealthPostSchema): void => {
+    const { images: _images, ...dataWithoutImages } = data;
     mutateHealthPost({
       healthPostId: healthPostId || undefined,
-      data: {
-        ...data,
-        id: healthPostId || undefined,
-      },
+      data: convertToFormData(
+        dataWithoutImages,
+        ['images'],
+        healthPostId ? dirtyFields : undefined,
+      ),
       method: healthPostId ? 'PUT' : 'POST',
     });
-    reset();
-    toggleModal();
   };
-
-  const handleExit = (): void => {
-    reset();
-    toggleModal();
-  };
-  console.log('Health Post Data:', form.getValues());
 
   return (
     <React.Fragment>
       <FormDialog
         isOpen={isOpen}
         toggleModal={handleExit}
-        title={healthPostId ? 'Update HealthPost' : 'Add New HealthPost'}
+        title={
+          healthPostId
+            ? t2('HealthPost.editHealthPost')
+            : t2('HealthPost.addHealthPost')
+        }
         className="sm:max-w-lg md:max-w-fit"
         isFormDirty={Object.keys(dirtyFields).length > 0}
         mutateAction={{
-          label: healthPostId ? 'Update Health Post' : 'Add Health Post',
+          label: healthPostId
+            ? t2('HealthPost.editHealthPost')
+            : t2('HealthPost.addHealthPost'),
           isLoading: isPending,
           onClick: handleSubmit(onSubmit),
           disabled: !Object.keys(dirtyFields).length,
           className: 'rounded-sm',
         }}
         resetAction={{
-          label: 'Reset',
+          label: t2('reset'),
           onClick: () => reset(),
           className: 'font-normal hover:bg-transparent',
         }}
       >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid w-[38vw] grid-cols-2 gap-4 xl:grid-cols-2">
+            <div className="grid w-full grid-cols-2 gap-4 px-1 xl:grid-cols-2">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormWrapper label="Health Post Name" isRequired>
+                  <FormWrapper label={t2('HealthPost.name')} isRequired>
                     <Input
                       {...field}
                       placeholder="Enter Health Post Name"
@@ -140,7 +144,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormWrapper label="HealthPost Email" isRequired>
+                  <FormWrapper label={t2('HealthPost.email')} isRequired>
                     <Input {...field} placeholder="Enter Email" required />
                   </FormWrapper>
                 )}
@@ -149,7 +153,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="municipality"
                 render={({ field }) => (
-                  <FormWrapper label="Municipality" isRequired>
+                  <FormWrapper label={t2('HealthPost.municipality')} isRequired>
                     <Input {...field} required />
                   </FormWrapper>
                 )}
@@ -158,64 +162,45 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormWrapper label="Location" isRequired>
+                  <FormWrapper label={t2('HealthPost.location')} isRequired>
                     <Input {...field} required />
                   </FormWrapper>
                 )}
               />
 
+              {healthPostId && (
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormWrapper label={t2('HealthPost.status')} isRequired>
+                      <FormSelect
+                        options={mapEnumToOptions(Status)}
+                        placeholder="Select status"
+                        {...field}
+                        required
+                        variant="basic"
+                        error={!!form.formState.errors.status}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="wardNo"
                 render={({ field }) => (
-                  <FormWrapper label="Ward No" isRequired>
-                    <Input {...field} type="number" required />
+                  <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
+                    <Input type="number" {...field} />
                   </FormWrapper>
                 )}
               />
 
               <FormField
                 control={form.control}
-                name="adminId"
-                render={({ field }) => (
-                  <FormWrapper label="Select Admin" isRequired>
-                    <SelectMultiple
-                      options={[
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                        { label: 'admin1', value: 'admin1' },
-                        { label: 'admin2', value: 'admin2' },
-                      ]}
-                      placeholder="Select Admin"
-                      Values={
-                        field?.value
-                          ? [{ label: field.value, value: field.value }]
-                          : []
-                      }
-                      maxSelection={1}
-                      onValueChange={(value) => {
-                        if (value.length === 0) {
-                          form.setValue('adminId', '');
-                          return;
-                        }
-                        form.setValue('adminId', value[0]?.value || '');
-                      }}
-                      {...field}
-                    />
-                  </FormWrapper>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="phone"
                 render={({ field }) => (
-                  <FormWrapper label="Phone Number" isRequired>
+                  <FormWrapper label={t2('HealthPost.phone')} isRequired>
                     <PhoneInput
                       {...field}
                       defaultCountry="NP"
@@ -233,7 +218,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   control={form.control}
                   name="images"
                   render={({ field }) => (
-                    <FormWrapper label="Images" isRequired>
+                    <FormWrapper label={t2('images')} isRequired>
                       <FileUploader
                         onChange={field.onChange}
                         defaultValue={field.value || []}

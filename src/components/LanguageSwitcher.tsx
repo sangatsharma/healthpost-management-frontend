@@ -37,7 +37,7 @@ export default function LanguageSwitcher() {
           switchLanguage(value);
         }}
       >
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="w-full">
