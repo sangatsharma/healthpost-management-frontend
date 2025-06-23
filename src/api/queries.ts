@@ -83,7 +83,7 @@ export const mutateStaffInfo = async ({
   method,
 }: {
   staffId?: string;
-  data: TStaffSchema | Partial<TStaffSchema>;
+  data: FormData;
   method: 'POST' | 'PUT';
 }) => {
   let res;

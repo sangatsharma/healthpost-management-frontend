@@ -1,5 +1,6 @@
 {
   "GeneralPages": {
+    "actions": "Actions",
     "NotFound": {
       "title": "Page Not Found",
       "description": "The page you are looking for doesn't exist or has been moved.",
@@ -9,6 +10,25 @@
     "unauthorized": {
       "title": "Access Denied",
       "description": "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
+    },
+    "SidebarItems": {
+      "dashboard": "Dashboard",
+      "healthpost": "Health Posts",
+      "patients": "Patients",
+      "staffsmanagement": "Staffs Management"
+    },
+    "HealthPost": {
+      "name": "HealthPost Name",
+      "wardNo": "Ward no",
+      "municipality": "Municipality",
+      "location": "Location",
+      "email": "Email",
+      "description": "Description",
+      "status": "Status",
+      "phone": "Contact Number",
+      "createdAt": "Created At",
+      "addHealthPost": "Add HealthPost",
+      "editHealthPost": "Edit HealthPost"
     }
   },
 

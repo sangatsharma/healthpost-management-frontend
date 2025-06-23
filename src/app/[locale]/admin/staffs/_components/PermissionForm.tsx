@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Action, Permissions } from '@/zustand/permissions';
 import { TPermission } from '@/types/global';
+import { Button } from '@/components/ui/button';
 
 // Simplified permission groups for cleaner UI
 const permissionGroups = [
@@ -402,7 +403,7 @@ export function PermissionSelector({
       <CardContent className="p-0">
         <div className="border-t">
           {/* Table Header */}
-          <div className="grid grid-cols-12 gap-4 border-b bg-gray-50 px-6 py-3 text-sm font-medium text-gray-700">
+          <div className="grid grid-cols-12 gap-4 border-b bg-gray-50 px-6 py-3 text-sm font-medium text-gray-700 dark:bg-[#1f1f1f] dark:text-white">
             <div className="col-span-8">Permissions</div>
             <div className="col-span-2 text-center">Read</div>
             <div className="col-span-2 text-center">Write</div>
@@ -416,30 +417,32 @@ export function PermissionSelector({
             return (
               <div key={group.category}>
                 {/* Category Header */}
-                <div className="grid grid-cols-12 gap-4 border-b bg-gray-100 px-6 py-3">
+                <div className="grid grid-cols-12 gap-4 border-b bg-gray-100 px-6 py-3 dark:bg-[#181717]">
                   <div className="col-span-8 flex items-center justify-between">
-                    <span className="text-sm font-medium tracking-wide text-gray-800 uppercase">
+                    <span className="text-sm font-medium tracking-wide text-gray-800 uppercase dark:text-white">
                       {group.category}
                     </span>
                     <div className="flex gap-1">
-                      <button
+                      <Button
                         type="button"
                         onClick={() =>
                           toggleGroupPermissions(groupPermissions, true)
                         }
-                        className="rounded px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 hover:text-blue-800"
+                        variant={'outline'}
+                        className="rounded px-2 py-1 text-xs text-green-600 hover:bg-blue-50 hover:text-blue-800"
                       >
                         All
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
                         onClick={() =>
                           toggleGroupPermissions(groupPermissions, false)
                         }
-                        className="rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                        variant={'destructive'}
+                        className="rounded px-2 py-1 text-xs"
                       >
                         None
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   <div className="col-span-2 text-center text-sm font-medium text-gray-700">
@@ -481,17 +484,17 @@ export function PermissionSelector({
                   return (
                     <div
                       key={permission.key}
-                      className={`grid grid-cols-12 gap-4 border-b px-6 py-4 transition-colors hover:bg-gray-50 ${
+                      className={`grid grid-cols-12 gap-4 border-b px-6 py-4 transition-colors hover:bg-gray-50 dark:bg-[#1f1f1f] dark:hover:bg-[#2b2b2b] ${
                         isAllPermission ? 'border-blue-200 bg-blue-50' : ''
                       }`}
                     >
                       <div className="col-span-8">
                         <span
-                          className={`text-sm ${isAllPermission ? 'font-semibold text-blue-900' : 'text-gray-900'}`}
+                          className={`text-sm ${isAllPermission ? 'font-semibold text-green-400' : 'text-gray-900 dark:text-white'}`}
                         >
                           {permission.label}
                           {isAllPermission && (
-                            <span className="ml-2 text-xs text-blue-600">
+                            <span className="ml-2 text-xs text-green-600">
                               (Master Control)
                             </span>
                           )}

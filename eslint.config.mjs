@@ -19,9 +19,9 @@ const eslintConfig = [
     rules: {
       // Disable the base rule for TypeScript files
       "no-unused-vars": "off",
-      // Use the TypeScript-specific rule instead
+      // Use the TypeScript-specific rule with error level
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "error",
         {
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
@@ -29,6 +29,8 @@ const eslintConfig = [
           destructuredArrayIgnorePattern: "^_",
         },
       ],
+      // Warn on console.log usage
+      "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
 ]

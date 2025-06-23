@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { getMenuItems } from '@/constants/routes.constants';
 import { TUser } from '@/types/user.types';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 interface MobileSidebarProps {
   currentUser: TUser;
@@ -24,6 +25,7 @@ export default function MobileSidebar({
   onThemeToggle,
 }: MobileSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTypedTranslations('GeneralPages');
 
   const closeSidebar = () => setIsOpen(false);
 
@@ -68,6 +70,7 @@ export default function MobileSidebar({
               <SidebarNavigation
                 menuItems={getMenuItems({
                   itemsFor: currentUser?.accountType,
+                  t,
                 })}
                 user={currentUser}
                 isCollapsed={false}

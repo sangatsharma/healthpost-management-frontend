@@ -20,7 +20,7 @@ import {
   HeartPlusIcon,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
-import { TMenuItem } from '@/types/global';
+import { TMenuItem, TTypeFunction } from '@/types/global';
 const LOCALES = ['en', 'np'] as const;
 
 const PUBLIC_PATHS = ['login'] as const;
@@ -64,8 +64,10 @@ export const PROTECTED_ROUTES = [
 
 export const getMenuItems = ({
   itemsFor,
+  t,
 }: {
   itemsFor: TUserType;
+  t: TTypeFunction<'GeneralPages'>;
 }): TMenuItem[] => {
   switch (itemsFor) {
     case 'HP':
@@ -73,7 +75,7 @@ export const getMenuItems = ({
         {
           key: 'dashboard',
           icon: Home,
-          label: 'Dashboard',
+          label: t('SidebarItems.dashboard'),
           href: `hp/dashboard`,
           permission: Permissions.HEALTH_POST_DASHBOARD,
         },
@@ -202,21 +204,21 @@ export const getMenuItems = ({
         {
           key: 'dashboard',
           icon: Home,
-          label: 'Dashboard',
+          label: t('SidebarItems.dashboard'),
           href: `dashboard`,
           permission: Permissions.ADMIN_DASHBOARD,
         },
         {
           key: 'healthpost',
           icon: HeartPlusIcon,
-          label: 'Health Posts',
+          label: t('SidebarItems.healthpost'),
           href: `healthpost`,
           permission: Permissions.HP_MANAGEMENT,
         },
         {
           key: 'staffs',
           icon: Users,
-          label: 'Staff Management',
+          label: t('SidebarItems.staffsmanagement'),
           href: `staffs`,
           permission: Permissions.HP_MANAGEMENT,
         },

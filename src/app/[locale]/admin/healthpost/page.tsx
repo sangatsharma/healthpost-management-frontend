@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
-import { Delete, Edit, Plus } from 'lucide-react';
+import { Edit, Plus, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { AddHealthPostModal } from './_components/HealthPostModal';
@@ -17,6 +17,7 @@ import { fetchHealthPostInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useHealthPostMutation } from '@/api/mutation';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -26,8 +27,15 @@ export default function Page() {
     isOpen: false,
     healthPostId: undefined,
   });
+
+  const t = useTypedTranslations('GeneralPages');
+
   const { showDeleteConfirmDialog } = useGlobalAlert();
-  const { mutateHealthPost } = useHealthPostMutation({});
+  const { mutateHealthPost } = useHealthPostMutation({
+    onSuccess: () => {
+      toast.success('Health Post deleted successfully!');
+    },
+  });
 
   const ActionOptions = (row: Row<THealthPost>): ActionButtonDataTypes[] => [
     {
@@ -43,7 +51,7 @@ export default function Page() {
     {
       name: 'Delete',
       isTrash: true,
-      icon: Delete,
+      icon: Trash,
 
       onClick: () => {
         showDeleteConfirmDialog({
@@ -52,7 +60,6 @@ export default function Page() {
               healthPostId: row.original.id,
               method: 'DELETE',
             });
-            toast.success('Health Post deleted successfully!');
           },
           itemName: row.original.name,
         });
@@ -99,7 +106,7 @@ export default function Page() {
         valueFrom: 'name',
       },
       accessorKey: 'name',
-      header: () => 'Name',
+      header: () => t('HealthPost.name'),
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <span className="truncate font-medium">{row.getValue('name')}</span>
@@ -112,9 +119,7 @@ export default function Page() {
         valueFrom: 'wardNo',
       },
       accessorKey: 'wardNo',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Ward No" />
-      ),
+      header: () => t('HealthPost.wardNo'),
       cell: ({ row }) => <span>{row.original.wardNo}</span>,
     },
     {
@@ -123,7 +128,7 @@ export default function Page() {
         valueFrom: 'email',
       },
       accessorKey: 'email',
-      header: () => 'Email',
+      header: () => t('HealthPost.email'),
       cell: ({ row }) => (
         <span className="text-muted-foreground">{row.getValue('email')}</span>
       ),
@@ -134,9 +139,7 @@ export default function Page() {
         valueFrom: 'status',
       },
       accessorKey: 'status',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
+      header: () => t('HealthPost.status'),
       cell: ({ row }) => {
         const status = row.getValue('status');
         return (
@@ -154,9 +157,7 @@ export default function Page() {
         valueFrom: 'municipality',
       },
       accessorKey: 'municipality',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Municipality" />
-      ),
+      header: () => t('HealthPost.municipality'),
       cell: ({ row }) => <span>{row.original.municipality}</span>,
     },
     {
@@ -165,9 +166,7 @@ export default function Page() {
         valueFrom: 'location',
       },
       accessorKey: 'location',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Location" />
-      ),
+      header: () => t('HealthPost.location'),
       cell: ({ row }) => <span>{row.original.location}</span>,
     },
     {
@@ -176,21 +175,18 @@ export default function Page() {
         valueFrom: 'phone',
       },
       accessorKey: 'phone',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Contact" />
-      ),
+      header: () => t('HealthPost.phone'),
       cell: ({ row }) => <span>{row.original.phone}</span>,
     },
 
     {
       map: {
         key: 'Created At',
-        valueFrom: 'createdAt',
+        dataTransformer: (data) =>
+          data.createdAt ? new Date(data?.createdAt).toLocaleDateString() : '-',
       },
       accessorKey: 'createdAt',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Created At" />
-      ),
+      header: () => t('HealthPost.createdAt'),
       cell: ({ row }) => (
         <span>{new Date(row.getValue('createdAt')).toLocaleDateString()}</span>
       ),
@@ -200,7 +196,7 @@ export default function Page() {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Actions"
+          title={t('actions')}
           className="mr-10 flex justify-end"
         />
       ),
@@ -228,7 +224,7 @@ export default function Page() {
         <DataTable
           columns={columns}
           header={{
-            label: 'HealthPosts',
+            label: t('SidebarItems.healthpost'),
             className: 'text-2xl font-bold mb-4',
           }}
           data={(data?.data as THealthPost[]) || []}
@@ -237,7 +233,7 @@ export default function Page() {
             hasExport: true,
           }}
           addButton={{
-            label: 'Add Hospital',
+            label: t('HealthPost.addHealthPost'),
             icon: <Plus className="mr-2 h-4 w-4" />,
             onClick: () =>
               setIsOpenAddModal({
