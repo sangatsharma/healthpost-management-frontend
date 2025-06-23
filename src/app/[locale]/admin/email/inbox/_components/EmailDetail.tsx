@@ -1,10 +1,16 @@
 const EmailDetail = () => {
   const email = {
     date: '20 June 2022, 9:16 AM',
-    from: 'Health Assistant',
-    content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Convallis tellus id interdum velit laoreet. Enim eu turpis egestas pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Convallis tellus id interdum velit laoreet. Enim eu turpis egestas pretium.
+    from: 'Central Health post',
+    content: `📢 Notice from Health Assistant
 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Convallis tellus id interdum velit laoreet. Enim eu turpis egestas pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Convallis tellus id interdum velit laoreet. Enim eu turpis egestas pretium.`,
+Please ensure your health profile is complete and up to date. Accurate information about your medical history, ongoing conditions, and medications helps us provide better support and timely recommendations.
+
+✔️ Update your profile  
+✔️ Set reminders for medications and appointments  
+✔️ Reach out for any health-related concerns or questions
+
+Your well-being is important to us. Thank you for taking proactive steps toward better health.`,
     attachments: [
       'ABCDGHJKL.pdf (200kb)',
       'ascasc.pdf (450kb)',
