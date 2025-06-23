@@ -1,4 +1,5 @@
 import { TAny } from '@/types/global';
+import { TFullname, TUser } from '@/types/user.types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,6 +20,7 @@ export function mapEnumToOptions<T extends Record<string, string | number>>(
     value: value.toString() as string,
   }));
 }
+
 export const convertToFormData = (
   data: Record<string, TAny>,
   imgKey?: string[],
@@ -79,4 +81,47 @@ export const convertToFormData = (
   }
 
   return formData;
+};
+
+export interface RenderFullNameProps {
+  userData?: Partial<TUser> | null;
+  params?: TFullname;
+}
+
+export const renderFullName = ({
+  userData = null,
+  params,
+}: RenderFullNameProps): string => {
+  if (!userData && !params) {
+    return '';
+  }
+  // Fallback to `userData` if `params` is not provided.
+  if (userData) {
+    const { fullName } = userData;
+    if (!fullName) {
+      return '';
+    }
+    const fulljoinName = [
+      fullName.firstName,
+      fullName.middleName,
+      fullName.lastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return fulljoinName || '';
+  }
+
+  // Use `params` if provided, overriding `userData`.
+  if (params) {
+    const { firstName = '', middleName = '', lastName = '' } = params;
+    const fullName = [firstName, middleName, lastName]
+      .filter(Boolean)
+      .join(' ');
+
+    return fullName || '';
+  }
+
+  // Default to an empty string (should never reach here due to earlier checks).
+  return '';
 };

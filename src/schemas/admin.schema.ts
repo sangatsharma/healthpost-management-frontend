@@ -91,8 +91,6 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
     profileImages: createFileUploadValidator({
       required: false,
     }),
-    createdAt: z.string().optional(),
-    id: z.string().uuid().optional(),
   });
 };
 

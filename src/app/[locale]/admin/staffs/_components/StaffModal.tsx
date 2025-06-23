@@ -89,7 +89,9 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
       profileImages: [],
     },
     values:
-      staffId && !isLoading && isSuccess ? (data as TStaffSchema) : undefined,
+      staffId && !isLoading && isSuccess
+        ? (data?.data as TStaffSchema)
+        : undefined,
   });
 
   const {
