@@ -11,26 +11,33 @@ import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { AddHealthPostModal } from './_components/HealthPostModal';
-
-type THealthpost = {
-  id: string;
-  name: string;
-  email: string;
-  status: string;
-  role: string;
-  createdAt: string;
-};
+import { THealthPost } from '@/types/healthpost.types';
+import { useQuery } from '@tanstack/react-query';
+import { fetchHealthPostInfo } from '@/api/queries';
+import { queryKeys } from '@/api/queryKeys';
+import { useGlobalAlert } from '@/hooks/useGlobalAlert';
+import { useHealthPostMutation } from '@/api/mutation';
 
 export default function Page() {
-  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+  const [isOpenAddModal, setIsOpenAddModal] = useState<{
+    isOpen: boolean;
+    healthPostId?: string;
+  }>({
+    isOpen: false,
+    healthPostId: undefined,
+  });
+  const { showDeleteConfirmDialog } = useGlobalAlert();
+  const { mutateHealthPost } = useHealthPostMutation({});
 
-  const ActionOptions = (row: Row<THealthpost>): ActionButtonDataTypes[] => [
+  const ActionOptions = (row: Row<THealthPost>): ActionButtonDataTypes[] => [
     {
       name: 'Edit',
       icon: Edit,
       onClick: () => {
-        toast.success('Edit action clicked for row: ' + row.original.name);
-        // Implement edit functionality here
+        setIsOpenAddModal({
+          isOpen: true,
+          healthPostId: row.original.id,
+        });
       },
     },
     {
@@ -39,13 +46,21 @@ export default function Page() {
       icon: Delete,
 
       onClick: () => {
-        toast.error('Delete action clicked for row: ' + row.original.name);
-        // Implement delete functionality here
+        showDeleteConfirmDialog({
+          onConfirm() {
+            mutateHealthPost({
+              healthPostId: row.original.id,
+              method: 'DELETE',
+            });
+            toast.success('Health Post deleted successfully!');
+          },
+          itemName: row.original.name,
+        });
       },
     },
   ];
 
-  const columns: ExtendedColumnDef<THealthpost>[] = [
+  const columns: ExtendedColumnDef<THealthPost>[] = [
     {
       id: 'select',
       map: {
@@ -93,12 +108,23 @@ export default function Page() {
     },
     {
       map: {
+        key: 'WardNo',
+        valueFrom: 'wardNo',
+      },
+      accessorKey: 'wardNo',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Ward No" />
+      ),
+      cell: ({ row }) => <span>{row.original.wardNo}</span>,
+    },
+    {
+      map: {
         key: 'Email',
         valueFrom: 'email',
       },
       accessorKey: 'email',
       header: () => 'Email',
-      cell: ({ row }: { row: Row<THealthpost> }) => (
+      cell: ({ row }) => (
         <span className="text-muted-foreground">{row.getValue('email')}</span>
       ),
     },
@@ -115,7 +141,7 @@ export default function Page() {
         const status = row.getValue('status');
         return (
           <span
-            className={status === 'active' ? 'text-green-600' : 'text-red-600'}
+            className={status === 'ACTIVE' ? 'text-green-600' : 'text-red-600'}
           >
             {row?.original?.status}
           </span>
@@ -124,15 +150,38 @@ export default function Page() {
     },
     {
       map: {
-        key: 'Role',
-        valueFrom: 'role',
+        key: 'Municipality',
+        valueFrom: 'municipality',
       },
-      accessorKey: 'role',
+      accessorKey: 'municipality',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Role" />
+        <DataTableColumnHeader column={column} title="Municipality" />
       ),
-      cell: ({ row }) => <span>{row.original.role}</span>,
+      cell: ({ row }) => <span>{row.original.municipality}</span>,
     },
+    {
+      map: {
+        key: 'Location',
+        valueFrom: 'location',
+      },
+      accessorKey: 'location',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Location" />
+      ),
+      cell: ({ row }) => <span>{row.original.location}</span>,
+    },
+    {
+      map: {
+        key: 'Phone',
+        valueFrom: 'phone',
+      },
+      accessorKey: 'phone',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Contact" />
+      ),
+      cell: ({ row }) => <span>{row.original.phone}</span>,
+    },
+
     {
       map: {
         key: 'Created At',
@@ -164,48 +213,14 @@ export default function Page() {
       enableHiding: false,
     },
   ];
-  const data = [
-    {
-      id: '1',
-      name: 'Alice Johnson',
-      email: 'alice@example.com',
-      status: 'active',
-      role: 'Admin',
-      createdAt: '2025-05-10T14:23:00',
-    },
-    {
-      id: '2',
-      name: 'पृष्ठ फेला परेन',
-      email: 'bob@example.com',
-      status: 'inactive',
-      role: 'User',
-      createdAt: '2025-04-18T09:00:00',
-    },
-    {
-      id: '3',
-      name: 'Carol Taylor',
-      email: 'carol@example.com',
-      status: 'active',
-      role: 'Moderator',
-      createdAt: '2025-06-01T12:45:00',
-    },
-    {
-      id: '4',
-      name: 'David Lee',
-      email: 'david@example.com',
-      status: 'active',
-      role: 'User',
-      createdAt: '2025-03-30T17:10:00',
-    },
-    {
-      id: '5',
-      name: 'Emma Wilson',
-      email: 'emma@example.com',
-      status: 'inactive',
-      role: 'Admin',
-      createdAt: '2025-01-22T08:15:00',
-    },
-  ];
+
+  const { data } = useQuery({
+    queryKey: queryKeys.healthPost.healthPosts,
+    queryFn: async () =>
+      fetchHealthPostInfo({
+        healthPostId: undefined,
+      }),
+  });
 
   return (
     <ProtectedRoute requiredPermission={Permissions.HP_MANAGEMENT}>
@@ -216,7 +231,7 @@ export default function Page() {
             label: 'HealthPosts',
             className: 'text-2xl font-bold mb-4',
           }}
-          data={data}
+          data={(data?.data as THealthPost[]) || []}
           utils={{
             showPagination: true,
             hasExport: true,
@@ -224,15 +239,25 @@ export default function Page() {
           addButton={{
             label: 'Add Hospital',
             icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () => setIsOpenAddModal(true),
+            onClick: () =>
+              setIsOpenAddModal({
+                isOpen: true,
+                healthPostId: undefined,
+              }),
           }}
           onRowClick={() => () => {}}
         />
       </div>
       {isOpenAddModal && (
         <AddHealthPostModal
-          isOpen={isOpenAddModal}
-          toggleModal={() => setIsOpenAddModal(false)}
+          isOpen={isOpenAddModal.isOpen}
+          healthPostId={isOpenAddModal.healthPostId}
+          toggleModal={() =>
+            setIsOpenAddModal({
+              isOpen: false,
+              healthPostId: undefined,
+            })
+          }
         />
       )}
     </ProtectedRoute>

@@ -9,31 +9,33 @@ import {
   getHealthPostSchema,
   THealthPostSchema,
 } from '@/schemas/healthPost.schema';
-import { useSearchParams } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchHealthPostInfo, mutateHealthPostInfo } from '@/api/queries';
+import { useQuery } from '@tanstack/react-query';
+import { fetchHealthPostInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
-import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { Status } from '@/types/user.types';
+import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
+import { useHealthPostMutation } from '@/api/mutation';
+import { FormSelect } from '@/components/reusables/form-select';
 
 type TProps = {
   isOpen: boolean;
   toggleModal: () => void;
+  healthPostId?: string;
 };
 
 export const AddHealthPostModal: React.FC<TProps> = ({
   isOpen,
   toggleModal,
+  healthPostId,
 }) => {
-  const searchParams = useSearchParams();
-  const healthPostId = searchParams.get('healthPostId');
+  console.log('Health Post ID:', healthPostId);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: queryKeys.healthPost.singleHealthPost(healthPostId || ''),
     queryFn: () =>
       fetchHealthPostInfo({
@@ -42,15 +44,13 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     enabled: !!healthPostId,
   });
 
-  const { mutate: mutateHealthPost, isPending } = useMutation({
-    mutationKey: queryKeys.healthPost.healthPosts,
-    mutationFn: mutateHealthPostInfo,
-    retry: false,
-    onSuccess: () => {
-      toast.success(
-        `Health Post ${healthPostId ? 'updated' : 'created'} successfully!`,
-      );
-    },
+  const handleExit = (): void => {
+    reset();
+    toggleModal();
+  };
+
+  const { mutateHealthPost, isPending } = useHealthPostMutation({
+    onSuccess: handleExit,
   });
 
   const t = useTypedTranslations('Validation');
@@ -61,15 +61,21 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     defaultValues: {
       name: '',
       location: '',
-      images: [],
+      // images: [],
       email: '',
       phone: '',
       municipality: '',
       status: Status.ACTIVE,
-      createdAt: '',
-      id: '',
+      wardNo: '',
     },
-    values: healthPostId && !isLoading ? data : undefined,
+    values:
+      healthPostId &&
+      !isLoading &&
+      isSuccess &&
+      data?.data &&
+      !Array.isArray(data.data)
+        ? (data?.data as THealthPostSchema)
+        : undefined,
   });
 
   const {
@@ -77,25 +83,20 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     reset,
     formState: { dirtyFields },
   } = form;
-
   const onSubmit = (data: THealthPostSchema): void => {
+    const { images: _images, ...dataWithoutImages } = data;
     mutateHealthPost({
       healthPostId: healthPostId || undefined,
-      data: {
-        ...data,
-        id: healthPostId || undefined,
-      },
+      data: convertToFormData(
+        dataWithoutImages,
+        ['images'],
+        healthPostId ? dirtyFields : undefined,
+      ),
       method: healthPostId ? 'PUT' : 'POST',
     });
-    reset();
-    toggleModal();
   };
 
-  const handleExit = (): void => {
-    reset();
-    toggleModal();
-  };
-  console.log('Health Post Data:', form.getValues());
+  console.log('Health Post Data:', form.formState.errors);
 
   return (
     <React.Fragment>
@@ -120,7 +121,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       >
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid w-[38vw] grid-cols-2 gap-4 xl:grid-cols-2">
+            <div className="grid w-full grid-cols-2 gap-4 px-1 xl:grid-cols-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -163,12 +164,30 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 )}
               />
 
+              {healthPostId && (
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormWrapper label="Status" isRequired>
+                      <FormSelect
+                        options={mapEnumToOptions(Status)}
+                        placeholder="Select status"
+                        {...field}
+                        required
+                        variant="basic"
+                        error={!!form.formState.errors.status}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="wardNo"
                 render={({ field }) => (
                   <FormWrapper label="Ward No" isRequired>
-                    <Input {...field} type="number" required />
+                    <Input type="number" {...field} />
                   </FormWrapper>
                 )}
               />

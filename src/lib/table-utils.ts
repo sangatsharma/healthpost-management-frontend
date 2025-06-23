@@ -48,12 +48,16 @@ const handlePDFExport = (data: TExportableData, fileName: string): void => {
   autoTable(doc, {
     head: [data.headers],
     body: data.data,
-    columnStyles: {
-      // 6: { cellWidth: 'wrap' },
+    headStyles: {
+      fillColor: [195, 243, 221], //light green
+      textColor: [0, 0, 0], //black
+      font: 'NotoSansDevanagari',
+      fontStyle: 'normal',
     },
     styles: {
       font: 'NotoSansDevanagari',
       fontStyle: 'normal',
+
       // overflow: 'linebreak',
     },
   });

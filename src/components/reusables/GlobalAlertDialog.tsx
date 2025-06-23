@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useGlobalAlertStore } from '@/zustand/useGlobalAlert';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
@@ -23,6 +24,7 @@ export function GlobalAlertDialog() {
     btnName,
     cancelName,
     btnAction,
+    isDestructive,
     cancelAction,
     isLoading,
     img,
@@ -53,10 +55,10 @@ export function GlobalAlertDialog() {
       open={isOpen}
       onOpenChange={(open) => !open && hideAlertDialog()}
     >
-      <AlertDialogContent className="w-fit">
+      <AlertDialogContent className="w-fit space-y-6">
         <AlertDialogHeader>
           {title && (
-            <AlertDialogTitle className="mb-2 flex flex-col items-center gap-4 text-center text-3xl">
+            <AlertDialogTitle className="mb-4 flex flex-col items-center gap-8 text-center text-3xl">
               {title}
               {img && (
                 <Image
@@ -92,7 +94,11 @@ export function GlobalAlertDialog() {
               <Button
                 onClick={handleConfirm}
                 disabled={isLoading}
-                className="min-w-[100px]"
+                className={cn(
+                  'min-w-[100px]',
+                  isDestructive &&
+                    'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/80 dark:hover:bg-destructive text-white shadow-xs',
+                )}
               >
                 {isLoading ? (
                   <>

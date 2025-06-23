@@ -9,10 +9,11 @@ type TGlobalAlertDialog = {
   btnAction?: () => void | Promise<void>;
   cancelAction?: () => void;
   isLoading?: boolean;
+  isDestructive?: boolean;
   img?: string;
   imgSize?: number;
   showAlertDialog: (
-    payload: Omit<
+    _payload: Omit<
       TGlobalAlertDialog,
       'isOpen' | 'showAlertDialog' | 'hideAlertDialog'
     >,
@@ -22,10 +23,10 @@ type TGlobalAlertDialog = {
 
 export const useGlobalAlertStore = create<TGlobalAlertDialog>((set) => ({
   isOpen: false,
-  showAlertDialog: (payload) =>
+  showAlertDialog: (_payload) =>
     set({
       isOpen: true,
-      ...payload,
+      ..._payload,
     }),
   hideAlertDialog: () => set({ isOpen: false }),
 }));

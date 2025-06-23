@@ -248,7 +248,6 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
                       ]}
                       placeholder="Select Healthpost"
                       {...field}
-                      required
                       variant="searchable"
                       error={!!form.formState.errors.healthPostId}
                     />
@@ -270,7 +269,6 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
                       maxFiles={1}
                       maxSize={2 * 1024 * 1024}
                       uploaderType="dropzone"
-                      // className="w-72"
                       {...field}
                     />
                   </FormWrapper>

@@ -10,7 +10,7 @@ export const queryKeys = {
   //   },
   healthPost: {
     healthPosts: ['healthPosts'],
-    singleHealthPost: (id: string) => ['healthPost', id],
+    singleHealthPost: (id: string) => ['healthPosts', id],
   },
   staff: {
     staffs: ['staffs'],
