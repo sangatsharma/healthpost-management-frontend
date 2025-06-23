@@ -209,14 +209,22 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: t('SidebarItems.dashboard'),
-          href: `/dashboard`,
+          href: `dashboard`,
           permission: Permissions.ADMIN_DASHBOARD,
         },
         {
           key: 'healthpost',
           icon: HeartPlusIcon,
           label: t('SidebarItems.healthpost'),
-          href: `/healthpost`,
+          href: `healthpost`,
+          permission: Permissions.HP_MANAGEMENT,
+        },
+
+        {
+          key: 'staffs',
+          icon: Users,
+          label: t('SidebarItems.staffsmanagement'),
+          href: `staffs`,
           permission: Permissions.HP_MANAGEMENT,
         },
         {
@@ -224,29 +232,7 @@ export const getMenuItems = ({
           icon: Mail,
           label: 'Email',
           href: 'email',
-          submenu: [
-            {
-              key: 'email',
-              icon: FileText,
-              label: 'Inbox',
-              href: 'email/inbox',
-              permission: Permissions.HP_MANAGEMENT,
-            },
-            {
-              key: 'new',
-              icon: FileText,
-              label: 'new',
-              href: 'new',
-              permission: Permissions.HP_MANAGEMENT,
-            },
-          ],
-        },
-        {
-          key: 'staffs',
-          icon: Users,
-          label: t('SidebarItems.staffsmanagement'),
-          href: `staffs`,
-          permission: Permissions.HP_MANAGEMENT,
+          permission: Permissions.SYSTEM_CONFIG,
         },
       ];
     default:

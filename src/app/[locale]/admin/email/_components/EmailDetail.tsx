@@ -18,8 +18,8 @@ Your well-being is important to us. Thank you for taking proactive steps toward 
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 text-gray-800">
-      <div className="rounded-lg bg-white p-6 shadow-md">
+    <div className="min-h-screen p-6">
+      <div className="rounded-lg p-6 shadow-md">
         <div className="mb-4 flex justify-between">
           <div>
             <a href="#" className="mr-2 text-purple-600">
