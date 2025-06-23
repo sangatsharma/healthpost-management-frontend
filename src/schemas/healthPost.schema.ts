@@ -42,12 +42,21 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
         message: t('phone'),
       }),
     wardNo: z.coerce
-      .number({
+      .string({
         required_error: t('required'),
         invalid_type_error: t('Healthpost.wardNo'),
       })
-      .int()
-      .min(1, { message: t('required') }),
+      .trim()
+      .min(1, { message: t('required') })
+      .refine(
+        (value) => {
+          const wardNumber = parseInt(value, 10);
+          return !isNaN(wardNumber) && wardNumber >= 1 && wardNumber;
+        },
+        {
+          message: t('Healthpost.wardNo'),
+        },
+      ),
 
     municipality: basicValidator({
       translationFunction: t,
@@ -61,11 +70,9 @@ export const getHealthPostSchema = (t: TTypeFunction<'Validation'>) => {
       invalid_type_error: t('status'),
     }),
     images: createFileUploadValidator({
-      required: true,
+      required: false,
       message: t('required'),
     }),
-    createdAt: z.string().optional(),
-    id: z.string().uuid().optional(),
   });
 };
 

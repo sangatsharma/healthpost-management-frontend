@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -75,8 +73,15 @@ const SaveFile: React.FC<TProps> = ({
       title="Save File"
       isOpen={isOpen}
       toggleModal={() => toggleModal((prev) => !prev)}
-      className="max-w-[300px] p-4"
-      isFormDirty={true}
+      className="max-w-[200px] p-4"
+      isFormDirty={fileInfo.name.trim().length > 0 || fileInfo.type !== 'xlsx'}
+      mutateAction={{
+        label: 'Download',
+        isLoading: false,
+        onClick: handleDownload,
+        className: 'w-full',
+        icon: <Download className="mr-2 h-4 w-4" />,
+      }}
     >
       <div className="flex flex-col gap-4 p-4">
         <div className="space-y-2">
@@ -122,12 +127,6 @@ const SaveFile: React.FC<TProps> = ({
             </SelectContent>
           </Select>
         </div>
-        <DialogFooter>
-          <Button onClick={handleDownload} className="mx-auto w-full">
-            <Download className="mr-2 h-4 w-4" />
-            Download
-          </Button>
-        </DialogFooter>
       </div>
     </FormDialog>
   );

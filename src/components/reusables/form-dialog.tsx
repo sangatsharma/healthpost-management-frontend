@@ -1,5 +1,6 @@
+'use client';
 import { Loader2 } from 'lucide-react';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -63,6 +64,30 @@ const FormDialog: React.FC<TProps> = ({
       toggleModal();
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.onkeydown = (e) => {
+        // Trigger the submit action if Enter is pressed
+        if (
+          e.key === 'Enter' &&
+          isOpen &&
+          isFormDirty &&
+          mutateAction &&
+          mutateAction.onClick
+        ) {
+          e.preventDefault();
+          mutateAction.onClick();
+        }
+      };
+    }
+    // Optionally, clean up on unmount
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.onkeydown = null;
+      }
+    };
+  }, [isOpen, mutateAction, isFormDirty]);
 
   return (
     <div className="relative">

@@ -1,8 +1,8 @@
 import { TResponse } from '@/types/global';
 import { api } from './axios';
 import { TLoginReponse, TUser, TUserType } from '@/types/user.types';
-import { THealthPostSchema } from '@/schemas/healthPost.schema';
 import { TStaffSchema } from '@/schemas/admin.schema';
+import { THealthPost } from '@/types/healthpost.types';
 
 //function to handle user login
 export const login = async (values: {
@@ -29,7 +29,9 @@ export const fetchHealthPostInfo = async ({
 }: {
   healthPostId?: string;
 }) => {
-  const res = await api.get<THealthPostSchema>(`/healthPost/${healthPostId}`);
+  const res = await api.get<TResponse<THealthPost[] | THealthPost>>(
+    `/healthpost${healthPostId ? `/${healthPostId}` : ''}`,
+  );
   if (res.data) {
     return res.data;
   }
@@ -37,7 +39,7 @@ export const fetchHealthPostInfo = async ({
 
 // function to mutate healthpost information
 // It can be used for both creating and updating health post information
-// If healthPostId is provided, it will update the specific health post      information
+// If healthPostId is provided, it will update the specific health post information
 // If healthPostId is not provided, it will create a new health post
 export const mutateHealthPostInfo = async ({
   healthPostId,
@@ -45,15 +47,17 @@ export const mutateHealthPostInfo = async ({
   method,
 }: {
   healthPostId?: string;
-  data: THealthPostSchema | Partial<THealthPostSchema>;
-  method: 'POST' | 'PUT';
+  data?: FormData;
+  method: 'POST' | 'PUT' | 'DELETE';
 }) => {
   let res;
   const url = `/healthPost${healthPostId ? `/${healthPostId}` : ''}`;
   if (method === 'POST') {
-    res = await api.post<THealthPostSchema>(url, data);
+    res = await api.post<THealthPost>(url, data);
   } else if (method === 'PUT') {
-    res = await api.put<THealthPostSchema>(url, data);
+    res = await api.put<THealthPost>(url, data);
+  } else if (method === 'DELETE') {
+    res = await api.delete<THealthPost>(url);
   } else {
     throw new Error('Invalid method');
   }

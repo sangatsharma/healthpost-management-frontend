@@ -96,6 +96,7 @@ export function useGlobalAlert() {
         t('dialog.deleteDescription', { item: itemName || 'item' }),
       btnName: t('action.delete'),
       cancelName: t('action.cancel'),
+      isDestructive: true,
       btnAction: onConfirm,
       cancelAction: () => {
         hideAlertDialog();
@@ -103,7 +104,7 @@ export function useGlobalAlert() {
           onCancel();
         }
       },
-      img: '🗑️',
+      img: '/trash.png',
     });
   };
 

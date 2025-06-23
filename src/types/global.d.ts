@@ -17,6 +17,9 @@ declare module '@tanstack/react-table' {
 
 type TTranslations = typeof en;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TAny = any;
+
 type TFunc<K extends keyof TTranslations> = (
   key: keyof TTranslations[K],
 ) => string;
