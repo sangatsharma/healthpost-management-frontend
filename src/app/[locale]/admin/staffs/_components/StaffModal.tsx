@@ -8,7 +8,11 @@ import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import {} from '@/schemas/healthPost.schema';
 import { useSearchParams } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchStaffInfo, mutateStaffInfo } from '@/api/queries';
+import {
+  fetchHealthPostInfo,
+  fetchStaffInfo,
+  mutateStaffInfo,
+} from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -18,9 +22,10 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { getStaffSchema, TStaffSchema } from '@/schemas/admin.schema';
 import { Gender, Status, UserRole, UserType } from '@/types/user.types';
-import { mapEnumToOptions } from '@/lib/utils';
+import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
 import { PermissionSelector } from './PermissionForm';
 import { FormSelect } from '@/components/reusables/form-select';
+import { THealthPost } from '@/types/healthpost.types';
 
 type TProps = {
   isOpen: boolean;
@@ -31,7 +36,7 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
   const searchParams = useSearchParams();
   const staffId = searchParams.get('staffId');
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: queryKeys.staff.singleStaff(staffId || ''),
     queryFn: () =>
       fetchStaffInfo({
@@ -39,6 +44,20 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
       }),
     enabled: !!staffId,
   });
+
+  const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
+    useQuery({
+      queryKey: queryKeys.healthPost.healthPosts,
+      queryFn: async () =>
+        fetchHealthPostInfo({
+          healthPostId: undefined,
+        }),
+      select: (data) =>
+        (data?.data as THealthPost[]).map((hp) => ({
+          label: hp.name,
+          value: hp.id,
+        })),
+    });
 
   const { mutate: mutateStaff, isPending } = useMutation({
     mutationKey: staffId
@@ -48,6 +67,7 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
     retry: false,
     onSuccess: () => {
       toast.success(`Staff ${staffId ? 'updated' : 'created'} successfully!`);
+      handleExit();
     },
   });
 
@@ -66,11 +86,10 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
       permissions: [],
       gender: undefined,
       status: undefined,
-      profileImages: [
-        'https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=',
-      ],
+      profileImages: [],
     },
-    values: staffId && !isLoading ? (data as TStaffSchema) : undefined,
+    values:
+      staffId && !isLoading && isSuccess ? (data as TStaffSchema) : undefined,
   });
 
   const {
@@ -80,22 +99,22 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
   } = form;
 
   const onSubmit = (data: TStaffSchema): void => {
-    console.log('Form Data:', data);
-    return;
+    const { profileImages: _images, ...dataWithoutImages } = data;
     mutateStaff({
       staffId: staffId!,
-      data,
+      data: convertToFormData(
+        dataWithoutImages,
+        ['profileImages'],
+        staffId ? dirtyFields : undefined,
+      ),
       method: staffId ? 'PUT' : 'POST',
     });
-    reset();
-    toggleModal();
   };
 
   const handleExit = (): void => {
     reset();
     toggleModal();
   };
-  console.log('images', form.watch());
 
   return (
     <React.Fragment>
@@ -239,13 +258,9 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
                 render={({ field }) => (
                   <FormWrapper label="Select Healthpost" isRequired>
                     <FormSelect
-                      options={[
-                        {
-                          label: 'admin1',
-                          value: 'e51ad8ea-9ed9-4a7b-821c-942a39b0fe4b',
-                        },
-                        { label: 'admin2', value: 'aasdasdas' },
-                      ]}
+                      options={
+                        (isHealthPostOptionsSuccess && healthpostsOptions) || []
+                      }
                       placeholder="Select Healthpost"
                       {...field}
                       variant="searchable"

@@ -33,8 +33,6 @@ export const AddHealthPostModal: React.FC<TProps> = ({
   toggleModal,
   healthPostId,
 }) => {
-  console.log('Health Post ID:', healthPostId);
-
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: queryKeys.healthPost.singleHealthPost(healthPostId || ''),
     queryFn: () =>
@@ -95,8 +93,6 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       method: healthPostId ? 'PUT' : 'POST',
     });
   };
-
-  console.log('Health Post Data:', form.formState.errors);
 
   return (
     <React.Fragment>

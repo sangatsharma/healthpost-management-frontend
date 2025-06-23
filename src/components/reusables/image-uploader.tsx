@@ -375,7 +375,12 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         <ImagePlus className="size-24 text-gray-400" />
       )}
 
-      <Input {...getInputProps()} name={name} type="file" multiple />
+      <Input
+        {...getInputProps()}
+        name={name}
+        type="file"
+        multiple={maxFiles > 1}
+      />
 
       <p className="text-center text-sm text-gray-600">
         {isDragActive

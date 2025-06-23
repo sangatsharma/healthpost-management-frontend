@@ -12,17 +12,18 @@ import { getMenuItems } from '@/constants/routes.constants';
 import { useTheme } from '@/provider/ThemeProvider';
 import { useUserStore } from '@/zustand/useUserDetails';
 import { useGetPathInfo } from '@/hooks/useGetPortal';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 export default function HealthPostSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const user = useUserStore((state) => state.user);
   const { portal } = useGetPathInfo();
+  const t = useTypedTranslations('GeneralPages');
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
-
   if (!user || user.accountType.toLowerCase() !== portal?.toLowerCase()) {
     return null;
   }
@@ -48,6 +49,7 @@ export default function HealthPostSidebar() {
           <SidebarNavigation
             menuItems={getMenuItems({
               itemsFor: user?.accountType,
+              t,
             })}
             user={user}
             isCollapsed={isCollapsed}
