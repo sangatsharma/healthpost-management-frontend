@@ -71,7 +71,7 @@ export const mutateHealthPostInfo = async ({
 // If staffId is provided, it will fetch the specific staff information
 // If staffId is not provided, it will fetch all staff information
 export const fetchStaffInfo = async ({ staffId }: { staffId?: string }) => {
-  const res = await api.get<TStaffSchema | TStaffSchema[]>(`/user/${staffId}`);
+  const res = await api.get<TResponse<TUser[] | TUser>>(`/user/${staffId}`);
   if (res.data) {
     return res.data;
   }

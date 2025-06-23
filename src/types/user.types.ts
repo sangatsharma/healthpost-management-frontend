@@ -32,17 +32,19 @@ export enum Gender {
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
 
 export type TUser = {
-  id: number | string;
+  id: string;
   fullName: TFullname;
   email: string;
   role: UserRole;
   accountType: TUserType;
   phoneNumber?: string;
-  status: boolean;
+  status: Status;
   permissions: TPermission[];
   healthPostId?: string;
   gender?: TGender;
   profileImage?: string;
+  healthPostName?: string;
+  createdAt?: string;
 };
 
 export type TFullname = {

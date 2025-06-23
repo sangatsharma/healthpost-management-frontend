@@ -1,6 +1,9 @@
 {
   "GeneralPages": {
     "actions": "कार्यहरू",
+    "reset": "पुनः सेट गर्नुहोस्",
+    "images": "तस्बिरहरू",
+    "search": "खोज्नुहोस्",
     "NotFound": {
       "title": "पृष्ठ फेला परेन",
       "description": "तपाईं खोजिरहनुभएको पृष्ठ अस्तित्वमा छैन वा सारिएको छ।",
@@ -28,7 +31,17 @@
       "phone": "सम्पर्क नम्बर",
       "createdAt": "सिर्जना मिति",
       "addHealthPost": "स्वास्थ्य चौकी थप्नुहोस्",
-      "editHealthPost": "स्वास्थ्य चौकी सम्पादन गर्नुहोस्"
+      "editHealthPost": "स्वास्थ्य चौकी सम्पादन गर्नुहोस्",
+      "number": "{number}"
+    },
+    "User": {
+      "fullName": "पूरा नाम",
+      "email": "इमेल",
+      "role": "भूमिका",
+      "accountType": "खाता प्रकार",
+      "permissions": "अनुमतिहरू",
+      "gender": "लिङ्ग",
+      "profileImage": "प्रोफाइल तस्वीर"
     }
   },
 

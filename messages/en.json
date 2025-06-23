@@ -1,6 +1,9 @@
 {
   "GeneralPages": {
     "actions": "Actions",
+    "reset": "Reset",
+    "images": "Images",
+    "search": "Search",
     "NotFound": {
       "title": "Page Not Found",
       "description": "The page you are looking for doesn't exist or has been moved.",
@@ -27,8 +30,18 @@
       "status": "Status",
       "phone": "Contact Number",
       "createdAt": "Created At",
-      "addHealthPost": "Add HealthPost",
-      "editHealthPost": "Edit HealthPost"
+      "addHealthPost": "Add New HealthPost",
+      "editHealthPost": "Update HealthPost",
+      "number": "{number}"
+    },
+    "User": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "role": "Role",
+      "accountType": "Account Type",
+      "permissions": "Permissions",
+      "gender": "Gender",
+      "profileImage": "Profile Image"
     }
   },
 

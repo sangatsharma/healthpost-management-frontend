@@ -52,6 +52,8 @@ export const AddHealthPostModal: React.FC<TProps> = ({
   });
 
   const t = useTypedTranslations('Validation');
+  const t2 = useTypedTranslations('GeneralPages');
+
   const HealthPostSchema = getHealthPostSchema(t);
 
   const form = useForm<THealthPostSchema>({
@@ -59,7 +61,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     defaultValues: {
       name: '',
       location: '',
-      // images: [],
+      images: [],
       email: '',
       phone: '',
       municipality: '',
@@ -99,18 +101,24 @@ export const AddHealthPostModal: React.FC<TProps> = ({
       <FormDialog
         isOpen={isOpen}
         toggleModal={handleExit}
-        title={healthPostId ? 'Update HealthPost' : 'Add New HealthPost'}
+        title={
+          healthPostId
+            ? t2('HealthPost.editHealthPost')
+            : t2('HealthPost.addHealthPost')
+        }
         className="sm:max-w-lg md:max-w-fit"
         isFormDirty={Object.keys(dirtyFields).length > 0}
         mutateAction={{
-          label: healthPostId ? 'Update Health Post' : 'Add Health Post',
+          label: healthPostId
+            ? t2('HealthPost.editHealthPost')
+            : t2('HealthPost.addHealthPost'),
           isLoading: isPending,
           onClick: handleSubmit(onSubmit),
           disabled: !Object.keys(dirtyFields).length,
           className: 'rounded-sm',
         }}
         resetAction={{
-          label: 'Reset',
+          label: t2('reset'),
           onClick: () => reset(),
           className: 'font-normal hover:bg-transparent',
         }}
@@ -122,7 +130,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormWrapper label="Health Post Name" isRequired>
+                  <FormWrapper label={t2('HealthPost.name')} isRequired>
                     <Input
                       {...field}
                       placeholder="Enter Health Post Name"
@@ -136,7 +144,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormWrapper label="HealthPost Email" isRequired>
+                  <FormWrapper label={t2('HealthPost.email')} isRequired>
                     <Input {...field} placeholder="Enter Email" required />
                   </FormWrapper>
                 )}
@@ -145,7 +153,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="municipality"
                 render={({ field }) => (
-                  <FormWrapper label="Municipality" isRequired>
+                  <FormWrapper label={t2('HealthPost.municipality')} isRequired>
                     <Input {...field} required />
                   </FormWrapper>
                 )}
@@ -154,7 +162,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormWrapper label="Location" isRequired>
+                  <FormWrapper label={t2('HealthPost.location')} isRequired>
                     <Input {...field} required />
                   </FormWrapper>
                 )}
@@ -165,7 +173,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   control={form.control}
                   name="status"
                   render={({ field }) => (
-                    <FormWrapper label="Status" isRequired>
+                    <FormWrapper label={t2('HealthPost.status')} isRequired>
                       <FormSelect
                         options={mapEnumToOptions(Status)}
                         placeholder="Select status"
@@ -182,7 +190,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="wardNo"
                 render={({ field }) => (
-                  <FormWrapper label="Ward No" isRequired>
+                  <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
                     <Input type="number" {...field} />
                   </FormWrapper>
                 )}
@@ -192,7 +200,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
-                  <FormWrapper label="Phone Number" isRequired>
+                  <FormWrapper label={t2('HealthPost.phone')} isRequired>
                     <PhoneInput
                       {...field}
                       defaultCountry="NP"
@@ -210,7 +218,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   control={form.control}
                   name="images"
                   render={({ field }) => (
-                    <FormWrapper label="Images" isRequired>
+                    <FormWrapper label={t2('images')} isRequired>
                       <FileUploader
                         onChange={field.onChange}
                         defaultValue={field.value || []}
