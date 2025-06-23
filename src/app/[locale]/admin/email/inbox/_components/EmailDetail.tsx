@@ -1,7 +1,7 @@
 const EmailDetail = () => {
   const email = {
     date: '20 June 2022, 9:16 AM',
-    from: 'Central Health post',
+    from: 'Amarsingh Health Post',
     content: `📢 Notice from Health Assistant
 
 Please ensure your health profile is complete and up to date. Accurate information about your medical history, ongoing conditions, and medications helps us provide better support and timely recommendations.
@@ -12,9 +12,8 @@ Please ensure your health profile is complete and up to date. Accurate informati
 
 Your well-being is important to us. Thank you for taking proactive steps toward better health.`,
     attachments: [
-      'ABCDGHJKL.pdf (200kb)',
-      'ascasc.pdf (450kb)',
-      'dontvjdjmg (300kb)',
+      'Health_Profile_Guide.pdf (1.5MB)',
+      'Medication_Reminder_Setup.pdf (800KB)',
     ],
   };
 

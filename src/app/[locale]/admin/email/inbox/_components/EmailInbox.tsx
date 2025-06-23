@@ -1,58 +1,29 @@
 const EmailInbox = () => {
   const messages = [
     {
-      name: 'Jeanne Nesty',
-      time: '3:13 PM',
+      name: 'Bagar Health Post',
+      time: '10:45 AM',
       content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ...',
+        'Please find attached the updated patient reports for your review. Let me know if you have any questions.',
       attachments: [
-        'ABCDGHJKL.pdf (200kb)',
-        'ascasc.pdf (450kb)',
-        'dontvjdjmg (300kb)',
+        'Patient_Report_2025.pdf (1.2MB)',
+        'Lab_Results_2025.pdf (850KB)',
       ],
     },
     {
-      name: 'Jeanne Nesty',
-      time: '3:13 PM',
+      name: 'Lakeside Health Post',
+      time: '2:30 PM',
       content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ...',
-      attachments: [
-        'ABCDGHJKL.pdf (200kb)',
-        'ascasc.pdf (450kb)',
-        'dontvjdjmg (300kb)',
-      ],
+        'The quarterly financial report is attached. Please review and provide your feedback by EOD.',
+      attachments: ['Q2_Financial_Report.pdf (2.5MB)'],
     },
     {
-      name: 'Jeanne Nesty',
-      time: '3:13 PM',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ...',
+      name: 'Amarsingh Health Post',
+      time: '8:00 AM',
+      content: `📢 Notice from Health Assistant Please ensure your health profile is complete and up to date.`,
       attachments: [
-        'ABCDGHJKL.pdf (200kb)',
-        'ascasc.pdf (450kb)',
-        'dontvjdjmg (300kb)',
-      ],
-    },
-    {
-      name: 'Jeanne Nesty',
-      time: '3:13 PM',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ...',
-      attachments: [
-        'ABCDGHJKL.pdf (200kb)',
-        'ascasc.pdf (450kb)',
-        'dontvjdjmg (300kb)',
-      ],
-    },
-    {
-      name: 'Jeanne Nesty',
-      time: '3:13 PM',
-      content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ...',
-      attachments: [
-        'ABCDGHJKL.pdf (200kb)',
-        'ascasc.pdf (450kb)',
-        'dontvjdjmg (300kb)',
+        'Health_Profile_Guide.pdf (1.5MB)',
+        'Medication_Reminder_Setup.pdf (800KB)',
       ],
     },
   ];
