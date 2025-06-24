@@ -73,7 +73,7 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
         required_error: t('required'),
         invalid_type_error: t('required'),
       })
-      .uuid(),
+      .optional(),
     permissions: z
       .array(
         z.object({

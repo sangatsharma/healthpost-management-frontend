@@ -392,7 +392,9 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         <div className="mt-2 text-center text-sm text-gray-500">
           Selected file(s):{' '}
           {files
-            .map((f) => (typeof f === 'string' ? f.slice(0, 25) : f.name))
+            .map((f) =>
+              typeof f === 'string' ? f.slice(0, 25) : f?.name || 'file',
+            )
             .join(', ')}
         </div>
       )}

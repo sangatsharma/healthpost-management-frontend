@@ -1,4 +1,6 @@
+import { logout } from '@/api/queries';
 import { TUser } from '@/types/user.types';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 
 type TUserStore = {
@@ -28,7 +30,18 @@ const getInitialData = (set: {
     set({ isLoggedIn: !!user, isLoading: false, user });
   },
   isLoggedIn: false,
-  logOut: () => set({ user: null, isLoggedIn: false }),
+  logOut: async () => {
+    await logout()
+      .then(() => {
+        set({ user: null, isLoggedIn: false, isLoading: false });
+        toast.success('Logged out successfully!');
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.error('Logout failed:', error);
+        toast.error('Failed to log out. Please try again.');
+      });
+  },
   isLoading: true,
   setIsLoading: (isLoading) => set({ isLoading }),
 });

@@ -19,26 +19,54 @@ import { queryKeys } from '@/api/queryKeys';
 import { useQuery } from '@tanstack/react-query';
 import { ImagePreviewer } from '@/components/reusables/ImagePreviewer';
 import Image from 'next/image';
+import { useGlobalAlert } from '@/hooks/useGlobalAlert';
+import { useStaffMutation } from '@/api/mutation';
 
 export default function Page() {
-  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+  const [isOpenAddModal, setIsOpenAddModal] = useState<{
+    isOpen: boolean;
+    staffId?: string;
+  }>({
+    isOpen: false,
+    staffId: undefined,
+  });
   const t = useTypedTranslations('GeneralPages');
+
+  const { showDeleteConfirmDialog } = useGlobalAlert();
+  const { mutatestaff } = useStaffMutation({
+    onSuccess: () => {
+      toast.success('Health Post deleted successfully!');
+    },
+  });
 
   const ActionOptions = (row: Row<TUser>): ActionButtonDataTypes[] => [
     {
       name: 'Edit',
       icon: Edit,
-      onClick: () => {},
+      onClick: () => {
+        setIsOpenAddModal({
+          isOpen: true,
+          staffId: row.original.id,
+        });
+      },
     },
     {
       name: 'Delete',
       isTrash: true,
       icon: Delete,
 
-      onClick: () => {
-        toast.error('Delete action clicked for row: ' + row.original.id);
-        // Implement delete functionality here
-      },
+      onClick: () =>
+        showDeleteConfirmDialog({
+          onConfirm() {
+            mutatestaff({
+              staffId: row.original.id,
+              method: 'DELETE',
+            });
+          },
+          itemName: renderFullName({
+            userData: row.original,
+          }),
+        }),
     },
   ];
 
@@ -83,11 +111,11 @@ export default function Page() {
       accessorKey: 'name',
       header: () => t('User.fullName'),
       cell: ({ row }) => (
-        <div className="flex items-center justify-center">
+        <span className="font-medium">
           {renderFullName({
             userData: row.original,
           })}
-        </div>
+        </span>
       ),
     },
 
@@ -160,13 +188,13 @@ export default function Page() {
     {
       map: {
         key: 'Healthpost',
-        valueFrom: 'healthPostName',
+        valueFrom: 'healthPost.name',
       },
-      accessorKey: 'location',
+      accessorKey: 'Healthpost',
       header: () => t('HealthPost.name'),
       cell: ({ row }) => (
         <>
-          {row.original?.healthPostName || (
+          {row.original?.healthPost?.name || (
             <span className="text-red-500">NOT ASSIGNED</span>
           )}
         </>
@@ -268,12 +296,12 @@ export default function Page() {
   });
 
   return (
-    <ProtectedRoute requiredPermission={Permissions.HP_MANAGEMENT}>
+    <ProtectedRoute requiredPermission={Permissions.ADMIN_MANAGEMENT}>
       <div className="p-4">
         <DataTable
           columns={columns}
           header={{
-            label: 'Healthpost Admins',
+            label: t('SidebarItems.staffsmanagement'),
             className: 'text-2xl font-bold mb-4',
           }}
           data={(data?.data as TUser[]) || []}
@@ -282,17 +310,27 @@ export default function Page() {
             hasExport: true,
           }}
           addButton={{
-            label: 'Add Admin',
+            label: t('User.addStaff'),
             icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () => setIsOpenAddModal(true),
+            onClick: () =>
+              setIsOpenAddModal({
+                isOpen: true,
+                staffId: undefined,
+              }),
           }}
           onRowClick={() => () => {}}
         />
       </div>
-      {isOpenAddModal && (
+      {isOpenAddModal.isOpen && (
         <AddAdminModal
-          isOpen={isOpenAddModal}
-          toggleModal={() => setIsOpenAddModal(false)}
+          isOpen={isOpenAddModal.isOpen}
+          staffId={isOpenAddModal.staffId}
+          toggleModal={() =>
+            setIsOpenAddModal((prev) => ({
+              ...prev,
+              isOpen: !prev.isOpen,
+            }))
+          }
         />
       )}
     </ProtectedRoute>

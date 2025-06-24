@@ -438,8 +438,8 @@ export function PermissionSelector({
                         onClick={() =>
                           toggleGroupPermissions(groupPermissions, false)
                         }
-                        variant={'destructive'}
-                        className="rounded px-2 py-1 text-xs"
+                        variant={'outline'}
+                        className="rounded px-2 py-1 text-xs text-red-400"
                       >
                         None
                       </Button>
