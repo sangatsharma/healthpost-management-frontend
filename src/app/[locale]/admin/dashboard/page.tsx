@@ -319,19 +319,19 @@ export default function AdminDashboard() {
       <div className="bg-background min-h-screen">
         {/* Header */}
         <div className="border-border bg-card border-b">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="py-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-foreground text-2xl font-bold">
+          <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-8">
+            <div className="py-4 sm:py-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <h1 className="text-foreground text-xl font-bold sm:text-2xl">
                     {data.labels.title}
                   </h1>
-                  <p className="text-muted-foreground mt-1 text-sm">
+                  <p className="text-muted-foreground mt-1 text-xs sm:text-sm">
                     {data.labels.subtitle}
                   </p>
                 </div>
-                <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4" />
+                <div className="text-muted-foreground flex items-center gap-2 text-xs sm:text-sm">
+                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>{new Date().toLocaleDateString()}</span>
                 </div>
               </div>
@@ -339,18 +339,18 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8 lg:py-8">
           {/* KPI Cards */}
-          <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
             <Card className="border-l-4 border-l-green-500 transition-all duration-200 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-muted-foreground text-sm font-medium">
+                <CardTitle className="text-muted-foreground text-xs font-medium sm:text-sm">
                   {data.labels.totalHealthPosts}
                 </CardTitle>
-                <Building2 className="h-5 w-5 text-green-600" />
+                <Building2 className="h-4 w-4 text-green-600 sm:h-5 sm:w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-foreground text-2xl font-bold">
+                <div className="text-foreground text-xl font-bold sm:text-2xl">
                   {mockKpis.totalHealthPosts}
                 </div>
                 <div className="mt-1 flex items-center text-xs text-green-600">
@@ -362,13 +362,13 @@ export default function AdminDashboard() {
 
             <Card className="border-l-4 border-l-blue-500 transition-all duration-200 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-muted-foreground text-sm font-medium">
+                <CardTitle className="text-muted-foreground text-xs font-medium sm:text-sm">
                   {data.labels.totalVisits}
                 </CardTitle>
-                <Activity className="h-5 w-5 text-blue-600" />
+                <Activity className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-foreground text-2xl font-bold">
+                <div className="text-foreground text-xl font-bold sm:text-2xl">
                   {mockKpis.totalVisits.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center text-xs text-green-600">
@@ -380,13 +380,13 @@ export default function AdminDashboard() {
 
             <Card className="border-l-4 border-l-purple-500 transition-all duration-200 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-muted-foreground text-sm font-medium">
+                <CardTitle className="text-muted-foreground text-xs font-medium sm:text-sm">
                   {data.labels.totalUsers}
                 </CardTitle>
-                <Users className="h-5 w-5 text-purple-600" />
+                <Users className="h-4 w-4 text-purple-600 sm:h-5 sm:w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-foreground text-2xl font-bold">
+                <div className="text-foreground text-xl font-bold sm:text-2xl">
                   {mockKpis.totalUsers.toLocaleString()}
                 </div>
                 <div className="mt-1 flex items-center text-xs text-green-600">
@@ -398,38 +398,40 @@ export default function AdminDashboard() {
 
             <Card className="border-l-4 border-l-orange-500 transition-all duration-200 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-muted-foreground text-sm font-medium">
+                <CardTitle className="text-muted-foreground text-xs font-medium sm:text-sm">
                   {data.labels.totalStaff}
                 </CardTitle>
-                <UserCheck className="h-5 w-5 text-orange-600" />
+                <UserCheck className="h-4 w-4 text-orange-600 sm:h-5 sm:w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-foreground text-2xl font-bold">
+                <div className="text-foreground text-xl font-bold sm:text-2xl">
                   {mockKpis.totalStaff}
                 </div>
                 <div className="text-muted-foreground mt-1 flex items-center text-xs">
-                  <span>{data.labels.acrossAllHealthPosts}</span>
+                  <span className="truncate">
+                    {data.labels.acrossAllHealthPosts}
+                  </span>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Enhanced Charts Section */}
-          <div className="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {/* Patient Visit Comparison Chart - Takes 2 columns */}
+          <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
+            {/* Patient Visit Comparison Chart - Takes 2 columns on large screens */}
             <Card className="lg:col-span-2">
-              <CardHeader>
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Activity className="h-5 w-5 text-green-600" />
-                      {comparisonLabels.title}
+              <CardHeader className="pb-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                      <Activity className="h-4 w-4 text-green-600 sm:h-5 sm:w-5" />
+                      <span className="truncate">{comparisonLabels.title}</span>
                     </CardTitle>
-                    <p className="text-muted-foreground mt-1 text-sm">
+                    <p className="text-muted-foreground mt-1 text-xs sm:text-sm">
                       {comparisonLabels.subtitle}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                     {(['week', 'month', 'year'] as const).map((period) => (
                       <Button
                         key={period}
@@ -438,11 +440,11 @@ export default function AdminDashboard() {
                         }
                         size="sm"
                         onClick={() => setSelectedPeriod(period)}
-                        className={
+                        className={`h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm ${
                           selectedPeriod === period
                             ? 'bg-green-600 hover:bg-green-700'
                             : ''
-                        }
+                        }`}
                       >
                         {periodLabels[period]}
                       </Button>
@@ -466,42 +468,54 @@ export default function AdminDashboard() {
                       color: '#ef4444',
                     },
                   }}
-                  className="h-[300px]"
+                  className="h-[200px] sm:h-[250px] lg:h-[300px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart
                       data={visitComparisonData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      margin={{
+                        top: 10,
+                        right: 10,
+                        left: 10,
+                        bottom: 5,
+                      }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="period" />
-                      <YAxis />
+                      <XAxis
+                        dataKey="period"
+                        tick={{ fontSize: 12 }}
+                        interval={0}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                      />
+                      <YAxis tick={{ fontSize: 12 }} />
                       <ChartTooltip
                         content={({ active, payload, label }) => {
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
                             const isSpike = data.isSpike;
                             return (
-                              <div className="bg-background border-border rounded-lg border p-3 shadow-lg">
-                                <p className="font-medium">{label}</p>
+                              <div className="bg-background border-border rounded-lg border p-2 shadow-lg sm:p-3">
+                                <p className="text-sm font-medium">{label}</p>
                                 <div className="mt-2 space-y-1">
                                   <div className="flex items-center gap-2">
-                                    <div className="h-3 w-3 rounded-full bg-green-600"></div>
-                                    <span className="text-sm">
+                                    <div className="h-2 w-2 rounded-full bg-green-600 sm:h-3 sm:w-3"></div>
+                                    <span className="text-xs sm:text-sm">
                                       {comparisonLabels.current}:{' '}
                                       {data.current.toLocaleString()}
                                     </span>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <div className="h-3 w-3 rounded-full bg-blue-600"></div>
-                                    <span className="text-sm">
+                                    <div className="h-2 w-2 rounded-full bg-blue-600 sm:h-3 sm:w-3"></div>
+                                    <span className="text-xs sm:text-sm">
                                       {comparisonLabels.previous}:{' '}
                                       {data.previous.toLocaleString()}
                                     </span>
                                   </div>
                                   {isSpike && (
-                                    <div className="mt-2 flex items-center gap-2 rounded bg-red-50 p-2 dark:bg-red-900/20">
-                                      <div className="h-2 w-2 animate-pulse rounded-full bg-red-500"></div>
+                                    <div className="mt-2 flex items-center gap-2 rounded bg-red-50 p-1 sm:p-2 dark:bg-red-900/20">
+                                      <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500 sm:h-2 sm:w-2"></div>
                                       <span className="text-xs font-medium text-red-600 dark:text-red-400">
                                         {comparisonLabels.spike}
                                       </span>
@@ -541,19 +555,23 @@ export default function AdminDashboard() {
                 </ChartContainer>
 
                 {/* Spike Legend */}
-                <div className="border-border mt-4 flex items-center justify-between border-t pt-4">
-                  <div className="flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-green-600"></div>
-                      <span>{comparisonLabels.current}</span>
+                <div className="border-border mt-3 flex flex-col gap-2 border-t pt-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-4">
+                  <div className="flex flex-wrap items-center gap-2 text-xs sm:gap-4 sm:text-sm">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-600 sm:h-3 sm:w-3"></div>
+                      <span className="truncate">
+                        {comparisonLabels.current}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-blue-600"></div>
-                      <span>{comparisonLabels.previous}</span>
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="h-2 w-2 rounded-full bg-blue-600 sm:h-3 sm:w-3"></div>
+                      <span className="truncate">
+                        {comparisonLabels.previous}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 animate-pulse rounded-full bg-red-500"></div>
-                      <span className="text-red-600 dark:text-red-400">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500 sm:h-2 sm:w-2"></div>
+                      <span className="truncate text-red-600 dark:text-red-400">
                         {comparisonLabels.spike}
                       </span>
                     </div>
@@ -567,10 +585,12 @@ export default function AdminDashboard() {
 
             {/* Visit Distribution Chart - Takes 1 column */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-blue-600" />
-                  {data.labels.visitDistribution}
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                  <BarChart3 className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                  <span className="truncate">
+                    {data.labels.visitDistribution}
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -581,7 +601,7 @@ export default function AdminDashboard() {
                       color: 'hsl(var(--chart-1))',
                     },
                   }}
-                  className="h-[200px]"
+                  className="h-[150px] sm:h-[180px] lg:h-[200px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -589,8 +609,8 @@ export default function AdminDashboard() {
                         data={visitDistributionData}
                         cx="50%"
                         cy="50%"
-                        innerRadius={40}
-                        outerRadius={80}
+                        innerRadius={30}
+                        outerRadius={60}
                         paddingAngle={5}
                         dataKey="value"
                       >
@@ -602,17 +622,19 @@ export default function AdminDashboard() {
                     </PieChart>
                   </ResponsiveContainer>
                 </ChartContainer>
-                <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="mt-3 grid grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2">
                   {visitDistributionData.map((item, index) => (
                     <div
                       key={index}
                       className="flex items-center gap-2 text-xs"
                     >
                       <div
-                        className="h-3 w-3 rounded-full"
+                        className="h-2 w-2 rounded-full sm:h-3 sm:w-3"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-muted-foreground">{item.name}</span>
+                      <span className="text-muted-foreground truncate">
+                        {item.name}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -621,11 +643,11 @@ export default function AdminDashboard() {
           </div>
 
           {/* Monthly Trend Chart - Separate row */}
-          <div className="mb-8">
+          <div className="mb-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-purple-600" />
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                  <TrendingUp className="h-4 w-4 text-purple-600 sm:h-5 sm:w-5" />
                   {data.labels.monthlyTrend}
                 </CardTitle>
               </CardHeader>
@@ -641,13 +663,21 @@ export default function AdminDashboard() {
                       color: 'hsl(var(--chart-2))',
                     },
                   }}
-                  className="h-[200px]"
+                  className="h-[150px] sm:h-[180px] lg:h-[200px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={monthlyVisitsData}>
+                    <LineChart
+                      data={monthlyVisitsData}
+                      margin={{
+                        top: 10,
+                        right: 10,
+                        left: 10,
+                        bottom: 5,
+                      }}
+                    >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
+                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Line
                         type="monotone"
@@ -669,16 +699,25 @@ export default function AdminDashboard() {
           </div>
 
           {/* Compact Overview Sections */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
             {/* Health Posts by Visits */}
             <Card>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-foreground text-base font-semibold">
-                    {data.labels.topHealthPostsByVisits}
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <CardTitle className="text-foreground text-sm font-semibold sm:text-base">
+                    <span className="line-clamp-2">
+                      {data.labels.topHealthPostsByVisits}
+                    </span>
                   </CardTitle>
-                  <Button variant="outline" size="sm" className="h-8 gap-2">
-                    {data.labels.viewAll}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 gap-1 self-start text-xs sm:h-8 sm:gap-2 sm:text-sm"
+                  >
+                    <span className="hidden sm:inline">
+                      {data.labels.viewAll}
+                    </span>
+                    <span className="sm:hidden">View</span>
                     <ArrowRight className="h-3 w-3" />
                   </Button>
                 </div>
@@ -689,23 +728,25 @@ export default function AdminDashboard() {
                     key={healthPost.id}
                     className="hover:bg-accent/50 flex items-center justify-between rounded-lg p-2 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-xs font-medium text-green-600 dark:bg-green-900">
+                    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100 text-xs font-medium text-green-600 sm:h-6 sm:w-6 dark:bg-green-900">
                         {index + 1}
                       </div>
-                      <div className="min-w-0">
-                        <p className="text-foreground truncate text-sm font-medium">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-foreground truncate text-xs font-medium sm:text-sm">
                           {healthPost.name}
                         </p>
                         <div className="text-muted-foreground flex items-center gap-1 text-xs">
-                          <MapPin className="h-3 w-3" />
-                          {healthPost.location}
+                          <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                          <span className="truncate">
+                            {healthPost.location}
+                          </span>
                         </div>
                       </div>
                     </div>
                     <Badge
                       variant="secondary"
-                      className="bg-green-100 text-xs text-green-700 dark:bg-green-900 dark:text-green-300"
+                      className="ml-2 bg-green-100 text-xs text-green-700 dark:bg-green-900 dark:text-green-300"
                     >
                       {healthPost.visits.toLocaleString()}
                     </Badge>
@@ -717,12 +758,21 @@ export default function AdminDashboard() {
             {/* Health Posts by User Registration */}
             <Card>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-foreground text-base font-semibold">
-                    {data.labels.topHealthPostsByUsers}
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <CardTitle className="text-foreground text-sm font-semibold sm:text-base">
+                    <span className="line-clamp-2">
+                      {data.labels.topHealthPostsByUsers}
+                    </span>
                   </CardTitle>
-                  <Button variant="outline" size="sm" className="h-8 gap-2">
-                    {data.labels.viewAll}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 gap-1 self-start text-xs sm:h-8 sm:gap-2 sm:text-sm"
+                  >
+                    <span className="hidden sm:inline">
+                      {data.labels.viewAll}
+                    </span>
+                    <span className="sm:hidden">View</span>
                     <ArrowRight className="h-3 w-3" />
                   </Button>
                 </div>
@@ -733,23 +783,25 @@ export default function AdminDashboard() {
                     key={healthPost.id}
                     className="hover:bg-accent/50 flex items-center justify-between rounded-lg p-2 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-xs font-medium text-purple-600 dark:bg-purple-900">
+                    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-xs font-medium text-purple-600 sm:h-6 sm:w-6 dark:bg-purple-900">
                         {index + 1}
                       </div>
-                      <div className="min-w-0">
-                        <p className="text-foreground truncate text-sm font-medium">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-foreground truncate text-xs font-medium sm:text-sm">
                           {healthPost.name}
                         </p>
                         <div className="text-muted-foreground flex items-center gap-1 text-xs">
-                          <MapPin className="h-3 w-3" />
-                          {healthPost.location}
+                          <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                          <span className="truncate">
+                            {healthPost.location}
+                          </span>
                         </div>
                       </div>
                     </div>
                     <Badge
                       variant="secondary"
-                      className="bg-purple-100 text-xs text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                      className="ml-2 bg-purple-100 text-xs text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                     >
                       {healthPost.users}
                     </Badge>

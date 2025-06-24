@@ -265,6 +265,22 @@ export const AddAdminModal: React.FC<TProps> = ({
               />
               <FormField
                 control={form.control}
+                name="accountType"
+                render={({ field }) => (
+                  <FormWrapper label="Account Type" isRequired>
+                    <FormSelect
+                      options={mapEnumToOptions(UserType)}
+                      placeholder="Select account type"
+                      {...field}
+                      required
+                      variant="searchable"
+                      error={!!form.formState.errors.accountType}
+                    />
+                  </FormWrapper>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="healthPostId"
                 render={({ field }) => (
                   <FormWrapper label="Select Healthpost">

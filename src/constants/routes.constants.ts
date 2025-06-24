@@ -57,10 +57,13 @@ export const HEALTHPOST_ROUTES = [
   '/inventory',
 ];
 
+export const EMAIL_ROUTES = ['/email/inbox', '/email/new'];
+
 export const PROTECTED_ROUTES = [
   ...ADMIN_ROUTES,
   ...HEALTHPOST_ROUTES,
   ...PATIENT_ROUTES,
+  ...EMAIL_ROUTES,
 ];
 
 export const getMenuItems = ({
@@ -216,12 +219,13 @@ export const getMenuItems = ({
           href: `healthpost`,
           permission: Permissions.HP_MANAGEMENT,
         },
+
         {
           key: 'staffs',
           icon: Users,
           label: t('SidebarItems.staffsmanagement'),
           href: `staffs`,
-          permission: Permissions.HP_MANAGEMENT,
+          permission: Permissions.ADMIN_MANAGEMENT,
         },
         {
           key: 'email',
