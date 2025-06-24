@@ -43,7 +43,9 @@ export type TUser = {
   healthPostId?: string;
   gender?: TGender;
   profileImage?: string;
-  healthPostName?: string;
+  healthPost?: {
+    name: string;
+  };
   createdAt?: string;
 };
 

@@ -41,7 +41,9 @@
       "accountType": "Account Type",
       "permissions": "Permissions",
       "gender": "Gender",
-      "profileImage": "Profile Image"
+      "profileImage": "Profile Image",
+      "addStaff": "Add New Staff",
+      "editStaff": "Edit Staff"
     }
   },
 

@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Form, FormField } from '@/components/ui/form';
 import FormDialog from '@/components/reusables/form-dialog';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import {} from '@/schemas/healthPost.schema';
-import { useSearchParams } from 'next/navigation';
+
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   fetchHealthPostInfo,
@@ -21,7 +20,7 @@ import { PhoneInput } from '@/components/ui/phone-input';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { getStaffSchema, TStaffSchema } from '@/schemas/admin.schema';
-import { Gender, Status, UserRole, UserType } from '@/types/user.types';
+import { Gender, Status, TUser, UserRole, UserType } from '@/types/user.types';
 import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
 import { PermissionSelector } from './PermissionForm';
 import { FormSelect } from '@/components/reusables/form-select';
@@ -30,12 +29,14 @@ import { THealthPost } from '@/types/healthpost.types';
 type TProps = {
   isOpen: boolean;
   toggleModal: () => void;
+  staffId?: string;
 };
 
-export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
-  const searchParams = useSearchParams();
-  const staffId = searchParams.get('staffId');
-
+export const AddAdminModal: React.FC<TProps> = ({
+  isOpen,
+  staffId,
+  toggleModal,
+}) => {
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: queryKeys.staff.singleStaff(staffId || ''),
     queryFn: () =>
@@ -44,6 +45,15 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
       }),
     enabled: !!staffId,
   });
+
+  const singleData = data?.data as TUser;
+  const formValues = {
+    firstName: singleData?.fullName?.firstName,
+    middleName: singleData?.fullName?.middleName,
+    lastName: singleData?.fullName?.lastName,
+    profileImages: [singleData?.profileImage],
+    ...singleData,
+  } as TStaffSchema;
 
   const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
     useQuery({
@@ -74,6 +84,7 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
   const t = useTypedTranslations('Validation');
   const staffSchema = getStaffSchema(t);
 
+  console.log('formValues', formValues);
   const form = useForm<TStaffSchema>({
     resolver: zodResolver(staffSchema),
     defaultValues: {
@@ -89,9 +100,7 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
       profileImages: [],
     },
     values:
-      staffId && !isLoading && isSuccess
-        ? (data?.data as TStaffSchema)
-        : undefined,
+      staffId && !isLoading && isSuccess && singleData ? formValues : undefined,
   });
 
   const {
@@ -258,7 +267,7 @@ export const AddAdminModal: React.FC<TProps> = ({ isOpen, toggleModal }) => {
                 control={form.control}
                 name="healthPostId"
                 render={({ field }) => (
-                  <FormWrapper label="Select Healthpost" isRequired>
+                  <FormWrapper label="Select Healthpost">
                     <FormSelect
                       options={
                         (isHealthPostOptionsSuccess && healthpostsOptions) || []

@@ -18,6 +18,7 @@ import {
   DollarSign,
   TrendingUp,
   HeartPlusIcon,
+  Mail,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem, TTypeFunction } from '@/types/global';
@@ -221,6 +222,13 @@ export const getMenuItems = ({
           label: t('SidebarItems.staffsmanagement'),
           href: `staffs`,
           permission: Permissions.HP_MANAGEMENT,
+        },
+        {
+          key: 'email',
+          icon: Mail,
+          label: t('User.email'),
+          href: 'email',
+          permission: Permissions.SYSTEM_CONFIG,
         },
       ];
     default:

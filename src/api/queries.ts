@@ -15,6 +15,14 @@ export const login = async (values: {
   }
 };
 
+//function to handle user logout
+export const logout = async () => {
+  const res = await api.get<TResponse<TUser>>('/auth/logout');
+  if (res.data) {
+    return res.data;
+  }
+};
+
 //function to handle otp verification
 export const verifyOTP = async (values: { email: string; otp: string }) => {
   const res = await api.post<TLoginReponse>('/auth/validate-otp', values);
@@ -83,8 +91,8 @@ export const mutateStaffInfo = async ({
   method,
 }: {
   staffId?: string;
-  data: FormData;
-  method: 'POST' | 'PUT';
+  data?: FormData;
+  method: 'POST' | 'PUT' | 'DELETE';
 }) => {
   let res;
   const url = `/auth/register${staffId ? `/${staffId}` : ''}`;
@@ -92,6 +100,8 @@ export const mutateStaffInfo = async ({
     res = await api.post<TStaffSchema>(url, data);
   } else if (method === 'PUT') {
     res = await api.put<TStaffSchema>(url, data);
+  } else if (method === 'DELETE') {
+    res = await api.delete<TStaffSchema>(url);
   } else {
     throw new Error('Invalid method');
   }

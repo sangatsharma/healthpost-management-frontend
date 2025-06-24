@@ -41,7 +41,9 @@
       "accountType": "खाता प्रकार",
       "permissions": "अनुमतिहरू",
       "gender": "लिङ्ग",
-      "profileImage": "प्रोफाइल तस्वीर"
+      "profileImage": "प्रोफाइल तस्वीर",
+      "addStaff": "नयाँ कर्मचारी थप्नुहोस्",
+      "editStaff": "कर्मचारी सम्पादन गर्नुहोस्"
     }
   },
 

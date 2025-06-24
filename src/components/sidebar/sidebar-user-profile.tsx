@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/tooltip';
 import { TUser } from '@/types/user.types';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useUserStore } from '@/zustand/useUserDetails';
 
 interface SidebarUserProfileProps {
   user: TUser;
@@ -33,6 +34,8 @@ export default function SidebarUserProfile({
   isDarkMode,
   onThemeToggle,
 }: SidebarUserProfileProps) {
+  const logout = useUserStore((state) => state.logOut);
+
   const [imageError, setImageError] = useState(false);
 
   const userDropdownItems = [
@@ -207,7 +210,12 @@ export default function SidebarUserProfile({
             )}
             {isDarkMode ? 'Light Mode' : 'Dark Mode'}
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-red-600">
+          <DropdownMenuItem
+            className="text-red-600"
+            onClick={() => {
+              logout();
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </DropdownMenuItem>
