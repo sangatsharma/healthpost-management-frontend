@@ -18,7 +18,8 @@
       "dashboard": "Dashboard",
       "healthpost": "Health Posts",
       "patients": "Patients",
-      "staffsmanagement": "Staffs Management"
+      "staffsmanagement": "Staffs Management",
+      "medicalhistory": "Medical History"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -88,6 +89,42 @@
     "resend_OTP": "Resend OTP",
     "logging": "Logging in...",
     "verifying_OTP": "Verifying OTP"
+  },
+
+  "MedicalHistory": {
+    "title": "Medical History",
+    "subtitle": "Complete Medical Records of Patient",
+    "patientInfo": "Patient Information",
+    "diagnosis": "Diagnosis",
+    "symptoms": "Symptoms",
+    "treatment": "Treatment",
+    "medications": "Medications",
+    "vitals": "Vital Signs",
+    "doctor": "Doctor",
+    "healthPost": "Health Post",
+    "date": "Date",
+    "time": "Time",
+    "age": "Age",
+    "gender": "Gender",
+    "notes": "Notes",
+    "nextAppointment": "Next Appointment",
+    "status": "Status",
+    "priority": "Priority",
+    "bloodPressure": "Blood Pressure",
+    "temperature": "Temperature",
+    "heartRate": "Heart Rate",
+    "weight": "Weight",
+    "height": "Height",
+    "dosage": "Dosage",
+    "frequency": "Frequency",
+    "duration": "Duration",
+    "filterAll": "All",
+    "filterCompleted": "Completed",
+    "filterOngoing": "Ongoing",
+    "filterFollowup": "Follow-up Required",
+    "downloadReport": "Download Report",
+    "years": "years",
+    "noRecordsFound": "No medical records found."
   },
 
   "AlertDialog": {

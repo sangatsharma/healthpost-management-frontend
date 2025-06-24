@@ -219,7 +219,13 @@ export const getMenuItems = ({
           href: `healthpost`,
           permission: Permissions.HP_MANAGEMENT,
         },
-
+        {
+          key: 'medicalhistory',
+          icon: FileText,
+          label: t('SidebarItems.medicalhistory'),
+          href: `medicalhistory`,
+          permission: Permissions.ADMIN_MANAGEMENT,
+        },
         {
           key: 'staffs',
           icon: Users,
