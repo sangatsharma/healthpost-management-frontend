@@ -18,30 +18,41 @@ Your well-being is important to us. Thank you for taking proactive steps toward 
   };
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="rounded-lg p-6 shadow-md">
+    <div className="bg-background min-h-screen p-6">
+      <div className="bg-card border-border rounded-lg border p-6 shadow-md">
         <div className="mb-4 flex justify-between">
           <div>
-            <a href="#" className="mr-2 text-purple-600">
+            <a
+              href="#"
+              className="text-primary hover:text-primary/80 mr-2 transition-colors"
+            >
               Health Assistant
             </a>
-            <a href="#" className="text-purple-600">
+            <a
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
               Patients
             </a>
           </div>
-          <span className="text-gray-500">{email.date}</span>
+          <span className="text-muted-foreground">{email.date}</span>
         </div>
         <div className="mb-4">
-          <p className="whitespace-pre-wrap">{email.content}</p>
+          <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+            {email.content}
+          </p>
         </div>
-        <div className="mb-4 text-blue-500">
+        <div className="mb-4">
           {email.attachments.map((attachment, i) => (
-            <span key={i} className="mr-2">
+            <span
+              key={i}
+              className="bg-accent text-accent-foreground mr-2 inline-block rounded px-2 py-1 text-sm"
+            >
               {attachment}
             </span>
           ))}
         </div>
-        <button className="rounded bg-gray-200 px-4 py-2 text-gray-700">
+        <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-ring rounded px-4 py-2 transition-colors focus:ring-2 focus:ring-offset-2">
           Forward
         </button>
       </div>

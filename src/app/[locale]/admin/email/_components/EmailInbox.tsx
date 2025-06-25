@@ -29,36 +29,45 @@ const EmailInbox = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 text-gray-800">
-      <div className="rounded-lg bg-white p-6 shadow-md">
+    <div className="bg-background text-foreground min-h-screen p-6">
+      <div className="bg-card border-border rounded-lg border p-6 shadow-md">
         <div className="mb-4">
-          <h2 className="text-lg">
-            Sent <span className="text-gray-500">2445 messages</span>
+          <h2 className="text-foreground text-lg font-semibold">
+            Sent{' '}
+            <span className="text-muted-foreground font-normal">
+              2445 messages
+            </span>
           </h2>
         </div>
         <div className="mb-4">
           <input
             type="text"
             placeholder="Search"
-            className="w-full rounded bg-gray-200 p-2 text-gray-800"
+            className="bg-input text-foreground border-border placeholder:text-muted-foreground focus:border-ring focus:ring-ring w-full rounded border p-2 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
           />
         </div>
-        <div className="max-h-96 overflow-y-auto">
+        <div className="scrollbar-thin-custom max-h-96 overflow-y-auto">
           {messages.map((msg, index) => (
             <div
               key={index}
-              className="mb-4 rounded-lg bg-gray-50 p-4 text-gray-800"
+              className="bg-muted text-foreground border-border/50 hover:bg-muted/80 mb-4 rounded-lg border p-4 transition-colors"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium">{msg.name}</h3>
-                <span className="text-gray-500">{msg.time}</span>
+                <h3 className="text-foreground text-lg font-medium">
+                  {msg.name}
+                </h3>
+                <span className="text-muted-foreground text-sm">
+                  {msg.time}
+                </span>
               </div>
-              <p className="mt-2">{msg.content}</p>
-              <div className="mt-2 font-light text-white">
+              <p className="text-foreground mt-2 text-sm leading-relaxed">
+                {msg.content}
+              </p>
+              <div className="mt-3">
                 {msg.attachments.map((attachment, i) => (
                   <span
                     key={i}
-                    className="mr-2 rounded-sm border-0 bg-blue-600 p-1"
+                    className="bg-primary text-primary-foreground mr-2 inline-block rounded-sm px-2 py-1 text-xs"
                   >
                     {attachment}
                   </span>

@@ -18,7 +18,8 @@
       "dashboard": "ड्यासबोर्ड",
       "healthpost": "स्वास्थ्य चौकीहरू",
       "patients": "रोगीहरू",
-      "staffsmanagement": "कर्मचारी व्यवस्थापन"
+      "staffsmanagement": "कर्मचारी व्यवस्थापन",
+      "medicalhistory": "चिकित्सा इतिहास"
     },
     "HealthPost": {
       "name": "स्वास्थ्य चौकीको नाम",
@@ -88,6 +89,43 @@
     "title": "यो होमपेज हो ।",
     "subtitle": "अर्डर पृष्ठमा जानुहोस्।"
   },
+
+  "MedicalHistory": {
+    "title": "चिकित्सा इतिहास",
+    "subtitle": "बिरामीको पूर्ण चिकित्सा रेकर्ड",
+    "patientInfo": "बिरामीको जानकारी",
+    "diagnosis": "निदान",
+    "symptoms": "लक्षणहरू",
+    "treatment": "उपचार",
+    "medications": "औषधिहरू",
+    "vitals": "महत्वपूर्ण संकेतहरू",
+    "doctor": "चिकित्सक",
+    "healthPost": "स्वास्थ्य पोस्ट",
+    "date": "मिति",
+    "time": "समय",
+    "age": "उमेर",
+    "gender": "लिङ्ग",
+    "notes": "टिप्पणी",
+    "nextAppointment": "अर्को भेट",
+    "status": "स्थिति",
+    "priority": "प्राथमिकता",
+    "bloodPressure": "रक्तचाप",
+    "temperature": "तापक्रम",
+    "heartRate": "मुटुको धड्कन",
+    "weight": "तौल",
+    "height": "उचाइ",
+    "dosage": "खुराक",
+    "frequency": "आवृत्ति",
+    "duration": "अवधि",
+    "filterAll": "सबै",
+    "filterCompleted": "सम्पन्न",
+    "filterOngoing": "जारी",
+    "filterFollowup": "फलो-अप आवश्यक",
+    "downloadReport": "रिपोर्ट डाउनलोड गर्नुहोस्",
+    "years": "वर्ष",
+    "noRecordsFound": "कुनै चिकित्सा रेकर्ड फेला परेन।"
+  },
+
   "AlertDialog": {
     "action": {
       "delete": "मेटाउनुहोस्",
