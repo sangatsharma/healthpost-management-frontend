@@ -1,16 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  getPaginationRowModel,
-} from '@tanstack/react-table';
-import { Eye, Edit, Trash2, MoreHorizontal, ArrowUpDown } from 'lucide-react';
+import { Eye, Edit, Trash2, MoreHorizontal } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,14 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -38,7 +21,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { DataTable } from '@/components/data-table/data-table';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { TPatient } from '@/types/patient.types';
+import { ExtendedColumnDef } from '@/types/global';
 
 interface PatientDataTableProps {
   patients: TPatient[];
@@ -54,21 +40,18 @@ export function PatientDataTable({
   onDelete,
 }: PatientDataTableProps) {
   const t = useTranslations('GeneralPages.Patient');
-  const [sorting, setSorting] = useState<SortingState>([]);
   const [deletePatientId, setDeletePatientId] = useState<string | null>(null);
 
-  const columns: ColumnDef<TPatient>[] = [
+  const columns: ExtendedColumnDef<TPatient>[] = [
     {
+      map: {
+        key: 'Full Name',
+        mergedValuesFrom: ['firstName', 'lastName'],
+        dataTransformer: (data) => `${data.firstName} ${data.lastName}`,
+      },
       accessorKey: 'fullName',
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="h-auto p-0 font-semibold"
-        >
-          {t('fullName')}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DataTableColumnHeader column={column} title={t('fullName')} />
       ),
       cell: ({ row }) => (
         <div className="font-medium">
@@ -77,15 +60,27 @@ export function PatientDataTable({
       ),
     },
     {
+      map: {
+        key: 'Phone',
+        valueFrom: 'phone',
+      },
       accessorKey: 'phone',
-      header: t('phone'),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('phone')} />
+      ),
       cell: ({ row }) => (
         <div className="font-mono text-sm">{row.original.phone}</div>
       ),
     },
     {
+      map: {
+        key: 'Email',
+        valueFrom: 'email',
+      },
       accessorKey: 'email',
-      header: t('email'),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('email')} />
+      ),
       cell: ({ row }) => (
         <div className="text-muted-foreground text-sm">
           {row.original.email || 'N/A'}
@@ -93,22 +88,25 @@ export function PatientDataTable({
       ),
     },
     {
+      map: {
+        key: 'Age',
+        valueFrom: 'age',
+      },
       accessorKey: 'age',
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="h-auto p-0 font-semibold"
-        >
-          {t('age')}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DataTableColumnHeader column={column} title={t('age')} />
       ),
       cell: ({ row }) => <div className="text-center">{row.original.age}</div>,
     },
     {
+      map: {
+        key: 'Gender',
+        valueFrom: 'gender',
+      },
       accessorKey: 'gender',
-      header: t('gender'),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('gender')} />
+      ),
       cell: ({ row }) => (
         <Badge variant="outline" className="capitalize">
           {t(row.original.gender)}
@@ -116,23 +114,27 @@ export function PatientDataTable({
       ),
     },
     {
+      map: {
+        key: 'Blood Group',
+        valueFrom: 'bloodGroup',
+      },
       accessorKey: 'bloodGroup',
-      header: t('bloodGroup'),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('bloodGroup')} />
+      ),
       cell: ({ row }) => (
         <Badge variant="secondary">{row.original.bloodGroup}</Badge>
       ),
     },
     {
+      map: {
+        key: 'Registration Date',
+        dataTransformer: (data) =>
+          new Date(data.registrationDate).toLocaleDateString(),
+      },
       accessorKey: 'registrationDate',
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="h-auto p-0 font-semibold"
-        >
-          {t('registrationDate')}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DataTableColumnHeader column={column} title={t('registrationDate')} />
       ),
       cell: ({ row }) => (
         <div className="text-sm">
@@ -141,8 +143,14 @@ export function PatientDataTable({
       ),
     },
     {
+      map: {
+        key: 'Status',
+        valueFrom: 'status',
+      },
       accessorKey: 'status',
-      header: t('status'),
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t('status')} />
+      ),
       cell: ({ row }) => (
         <Badge
           variant={row.original.status === 'active' ? 'default' : 'secondary'}
@@ -158,144 +166,65 @@ export function PatientDataTable({
     },
     {
       id: 'actions',
-      header: t('actions'),
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t('actions')}
+          className="flex justify-end"
+        />
+      ),
       cell: ({ row }) => {
         const patient = row.original;
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onView(patient)}>
-                <Eye className="mr-2 h-4 w-4" />
-                {t('view')}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit(patient)}>
-                <Edit className="mr-2 h-4 w-4" />
-                {t('edit')}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setDeletePatientId(patient.id)}
-                className="text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                {t('delete')}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onView(patient)}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  {t('view')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onEdit(patient)}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  {t('edit')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setDeletePatientId(patient.id)}
+                  className="text-destructive"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {t('delete')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 
-  const table = useReactTable({
-    data: patients,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    state: {
-      sorting,
-    },
-    initialState: {
-      pagination: {
-        pageSize: 10,
-      },
-    },
-  });
-
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className="hover:bg-muted/50"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No patients found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-between">
-        <div className="text-muted-foreground text-sm">
-          Showing{' '}
-          {table.getState().pagination.pageIndex *
-            table.getState().pagination.pageSize +
-            1}{' '}
-          to{' '}
-          {Math.min(
-            (table.getState().pagination.pageIndex + 1) *
-              table.getState().pagination.pageSize,
-            patients.length,
-          )}{' '}
-          of {patients.length} patients
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+    <>
+      <DataTable
+        columns={columns}
+        data={patients}
+        header={{
+          label: t('patients'),
+          className: 'text-2xl font-bold mb-4',
+        }}
+        utils={{
+          showPagination: true,
+          hasExport: true,
+        }}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog
@@ -328,6 +257,6 @@ export function PatientDataTable({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 }
