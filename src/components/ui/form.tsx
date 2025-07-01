@@ -14,7 +14,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useLocale } from 'next-intl';
-import { devnagari } from '@/app/layout';
+import { devnagari } from '../ClientWrapper';
 
 const Form = FormProvider;
 

@@ -8,7 +8,15 @@ import { Toaster } from './ui/sonner';
 import { AuthProvider } from '@/provider/AuthProvider';
 import { GlobalAlertDialog } from './reusables/GlobalAlertDialog';
 import HealthPostSidebar from './sidebar/sidebar';
-
+import { Noto_Sans_Devanagari } from 'next/font/google';
+import { cn } from '@/lib/utils';
+export const devnagari = Noto_Sans_Devanagari({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-devnagari',
+  display: 'swap',
+  fallback: ['system-ui', 'sans-serif'],
+});
 export function ClientWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ErrorBoundary>
@@ -24,7 +32,12 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
               }}
             />
             <AuthProvider>
-              <div className="flex min-h-screen justify-start gap-4">
+              <div
+                className={cn(
+                  'flex min-h-screen justify-start gap-4',
+                  devnagari.variable,
+                )}
+              >
                 <GlobalAlertDialog />
                 <HealthPostSidebar />
                 <div className="h-screen w-full overflow-scroll">

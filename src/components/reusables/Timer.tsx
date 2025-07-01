@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useLocalizedNumber } from '@/hooks/useLocalizedNumber';
 import { cn } from '@/lib/utils';
 import { useLocale } from 'next-intl';
-import { devnagari } from '@/app/layout';
+import { devnagari } from '../ClientWrapper';
 
 const Timer = ({
   seconds,

@@ -1,17 +1,10 @@
 import { ReactNode } from 'react';
 import './globals.css';
-import { Noto_Sans_Devanagari, Poppins } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { useLocale } from 'next-intl';
 import { ThemeScript } from '@/components/ThemeScript';
 import { cn } from '@/lib/utils';
 
-export const devnagari = Noto_Sans_Devanagari({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-devnagari',
-  display: 'swap',
-  fallback: ['system-ui', 'sans-serif'],
-});
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
@@ -23,10 +16,7 @@ const poppins = Poppins({
 export default function RootLayout({ children }: { children: ReactNode }) {
   const locale = useLocale();
   return (
-    <html
-      lang={locale || 'en'}
-      className={cn(poppins.variable, devnagari.variable)}
-    >
+    <html lang={locale || 'en'} className={cn(poppins.variable)}>
       <head>
         <ThemeScript />
       </head>
