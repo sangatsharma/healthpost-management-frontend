@@ -119,7 +119,7 @@ export default function SidebarMenuItem({
           />
         </div>
         {!isCollapsed && (
-          <span className="text-[18px] text-nowrap">{item.label}</span>
+          <span className="text-[16px] text-nowrap">{item.label}</span>
         )}
       </div>
 

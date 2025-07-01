@@ -6,6 +6,8 @@ import * as React from 'react';
 
 import { useLocalizedNumber } from '@/hooks/useLocalizedNumber';
 import { cn } from '@/lib/utils';
+import { useLocale } from 'next-intl';
+import { devnagari } from '@/app/layout';
 
 function InputOTP({
   className,
@@ -48,6 +50,7 @@ const InputOTPSlot = React.forwardRef<HTMLDivElement, InputOTPSlotProps>(
       inputOTPContext?.slots?.[index] ?? {};
 
     const numberFormatter = useLocalizedNumber();
+    const locale = useLocale();
     return (
       <div
         ref={ref}
@@ -61,6 +64,7 @@ const InputOTPSlot = React.forwardRef<HTMLDivElement, InputOTPSlotProps>(
           'data-[active=true]:shadow-[0_0_0_2px_rgba(99,102,241,0.2)]',
           'aria-invalid:border-red-500 aria-invalid:data-[active=true]:border-red-500',
           'aria-invalid:data-[active=true]:shadow-[0_0_0_2px_rgba(239,68,68,0.2)]',
+          locale === 'np' && devnagari.className,
           className,
         )}
         {...props}

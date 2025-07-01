@@ -13,6 +13,8 @@ import {
 
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { useLocale } from 'next-intl';
+import { devnagari } from '@/app/layout';
 
 const Form = FormProvider;
 
@@ -161,15 +163,20 @@ const FormMessage = React.forwardRef<
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message) : children;
 
+  const locale = useLocale();
   if (!body) {
     return null;
   }
-
   return (
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-destructive text-sm font-normal', className)}
+      className={cn(
+        'text-destructive ] text-sm font-normal',
+        locale === 'np' && devnagari.className,
+        locale === 'np' && 'text-[16px]',
+        className,
+      )}
       {...props}
     >
       {body}

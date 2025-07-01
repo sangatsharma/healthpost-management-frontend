@@ -1,6 +1,10 @@
 import { TPermission } from '@/types/global';
 import { UserRole } from '@/types/user.types';
-import { Action, TPermissionResource } from '@/zustand/permissions';
+import {
+  Action,
+  Permissions,
+  TPermissionResource,
+} from '@/zustand/permissions';
 import { useUserStore } from '@/zustand/useUserDetails';
 import { useState, useEffect } from 'react';
 import { useGetPathInfo } from './useGetPortal';
@@ -39,11 +43,11 @@ export function useHasPermission(
       });
       return;
     }
-
+    const isAdminPortal = portal?.toLowerCase() === 'admin';
     const { role, permissions: userPermissions = [], healthPostId } = user;
 
     // Super admin has all permissions
-    if (role === UserRole.SUPERADMIN && portal?.toLowerCase() === 'admin') {
+    if (role === UserRole.SUPERADMIN && isAdminPortal) {
       setPermissions({
         hasReadPermission: true,
         hasWritePermission: true,
@@ -64,7 +68,8 @@ export function useHasPermission(
 
     // Filter permissions that match the resource
     const relevantPermissions = userPermissions.filter(
-      (perm: TPermission) => perm.resource === resource,
+      (perm: TPermission) =>
+        perm.resource === resource || perm.resource === Permissions.ALL,
       // && perm.healthPost === healthPostId, // Uncomment if needed
     );
 
@@ -80,7 +85,7 @@ export function useHasPermission(
       hasWritePermission: newWritePermission,
       isLoading: false,
     });
-  }, [user, resource, userLoaded]);
+  }, [user, resource, userLoaded, portal]);
 
   return permissions;
 }

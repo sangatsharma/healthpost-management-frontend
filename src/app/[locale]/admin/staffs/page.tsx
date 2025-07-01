@@ -106,7 +106,10 @@ export default function Page() {
     {
       map: {
         key: 'Name',
-        valueFrom: 'name',
+        dataTransformer: (data) =>
+          renderFullName({
+            userData: data,
+          }),
       },
       accessorKey: 'name',
       header: () => t('User.fullName'),
@@ -133,7 +136,7 @@ export default function Page() {
     {
       map: {
         key: 'Phone',
-        valueFrom: 'phone',
+        valueFrom: 'phoneNumber',
       },
       accessorKey: 'phone',
       header: () => t('HealthPost.phone'),
@@ -173,7 +176,11 @@ export default function Page() {
       },
       accessorKey: 'role',
       header: () => t('User.role'),
-      cell: ({ row }) => <span>{row.original.role}</span>,
+      cell: ({ row }) => (
+        <span className="capitalize">
+          {row.original.role.replace(/_/g, ' ').toLowerCase()}
+        </span>
+      ),
     },
     {
       map: {
@@ -188,7 +195,9 @@ export default function Page() {
     {
       map: {
         key: 'Healthpost',
-        valueFrom: 'healthPost.name',
+        dataTransformer: (data) => {
+          return data?.healthPost?.name || 'NOT ASSIGNED';
+        },
       },
       accessorKey: 'Healthpost',
       header: () => t('HealthPost.name'),
@@ -248,15 +257,18 @@ export default function Page() {
         const profileImage = row.original.profileImage;
         return (
           <div className="flex items-center justify-center">
-            {profileImage ? (
+            {profileImage && profileImage.length ? (
               <ImagePreviewer>
-                <Image
-                  src={profileImage}
-                  alt={row.original.fullName.firstName}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
+                {profileImage.map((image, index) => (
+                  <Image
+                    key={'image-' + index}
+                    src={image}
+                    alt={row.original.fullName.firstName}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                ))}
               </ImagePreviewer>
             ) : (
               <span className="text-muted-foreground">No Image</span>

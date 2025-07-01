@@ -1,8 +1,8 @@
 import { TResponse } from '@/types/global';
 import { api } from './axios';
 import { TLoginReponse, TUser, TUserType } from '@/types/user.types';
-import { TStaffSchema } from '@/schemas/admin.schema';
 import { THealthPost } from '@/types/healthpost.types';
+import { TStaffSchema } from '@/schemas/adminPortal/admin.schema';
 
 //function to handle user login
 export const login = async (values: {
@@ -99,9 +99,9 @@ export const mutateStaffInfo = async ({
   if (method === 'POST') {
     res = await api.post<TStaffSchema>(url, data);
   } else if (method === 'PUT') {
-    res = await api.put<TStaffSchema>(url, data);
+    res = await api.put<TStaffSchema>(`/user/${staffId}/admin`, data);
   } else if (method === 'DELETE') {
-    res = await api.delete<TStaffSchema>(url);
+    res = await api.delete<TStaffSchema>(`/user/${staffId}`);
   } else {
     throw new Error('Invalid method');
   }

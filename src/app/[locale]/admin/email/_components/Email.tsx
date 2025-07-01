@@ -1,4 +1,4 @@
-import { File, Image, Link, Signature } from 'lucide-react';
+import { File, Link, Signature } from 'lucide-react';
 
 const Email = () => {
   return (
@@ -86,9 +86,7 @@ const Email = () => {
             <button className="text-muted-foreground hover:text-foreground transition-colors">
               <File />
             </button>
-            <button className="text-muted-foreground hover:text-foreground transition-colors">
-              <Image />
-            </button>
+            <button className="text-muted-foreground hover:text-foreground transition-colors"></button>
             <button className="text-muted-foreground hover:text-foreground transition-colors">
               <Link />
             </button>

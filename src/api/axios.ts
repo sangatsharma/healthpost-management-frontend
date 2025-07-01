@@ -14,7 +14,6 @@ export const api = axios.create({
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    console.log('Error in axios interceptor:', err);
     errorHandler(err);
     return Promise.reject(err);
   },

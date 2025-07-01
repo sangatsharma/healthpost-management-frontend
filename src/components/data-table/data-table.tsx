@@ -123,7 +123,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                         colSpan={header.colSpan}
                         className={cn(
                           header.column.columnDef.meta?.headerClassName,
-                          'py-3',
+                          'border-r py-3',
                         )}
                       >
                         {header.isPlaceholder
@@ -158,7 +158,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                         key={cell.id}
                         className={
                           cell.column.columnDef.meta?.cellClassName ??
-                          'table-row-width'
+                          'table-row-width border-r px-4'
                         }
                       >
                         <span className="tablecell">

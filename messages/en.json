@@ -58,6 +58,7 @@
     "status": "Status is required.",
     "minSelection": "Please select at least {min} option.",
     "maxSelection": "You can only select up to {max} options.",
+    "fullName": "Enter full name.",
     "Healthpost": {
       "name": "HealthPost name is required.",
       "wardNo": "HealthPost ward number is required.",
