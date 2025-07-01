@@ -4,6 +4,7 @@
     "reset": "Reset",
     "images": "Images",
     "search": "Search",
+    "select": "Select",
     "NotFound": {
       "title": "Page Not Found",
       "description": "The page you are looking for doesn't exist or has been moved.",
@@ -35,8 +36,42 @@
       "editHealthPost": "Update HealthPost",
       "number": "{number}"
     },
+    "Dashboard": {
+      "title": "Admin Dashboard",
+      "subtitle": "Health Post Management System Overview",
+      "totalHealthPosts": "Total Health Posts",
+      "totalVisits": "Total Patient Visits",
+      "totalUsers": "Registered Users",
+      "totalStaff": "Total Staff Members",
+      "topHealthPostsByVisits": "Top Health Posts by Visits",
+      "topHealthPostsByUsers": "Top Health Posts by Users",
+      "viewAll": "View All",
+      "visits": "visits",
+      "users": "users",
+      "thisMonth": "this month",
+      "fromLastMonth": "from last month",
+      "acrossAllHealthPosts": "Across all health posts",
+      "monthlyTrend": "Monthly Trend",
+      "visitDistribution": "Visit Distribution",
+      "patientVisitComparison": "Patient Visit Comparison",
+      "currentVsPrevious": "Current vs Previous Period Comparison",
+      "currentPeriod": "Current Period",
+      "previousPeriod": "Previous Period",
+      "spikeDetected": "Spike Detected",
+      "spikeDescription": "50% above normal visits",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year",
+      "generalCheckup": "General Checkup",
+      "emergency": "Emergency",
+      "vaccination": "Vaccination",
+      "consultation": "Consultation"
+    },
     "User": {
       "fullName": "Full Name",
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
       "email": "Email",
       "role": "Role",
       "accountType": "Account Type",
@@ -146,5 +181,48 @@
       "keepEditing": "Keep Editing",
       "cancelForm": "Cancel Form"
     }
+  },
+
+  "Toast": {
+    "healthPostDeleted": "Health Post deleted successfully!",
+    "healthPostCreated": "Health Post created successfully!",
+    "healthPostUpdated": "Health Post updated successfully!",
+    "staffDeleted": "Staff deleted successfully!",
+    "staffCreated": "Staff created successfully!",
+    "staffUpdated": "Staff updated successfully!"
+  },
+
+  "FileOperations": {
+    "enterFileName": "Enter file name",
+    "fileType": "File Type",
+    "fileName": "File Name"
+  },
+
+  "Placeholder": {
+    "enterFileName": "Enter file name",
+    "fileType": "File Type",
+    "fileName": "File Name",
+    "firstName": "Enter first name",
+    "middleName": "Enter middle name",
+    "lastName": "Enter last name",
+    "email": "Enter email address",
+    "phone": "Enter phone number",
+    "selectGender": "Select gender",
+    "selectStatus": "Select status",
+    "selectRole": "Select role",
+    "selectAccountType": "Select account type",
+    "selectHealthPost": "Select health post",
+    "healthPostName": "Enter health post name",
+    "municipality": "Enter municipality",
+    "location": "Enter location",
+    "wardNo": "Enter ward number",
+    "description": "Enter description",
+    "search": "Search",
+    "searchHealthPosts": "Search health posts",
+    "subject": "Subject",
+    "emailBody": "Enter your message here...",
+    "searchCountry": "Search country...",
+    "searchHere": "Search here",
+    "searchOptions": "Search options..."
   }
 }

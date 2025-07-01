@@ -29,17 +29,19 @@ export default function Page() {
   });
 
   const t = useTypedTranslations('GeneralPages');
+  const tAlert = useTypedTranslations('AlertDialog');
+  const tToast = useTypedTranslations('Toast');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
   const { mutateHealthPost } = useHealthPostMutation({
     onSuccess: () => {
-      toast.success('Health Post deleted successfully!');
+      toast.success(tToast('healthPostDeleted'));
     },
   });
 
   const ActionOptions = (row: Row<THealthPost>): ActionButtonDataTypes[] => [
     {
-      name: 'Edit',
+      name: t('HealthPost.editHealthPost'),
       icon: Edit,
       onClick: () => {
         setIsOpenAddModal({
@@ -49,7 +51,7 @@ export default function Page() {
       },
     },
     {
-      name: 'Delete',
+      name: tAlert('action.delete'),
       isTrash: true,
       icon: Trash,
 

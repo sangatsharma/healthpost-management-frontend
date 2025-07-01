@@ -86,12 +86,15 @@ export const AddAdminModal: React.FC<TProps> = ({
     mutationFn: mutateStaffInfo,
     retry: false,
     onSuccess: () => {
-      toast.success(`Staff ${staffId ? 'updated' : 'created'} successfully!`);
+      toast.success(tToast(staffId ? 'staffUpdated' : 'staffCreated'));
       handleExit();
     },
   });
 
   const t = useTypedTranslations('Validation');
+  const t2 = useTypedTranslations('GeneralPages');
+  const tToast = useTypedTranslations('Toast');
+  const tPlaceholder = useTypedTranslations('Placeholder');
   const staffSchema = getStaffSchema(t);
 
   const form = useForm<TStaffSchema>({
@@ -144,18 +147,18 @@ export const AddAdminModal: React.FC<TProps> = ({
       <FormDialog
         isOpen={isOpen}
         toggleModal={handleExit}
-        title={staffId ? 'Update Staff' : 'Add New Staff'}
+        title={staffId ? t2('User.editStaff') : t2('User.addStaff')}
         className="sm:max-w-lg md:max-w-fit"
         isFormDirty={Object.keys(dirtyFields).length > 0}
         mutateAction={{
-          label: staffId ? 'Update Staff' : 'Add Staff',
+          label: staffId ? t2('User.editStaff') : t2('User.addStaff'),
           isLoading: isPending,
           onClick: handleSubmit(onSubmit),
           disabled: !Object.keys(dirtyFields).length,
           className: 'rounded-sm',
         }}
         resetAction={{
-          label: 'Reset',
+          label: t2('reset'),
           onClick: () => reset(),
           className: 'font-normal hover:bg-transparent',
         }}
@@ -173,12 +176,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
-                  <FormWrapper label="First Name" isRequired>
+                  <FormWrapper label={t2('User.firstName')} isRequired>
                     <Input
                       {...field}
-                      placeholder="Enter First Name"
+                      placeholder={tPlaceholder('firstName')}
                       autoFocus
-                      disabled={isLoading}
                     />
                   </FormWrapper>
                 )}
@@ -187,11 +189,10 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="middleName"
                 render={({ field }) => (
-                  <FormWrapper label="Middle Name">
+                  <FormWrapper label={t2('User.middleName')}>
                     <Input
                       {...field}
-                      placeholder="Enter Middle Name"
-                      disabled={isLoading}
+                      placeholder={tPlaceholder('middleName')}
                     />
                   </FormWrapper>
                 )}
@@ -200,12 +201,8 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
-                  <FormWrapper label="Last Name" isRequired>
-                    <Input
-                      {...field}
-                      placeholder="Enter Last Name"
-                      disabled={isLoading}
-                    />
+                  <FormWrapper label={t2('User.lastName')} isRequired>
+                    <Input {...field} placeholder={tPlaceholder('lastName')} />
                   </FormWrapper>
                 )}
               />
@@ -213,12 +210,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormWrapper label="Email" isRequired>
+                  <FormWrapper label={t2('User.email')} isRequired>
                     <Input
                       {...field}
-                      placeholder="Enter Email"
+                      placeholder={tPlaceholder('email')}
                       required
-                      disabled={isLoading}
                     />
                   </FormWrapper>
                 )}
@@ -227,11 +223,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="phoneNumber"
                 render={({ field }) => (
-                  <FormWrapper label="Phone Number" isRequired>
+                  <FormWrapper label={t2('HealthPost.phone')} isRequired>
                     <PhoneInput
                       {...field}
                       defaultCountry="NP"
-                      placeholder="Enter Phone Number"
+                      placeholder={tPlaceholder('phone')}
                       required
                       countrySelectProps={{
                         disabled: true,
@@ -246,10 +242,10 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
-                  <FormWrapper label="Gender" isRequired>
+                  <FormWrapper label={t2('User.gender')} isRequired>
                     <FormSelect
                       options={mapEnumToOptions(Gender)}
-                      placeholder="Select gender"
+                      placeholder={tPlaceholder('selectGender')}
                       {...field}
                       required
                       variant="basic"
@@ -263,10 +259,10 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="status"
                 render={({ field }) => (
-                  <FormWrapper label="Status" isRequired>
+                  <FormWrapper label={t2('HealthPost.status')} isRequired>
                     <FormSelect
                       options={mapEnumToOptions(Status)}
-                      placeholder="Select status"
+                      placeholder={tPlaceholder('selectStatus')}
                       {...field}
                       required
                       variant="basic"
@@ -280,10 +276,10 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="role"
                 render={({ field }) => (
-                  <FormWrapper label="Role" isRequired>
+                  <FormWrapper label={t2('User.role')} isRequired>
                     <FormSelect
                       options={mapEnumToOptions(UserRole)}
-                      placeholder="Select role"
+                      placeholder={tPlaceholder('selectRole')}
                       {...field}
                       required
                       variant="basic"
@@ -296,10 +292,10 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="accountType"
                 render={({ field }) => (
-                  <FormWrapper label="Account Type" isRequired>
+                  <FormWrapper label={t2('User.accountType')} isRequired>
                     <FormSelect
                       options={mapEnumToOptions(UserType)}
-                      placeholder="Select account type"
+                      placeholder={tPlaceholder('selectAccountType')}
                       {...field}
                       required
                       variant="basic"
@@ -312,12 +308,12 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="healthPostId"
                 render={({ field }) => (
-                  <FormWrapper label="Select Healthpost">
+                  <FormWrapper label={t2('SidebarItems.healthpost')}>
                     <FormSelect
                       options={
                         (isHealthPostOptionsSuccess && healthpostsOptions) || []
                       }
-                      placeholder="Select Healthpost"
+                      placeholder={tPlaceholder('selectHealthPost')}
                       {...field}
                       variant="searchable"
                       error={!!form.formState.errors.healthPostId}
@@ -331,7 +327,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                 control={form.control}
                 name="profileImage"
                 render={({ field }) => (
-                  <FormWrapper label="Images">
+                  <FormWrapper label={t2('images')}>
                     <FileUploader
                       defaultValue={field.value || []}
                       allowFile={false}
