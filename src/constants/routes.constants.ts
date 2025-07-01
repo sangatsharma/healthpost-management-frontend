@@ -81,21 +81,28 @@ export const getMenuItems = ({
           icon: Home,
           label: t('SidebarItems.dashboard'),
           href: `hp/dashboard`,
-          permission: Permissions.HEALTH_POST_DASHBOARD,
+          // permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
           label: 'Patient Registry',
           href: `hp/patients`,
-          permission: Permissions.PATIENT_RECORDS,
+          // permission: Permissions.PATIENT_RECORDS,
         },
         {
           key: 'medical-records',
           icon: FileText,
           label: 'Medical Records',
           href: `hp/medical-records`,
-          permission: Permissions.MEDICINE_DISPENSE,
+          // permission: Permissions.MEDICINE_DISPENSE,
+        },
+        {
+          key: 'medicalhistory',
+          icon: FileText,
+          label: t('SidebarItems.medicalhistory'),
+          href: `/hp/medicalhistory`,
+          // permission: Permissions.ADMIN_MANAGEMENT,
         },
         {
           key: 'pharmacy',
@@ -219,13 +226,7 @@ export const getMenuItems = ({
           href: `healthpost`,
           permission: Permissions.HP_MANAGEMENT,
         },
-        {
-          key: 'medicalhistory',
-          icon: FileText,
-          label: t('SidebarItems.medicalhistory'),
-          href: `medicalhistory`,
-          permission: Permissions.ADMIN_MANAGEMENT,
-        },
+
         {
           key: 'staffs',
           icon: Users,

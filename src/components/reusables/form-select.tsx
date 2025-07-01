@@ -92,7 +92,8 @@ export function FormSelect<
     >
       <SelectTrigger
         className={cn(
-          'w-full bg-emerald-50 p-3 font-normal',
+          'flex !h-10 w-full justify-between bg-emerald-50 text-center font-normal',
+          'border-emerald-200 bg-emerald-50',
           error && 'border-red-500',
         )}
       >
@@ -124,7 +125,8 @@ export function FormSelect<
             aria-expanded={open}
             className={cn(
               'flex w-full justify-between bg-emerald-50 font-normal',
-              error && 'border-red-500',
+              '!border-emerald-200',
+              error && '!border-red-500',
             )}
             disabled={disabled}
           >

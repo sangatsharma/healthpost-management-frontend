@@ -42,7 +42,7 @@ export const basicValidator = ({
     schema = schema.min(minLength, {
       message: useReqMsg
         ? message
-        : translationFunction('minLength', { min: 4 }),
+        : translationFunction('minLength', { min: minLength }),
     }); // Handle required field
   }
 

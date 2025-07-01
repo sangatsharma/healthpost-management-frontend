@@ -1,6 +1,7 @@
 export function ThemeScript() {
   return (
     <script
+      defer
       dangerouslySetInnerHTML={{
         __html: `
           (function() {

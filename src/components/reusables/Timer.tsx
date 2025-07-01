@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import { useLocalizedNumber } from '@/hooks/useLocalizedNumber';
 import { cn } from '@/lib/utils';
+import { useLocale } from 'next-intl';
+import { devnagari } from '../ClientWrapper';
 
 const Timer = ({
   seconds,
@@ -13,6 +15,7 @@ const Timer = ({
   className?: string;
 }): React.JSX.Element => {
   const numFormatter = useLocalizedNumber();
+  const locale = useLocale();
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -36,7 +39,13 @@ const Timer = ({
   };
 
   return (
-    <div className={cn('text-sm font-normal text-blue-600', className)}>
+    <div
+      className={cn(
+        'text-sm font-normal text-blue-600',
+        locale === 'np' && devnagari.className,
+        className,
+      )}
+    >
       <p>{formatTime(seconds)}</p>
     </div>
   );

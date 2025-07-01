@@ -88,7 +88,7 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
       .min(1, {
         message: t('required'),
       }),
-    profileImages: createFileUploadValidator({
+    profileImage: createFileUploadValidator({
       required: false,
     }),
   });

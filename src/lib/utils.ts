@@ -16,8 +16,12 @@ export function mapEnumToOptions<T extends Record<string, string | number>>(
   );
 
   return enumValues.map(([key, value]) => ({
-    label: key.replace('_', ' ') as string,
-    value: value.toString() as string,
+    label: key
+      .toLowerCase()
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '),
+    value: value.toString(),
   }));
 }
 

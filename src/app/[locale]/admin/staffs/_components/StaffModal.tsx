@@ -19,12 +19,15 @@ import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
-import { getStaffSchema, TStaffSchema } from '@/schemas/admin.schema';
 import { Gender, Status, TUser, UserRole, UserType } from '@/types/user.types';
 import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
 import { PermissionSelector } from './PermissionForm';
 import { FormSelect } from '@/components/reusables/form-select';
 import { THealthPost } from '@/types/healthpost.types';
+import {
+  getStaffSchema,
+  TStaffSchema,
+} from '@/schemas/adminPortal/admin.schema';
 
 type TProps = {
   isOpen: boolean;
@@ -37,7 +40,7 @@ export const AddAdminModal: React.FC<TProps> = ({
   staffId,
   toggleModal,
 }) => {
-  const { data, isLoading, isSuccess } = useQuery({
+  const { data, isLoading, isSuccess, isError, refetch } = useQuery({
     queryKey: queryKeys.staff.singleStaff(staffId || ''),
     queryFn: () =>
       fetchStaffInfo({
@@ -48,11 +51,18 @@ export const AddAdminModal: React.FC<TProps> = ({
 
   const singleData = data?.data as TUser;
   const formValues = {
-    firstName: singleData?.fullName?.firstName,
-    middleName: singleData?.fullName?.middleName,
-    lastName: singleData?.fullName?.lastName,
-    profileImages: [singleData?.profileImage],
-    ...singleData,
+    firstName: singleData?.fullName?.firstName || '',
+    middleName: singleData?.fullName?.middleName || '',
+    lastName: singleData?.fullName?.lastName || '',
+    profileImage: singleData?.profileImage || [],
+    accountType: singleData?.accountType || '',
+    email: singleData?.email,
+    phoneNumber: singleData?.phoneNumber || '',
+    gender: singleData?.gender || '',
+    permissions: singleData?.permissions || [],
+    status: singleData?.status || '',
+    role: singleData?.role || '',
+    healthPostId: singleData?.healthPostId || '',
   } as TStaffSchema;
 
   const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
@@ -99,7 +109,7 @@ export const AddAdminModal: React.FC<TProps> = ({
       permissions: [],
       gender: undefined,
       status: undefined,
-      profileImages: [],
+      profileImage: [],
     },
     values:
       staffId && !isLoading && isSuccess && singleData ? formValues : undefined,
@@ -112,12 +122,15 @@ export const AddAdminModal: React.FC<TProps> = ({
   } = form;
 
   const onSubmit = (data: TStaffSchema): void => {
-    const { profileImages: _images, ...dataWithoutImages } = data;
+    const { permissions, ...dataToSend } = data;
     mutateStaff({
       staffId: staffId!,
       data: convertToFormData(
-        dataWithoutImages,
-        ['profileImages'],
+        {
+          ...dataToSend,
+          permissions: JSON.stringify(permissions),
+        },
+        ['profileImage'],
         staffId ? dirtyFields : undefined,
       ),
       method: staffId ? 'PUT' : 'POST',
@@ -149,6 +162,9 @@ export const AddAdminModal: React.FC<TProps> = ({
           onClick: () => reset(),
           className: 'font-normal hover:bg-transparent',
         }}
+        isLoading={isLoading}
+        isError={isError}
+        refetch={refetch}
       >
         <Form {...form}>
           <form
@@ -266,7 +282,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                       placeholder={tPlaceholder('selectRole')}
                       {...field}
                       required
-                      variant="searchable"
+                      variant="basic"
                       error={!!form.formState.errors.role}
                     />
                   </FormWrapper>
@@ -282,7 +298,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                       placeholder={tPlaceholder('selectAccountType')}
                       {...field}
                       required
-                      variant="searchable"
+                      variant="basic"
                       error={!!form.formState.errors.accountType}
                     />
                   </FormWrapper>
@@ -309,7 +325,7 @@ export const AddAdminModal: React.FC<TProps> = ({
             <div className="col-span-2 flex w-full flex-col gap-4">
               <FormField
                 control={form.control}
-                name="profileImages"
+                name="profileImage"
                 render={({ field }) => (
                   <FormWrapper label={t2('images')}>
                     <FileUploader
@@ -317,7 +333,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                       allowFile={false}
                       allowImage
                       showPreview
-                      maxFiles={1}
+                      maxFiles={2}
                       maxSize={2 * 1024 * 1024}
                       uploaderType="dropzone"
                       {...field}
