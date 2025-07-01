@@ -53,6 +53,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
 
   const t = useTypedTranslations('Validation');
   const t2 = useTypedTranslations('GeneralPages');
+  const tPlaceholder = useTypedTranslations('Placeholder');
 
   const HealthPostSchema = getHealthPostSchema(t);
 
@@ -133,7 +134,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FormWrapper label={t2('HealthPost.name')} isRequired>
                     <Input
                       {...field}
-                      placeholder="Enter Health Post Name"
+                      placeholder={tPlaceholder('healthPostName')}
                       autoFocus
                       required
                     />
@@ -145,7 +146,11 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 name="email"
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.email')} isRequired>
-                    <Input {...field} placeholder="Enter Email" required />
+                    <Input
+                      {...field}
+                      placeholder={tPlaceholder('email')}
+                      required
+                    />
                   </FormWrapper>
                 )}
               />
@@ -154,7 +159,11 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 name="municipality"
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.municipality')} isRequired>
-                    <Input {...field} required />
+                    <Input
+                      {...field}
+                      placeholder={tPlaceholder('municipality')}
+                      required
+                    />
                   </FormWrapper>
                 )}
               />
@@ -163,7 +172,11 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 name="location"
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.location')} isRequired>
-                    <Input {...field} required />
+                    <Input
+                      {...field}
+                      placeholder={tPlaceholder('location')}
+                      required
+                    />
                   </FormWrapper>
                 )}
               />
@@ -174,9 +187,10 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   name="status"
                   render={({ field }) => (
                     <FormWrapper label={t2('HealthPost.status')} isRequired>
+                      {' '}
                       <FormSelect
                         options={mapEnumToOptions(Status)}
-                        placeholder="Select status"
+                        placeholder={tPlaceholder('selectStatus')}
                         {...field}
                         required
                         variant="basic"
@@ -191,7 +205,11 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 name="wardNo"
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
-                    <Input type="number" {...field} />
+                    <Input
+                      type="number"
+                      placeholder={tPlaceholder('wardNo')}
+                      {...field}
+                    />
                   </FormWrapper>
                 )}
               />
@@ -204,7 +222,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                     <PhoneInput
                       {...field}
                       defaultCountry="NP"
-                      placeholder="Enter Phone Number"
+                      placeholder={tPlaceholder('phone')}
                       required
                       countrySelectProps={{
                         disabled: true,

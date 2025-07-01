@@ -4,6 +4,7 @@
     "reset": "पुनः सेट गर्नुहोस्",
     "images": "तस्बिरहरू",
     "search": "खोज्नुहोस्",
+    "select": "छान्नुहोस्",
     "NotFound": {
       "title": "पृष्ठ फेला परेन",
       "description": "तपाईं खोजिरहनुभएको पृष्ठ अस्तित्वमा छैन वा सारिएको छ।",
@@ -34,8 +35,42 @@
       "editHealthPost": "स्वास्थ्य चौकी सम्पादन गर्नुहोस्",
       "number": "{number}"
     },
+    "Dashboard": {
+      "title": "एडमिन ड्यासबोर्ड",
+      "subtitle": "स्वास्थ्य पोस्ट व्यवस्थापन प्रणाली अवलोकन",
+      "totalHealthPosts": "कुल स्वास्थ्य पोस्टहरू",
+      "totalVisits": "कुल बिरामी भेटहरू",
+      "totalUsers": "दर्ता भएका प्रयोगकर्ताहरू",
+      "totalStaff": "कुल कर्मचारीहरू",
+      "topHealthPostsByVisits": "भेट अनुसार शीर्ष स्वास्थ्य पोस्टहरू",
+      "topHealthPostsByUsers": "प्रयोगकर्ता दर्ता अनुसार शीर्ष स्वास्थ्य पोस्टहरू",
+      "viewAll": "सबै हेर्नुहोस्",
+      "visits": "भेटहरू",
+      "users": "प्रयोगकर्ताहरू",
+      "thisMonth": "यो महिना",
+      "fromLastMonth": "गत महिनाबाट",
+      "acrossAllHealthPosts": "सबै स्वास्थ्य पोस्टहरूमा",
+      "monthlyTrend": "मासिक प्रवृत्ति",
+      "visitDistribution": "भेट वितरण",
+      "patientVisitComparison": "बिरामी आउने दरको तुलना",
+      "currentVsPrevious": "हालको र अघिल्लो अवधिको तुलना",
+      "currentPeriod": "हालको अवधि",
+      "previousPeriod": "अघिल्लो अवधि",
+      "spikeDetected": "अचानक वृद्धि",
+      "spikeDescription": "सामान्यभन्दा ५०% बढी भेट",
+      "week": "हप्ता",
+      "month": "महिना",
+      "year": "वर्ष",
+      "generalCheckup": "सामान्य जाँच",
+      "emergency": "आपतकालीन",
+      "vaccination": "खोप",
+      "consultation": "परामर्श"
+    },
     "User": {
       "fullName": "पूरा नाम",
+      "firstName": "पहिलो नाम",
+      "middleName": "मध्य नाम",
+      "lastName": "अन्तिम नाम",
       "email": "इमेल",
       "role": "भूमिका",
       "accountType": "खाता प्रकार",
@@ -105,5 +140,47 @@
       "keepEditing": "फेरि सम्पादन गरौँ",
       "cancelForm": "फारम रद्द गरौँ"
     }
+  },
+
+  "Toast": {
+    "healthPostDeleted": "स्वास्थ्य चौकी सफलतापूर्वक मेटाइयो!",
+    "healthPostCreated": "स्वास्थ्य चौकी सफलतापूर्वक सिर्जना गरियो!",
+    "healthPostUpdated": "स्वास्थ्य चौकी सफलतापूर्वक अपडेट गरियो!",
+    "staffDeleted": "कर्मचारी सफलतापूर्वक मेटाइयो!",
+    "staffCreated": "कर्मचारी सफलतापूर्वक सिर्जना गरियो!",
+    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!"
+  },
+
+  "FileOperations": {
+    "enterFileName": "फाइलको नाम प्रविष्ट गर्नुहोस्",
+    "fileType": "फाइल प्रकार",
+    "fileName": "फाइलको नाम"
+  },
+  "Placeholder": {
+    "enterFileName": "फाइलको नाम प्रविष्ट गर्नुहोस्",
+    "fileType": "फाइल प्रकार",
+    "fileName": "फाइलको नाम",
+    "firstName": "पहिलो नाम प्रविष्ट गर्नुहोस्",
+    "middleName": "मध्य नाम प्रविष्ट गर्नुहोस्",
+    "lastName": "अन्तिम नाम प्रविष्ट गर्नुहोस्",
+    "email": "इमेल ठेगाना प्रविष्ट गर्नुहोस्",
+    "phone": "फोन नम्बर प्रविष्ट गर्नुहोस्",
+    "selectGender": "लिङ्ग छान्नुहोस्",
+    "selectStatus": "स्थिति छान्नुहोस्",
+    "selectRole": "भूमिका छान्नुहोस्",
+    "selectAccountType": "खाता प्रकार छान्नुहोस्",
+    "selectHealthPost": "स्वास्थ्य चौकी छान्नुहोस्",
+    "healthPostName": "स्वास्थ्य चौकीको नाम प्रविष्ट गर्नुहोस्",
+    "municipality": "नगरपालिका प्रविष्ट गर्नुहोस्",
+    "location": "ठेगाना प्रविष्ट गर्नुहोस्",
+    "wardNo": "वडा नम्बर प्रविष्ट गर्नुहोस्",
+    "description": "विवरण प्रविष्ट गर्नुहोस्",
+    "search": "खोज्नुहोस्",
+    "searchHealthPosts": "स्वास्थ्य चौकीहरू खोज्नुहोस्",
+    "subject": "विषय",
+    "emailBody": "यहाँ आफ्नो सन्देश प्रविष्ट गर्नुहोस्...",
+    "searchCountry": "देश खोज्नुहोस्...",
+    "searchHere": "यहाँ खोज्नुहोस्",
+    "searchOptions": "विकल्पहरू खोज्नुहोस्..."
   }
 }
