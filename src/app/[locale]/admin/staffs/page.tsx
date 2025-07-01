@@ -31,17 +31,19 @@ export default function Page() {
     staffId: undefined,
   });
   const t = useTypedTranslations('GeneralPages');
+  const tAlert = useTypedTranslations('AlertDialog');
+  const tToast = useTypedTranslations('Toast');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
   const { mutatestaff } = useStaffMutation({
     onSuccess: () => {
-      toast.success('Health Post deleted successfully!');
+      toast.success(tToast('staffDeleted'));
     },
   });
 
   const ActionOptions = (row: Row<TUser>): ActionButtonDataTypes[] => [
     {
-      name: 'Edit',
+      name: t('User.editStaff'),
       icon: Edit,
       onClick: () => {
         setIsOpenAddModal({
@@ -51,7 +53,7 @@ export default function Page() {
       },
     },
     {
-      name: 'Delete',
+      name: tAlert('action.delete'),
       isTrash: true,
       icon: Delete,
 

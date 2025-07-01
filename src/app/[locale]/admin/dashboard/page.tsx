@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProtectedRoute } from '@/components/ProtectedRoutes';
-// import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { Permissions } from '@/zustand/permissions';
 import {
   Building2,
@@ -47,39 +47,29 @@ import { useLocale } from 'next-intl';
 export default function AdminDashboard() {
   // const { locale } = params;
   const locale = useLocale();
-  // const t = useTypedTranslations('GeneralPages')
+  const t = useTypedTranslations('GeneralPages');
   const isNepali = locale === 'np';
 
   // Locale-based data
   const getLocaleData = () => {
     return {
       labels: {
-        title: isNepali ? 'एडमिन ड्यासबोर्ड' : 'Admin Dashboard',
-        subtitle: isNepali
-          ? 'स्वास्थ्य पोस्ट व्यवस्थापन प्रणाली अवलोकन'
-          : 'Health Post Management System Overview',
-        totalHealthPosts: isNepali
-          ? 'कुल स्वास्थ्य पोस्टहरू'
-          : 'Total Health Posts',
-        totalVisits: isNepali ? 'कुल बिरामी भेटहरू' : 'Total Patient Visits',
-        totalUsers: isNepali ? 'दर्ता भएका प्रयोगकर्ताहरू' : 'Registered Users',
-        totalStaff: isNepali ? 'कुल कर्मचारीहरू' : 'Total Staff Members',
-        topHealthPostsByVisits: isNepali
-          ? 'भेट अनुसार शीर्ष स्वास्थ्य पोस्टहरू'
-          : 'Top Health Posts by Visits',
-        topHealthPostsByUsers: isNepali
-          ? 'प्रयोगकर्ता दर्ता अनुसार शीर्ष स्वास्थ्य पोस्टहरू'
-          : 'Top Health Posts by Users',
-        viewAll: isNepali ? 'सबै हेर्नुहोस्' : 'View All',
-        visits: isNepali ? 'भेटहरू' : 'visits',
-        users: isNepali ? 'प्रयोगकर्ताहरू' : 'users',
-        thisMonth: isNepali ? 'यो महिना' : 'this month',
-        fromLastMonth: isNepali ? 'गत महिनाबाट' : 'from last month',
-        acrossAllHealthPosts: isNepali
-          ? 'सबै स्वास्थ्य पोस्टहरूमा'
-          : 'Across all health posts',
-        monthlyTrend: isNepali ? 'मासिक प्रवृत्ति' : 'Monthly Trend',
-        visitDistribution: isNepali ? 'भेट वितरण' : 'Visit Distribution',
+        title: t('Dashboard.title'),
+        subtitle: t('Dashboard.subtitle'),
+        totalHealthPosts: t('Dashboard.totalHealthPosts'),
+        totalVisits: t('Dashboard.totalVisits'),
+        totalUsers: t('Dashboard.totalUsers'),
+        totalStaff: t('Dashboard.totalStaff'),
+        topHealthPostsByVisits: t('Dashboard.topHealthPostsByVisits'),
+        topHealthPostsByUsers: t('Dashboard.topHealthPostsByUsers'),
+        viewAll: t('Dashboard.viewAll'),
+        visits: t('Dashboard.visits'),
+        users: t('Dashboard.users'),
+        thisMonth: t('Dashboard.thisMonth'),
+        fromLastMonth: t('Dashboard.fromLastMonth'),
+        acrossAllHealthPosts: t('Dashboard.acrossAllHealthPosts'),
+        monthlyTrend: t('Dashboard.monthlyTrend'),
+        visitDistribution: t('Dashboard.visitDistribution'),
       },
       healthPosts: isNepali
         ? [
@@ -172,10 +162,10 @@ export default function AdminDashboard() {
   ];
 
   const visitDistributionData = [
-    { name: 'General Checkup', value: 35, color: '#10b981' },
-    { name: 'Emergency', value: 25, color: '#ef4444' },
-    { name: 'Vaccination', value: 20, color: '#3b82f6' },
-    { name: 'Consultation', value: 20, color: '#f59e0b' },
+    { name: t('Dashboard.generalCheckup'), value: 35, color: '#10b981' },
+    { name: t('Dashboard.emergency'), value: 25, color: '#ef4444' },
+    { name: t('Dashboard.vaccination'), value: 20, color: '#3b82f6' },
+    { name: t('Dashboard.consultation'), value: 20, color: '#f59e0b' },
   ];
 
   // Period filter state
@@ -289,22 +279,18 @@ export default function AdminDashboard() {
 
   // Period filter labels
   const periodLabels = {
-    week: isNepali ? 'हप्ता' : 'Week',
-    month: isNepali ? 'महिना' : 'Month',
-    year: isNepali ? 'वर्ष' : 'Year',
+    week: t('Dashboard.week'),
+    month: t('Dashboard.month'),
+    year: t('Dashboard.year'),
   };
 
   const comparisonLabels = {
-    title: isNepali ? 'बिरामी आउने दरको तुलना' : 'Patient Visit Comparison',
-    subtitle: isNepali
-      ? 'हालको र अघिल्लो अवधिको तुलना'
-      : 'Current vs Previous Period Comparison',
-    current: isNepali ? 'हालको अवधि' : 'Current Period',
-    previous: isNepali ? 'अघिल्लो अवधि' : 'Previous Period',
-    spike: isNepali ? 'अचानक वृद्धि' : 'Spike Detected',
-    spikeDesc: isNepali
-      ? 'सामान्यभन्दा ५०% बढी भेट'
-      : '50% above normal visits',
+    title: t('Dashboard.patientVisitComparison'),
+    subtitle: t('Dashboard.currentVsPrevious'),
+    current: t('Dashboard.currentPeriod'),
+    previous: t('Dashboard.previousPeriod'),
+    spike: t('Dashboard.spikeDetected'),
+    spikeDesc: t('Dashboard.spikeDescription'),
   };
 
   const mockKpis = {
