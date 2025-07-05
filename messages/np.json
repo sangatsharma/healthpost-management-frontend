@@ -331,6 +331,9 @@
     "smokingStatus": "धुम्रपानको स्थिति छान्नुहोस्",
     "drinkingStatus": "मदिराको स्थिति छान्नुहोस्",
     "exerciseFrequency": "व्यायामको आवृत्ति छान्नुहोस्",
-    "dietaryRestrictions": "आहार प्रतिबन्धहरू प्रविष्ट गर्नुहोस्"
+    "dietaryRestrictions": "आहार प्रतिबन्धहरू प्रविष्ट गर्नुहोस्",
+    "selectRole": "भूमिका छान्नुहोस्",
+    "selectAccountType": "खाता प्रकार छान्नुहोस्",
+    "selectHealthPost": "स्वास्थ्य चौकी छान्नुहोस्"
   }
 }

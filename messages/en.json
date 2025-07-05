@@ -334,6 +334,9 @@
     "smokingStatus": "Select smoking status",
     "drinkingStatus": "Select drinking status",
     "exerciseFrequency": "Select exercise frequency",
-    "dietaryRestrictions": "Enter dietary restrictions"
+    "dietaryRestrictions": "Enter dietary restrictions",
+    "selectRole": "Select role",
+    "selectAccountType": "Select account type",
+    "selectHealthPost": "Select health post"
   }
 }
