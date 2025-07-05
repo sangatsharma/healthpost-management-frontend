@@ -2,21 +2,26 @@ import FormWrapper from '@/components/reusables/form-wrapper';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { TAddressInfoSchema } from '@/schemas/healthpostPortal/clients.schema';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { useFormContext } from 'react-hook-form';
 
 export default function AddressInfoForm() {
   const form = useFormContext<TAddressInfoSchema>();
+  const t = useTypedTranslations('ClientRegistration');
+  const p = useTypedTranslations('Placeholder');
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Permanent Address</h3>
+        <h3 className="mb-4 text-lg font-semibold">
+          {t('addressInfo.permanentAddress')}
+        </h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <FormField
             control={form.control}
             name="districtId"
             render={({ field }) => (
-              <FormWrapper label="Enter District" isRequired>
-                <Input {...field} placeholder="Enter District" autoFocus />
+              <FormWrapper label={t('addressInfo.district')} isRequired>
+                <Input {...field} placeholder={p('district')} autoFocus />
               </FormWrapper>
             )}
           />
@@ -24,8 +29,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="palityId"
             render={({ field }) => (
-              <FormWrapper label="Enter Municipality" isRequired>
-                <Input {...field} placeholder="Enter Municipality" />
+              <FormWrapper label={t('addressInfo.municipality')} isRequired>
+                <Input {...field} placeholder={p('municipality')} />
               </FormWrapper>
             )}
           />
@@ -33,8 +38,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="wardNo"
             render={({ field }) => (
-              <FormWrapper label={'Ward number'} isRequired>
-                <Input type="number" {...field} />
+              <FormWrapper label={t('addressInfo.wardNumber')} isRequired>
+                <Input type="number" {...field} placeholder={p('wardNumber')} />
               </FormWrapper>
             )}
           />
@@ -42,8 +47,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="tole"
             render={({ field }) => (
-              <FormWrapper label="Enter tole" isRequired>
-                <Input {...field} placeholder="Enter tole" />
+              <FormWrapper label={t('addressInfo.tole')} isRequired>
+                <Input {...field} placeholder={p('tole')} />
               </FormWrapper>
             )}
           />
@@ -52,15 +57,15 @@ export default function AddressInfoForm() {
 
       <div>
         <h3 className="mb-4 text-lg font-semibold">
-          Temporary Address (Optional)
+          {t('addressInfo.temporaryAddress')}
         </h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <FormField
             control={form.control}
             name="tDistrictId"
             render={({ field }) => (
-              <FormWrapper label="Enter District">
-                <Input {...field} placeholder="Enter District" />
+              <FormWrapper label={t('addressInfo.district')}>
+                <Input {...field} placeholder={p('district')} />
               </FormWrapper>
             )}
           />
@@ -68,8 +73,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="tPalityId"
             render={({ field }) => (
-              <FormWrapper label="Enter Municipality">
-                <Input {...field} placeholder="Enter Municipality" />
+              <FormWrapper label={t('addressInfo.municipality')}>
+                <Input {...field} placeholder={p('municipality')} />
               </FormWrapper>
             )}
           />
@@ -77,8 +82,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="tWardNo"
             render={({ field }) => (
-              <FormWrapper label={'Ward number'}>
-                <Input type="number" {...field} />
+              <FormWrapper label={t('addressInfo.wardNumber')}>
+                <Input type="number" {...field} placeholder={p('wardNumber')} />
               </FormWrapper>
             )}
           />
@@ -86,8 +91,8 @@ export default function AddressInfoForm() {
             control={form.control}
             name="tTole"
             render={({ field }) => (
-              <FormWrapper label="Enter tole">
-                <Input {...field} placeholder="Enter tole" />
+              <FormWrapper label={t('addressInfo.tole')}>
+                <Input {...field} placeholder={p('tole')} />
               </FormWrapper>
             )}
           />

@@ -1,11 +1,11 @@
 'use client';
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { ProtectedRoute } from '@/components/ProtectedRoutes';
+// import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
-import { Permissions } from '@/zustand/permissions';
+// import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
@@ -304,44 +304,44 @@ export default function Page() {
   });
 
   return (
-    <ProtectedRoute requiredPermission={Permissions.ADMIN_MANAGEMENT}>
-      <>
-        <div className="p-4">
-          <DataTable
-            columns={columns}
-            header={{
-              label: t('SidebarItems.staffsmanagement'),
-              className: 'text-2xl font-bold mb-4',
-            }}
-            data={(data?.data as TUser[]) || []}
-            utils={{
-              showPagination: true,
-              hasExport: true,
-            }}
-            addButton={{
-              label: t('User.addStaff'),
-              icon: <Plus className="mr-2 h-4 w-4" />,
-              onClick: () =>
-                setIsOpenAddModal({
-                  isOpen: true,
-                  staffId: undefined,
-                }),
-            }}
-            onRowClick={() => () => {}}
-          />
-        </div>
-        {isOpenAddModal.isOpen && (
-          <ClientRegistrationModal
-            isOpen={isOpenAddModal.isOpen}
-            handleExit={() =>
-              setIsOpenAddModal((prev) => ({
-                ...prev,
-                isOpen: !prev.isOpen,
-              }))
-            }
-          />
-        )}
-      </>
-    </ProtectedRoute>
+    // <ProtectedRoute requiredPermission={Permissions.ADMIN_MANAGEMENT}>
+    <>
+      <div className="p-4">
+        <DataTable
+          columns={columns}
+          header={{
+            label: t('SidebarItems.staffsmanagement'),
+            className: 'text-2xl font-bold mb-4',
+          }}
+          data={(data?.data as TUser[]) || []}
+          utils={{
+            showPagination: true,
+            hasExport: true,
+          }}
+          addButton={{
+            label: t('User.addStaff'),
+            icon: <Plus className="mr-2 h-4 w-4" />,
+            onClick: () =>
+              setIsOpenAddModal({
+                isOpen: true,
+                staffId: undefined,
+              }),
+          }}
+          onRowClick={() => () => {}}
+        />
+      </div>
+      {isOpenAddModal.isOpen && (
+        <ClientRegistrationModal
+          isOpen={isOpenAddModal.isOpen}
+          handleExit={() =>
+            setIsOpenAddModal((prev) => ({
+              ...prev,
+              isOpen: !prev.isOpen,
+            }))
+          }
+        />
+      )}
+    </>
+    // {/* </ProtectedRoute> */}
   );
 }

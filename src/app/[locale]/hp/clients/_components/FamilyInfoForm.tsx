@@ -5,18 +5,21 @@ import { Input } from '@/components/ui/input';
 import { mapEnumToOptions } from '@/lib/utils';
 import { TFamilyInfoSchema } from '@/schemas/healthpostPortal/clients.schema';
 import { MarriageStatus } from '@/types/user.types';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { useFormContext } from 'react-hook-form';
 
 export default function FamilyInfoForm() {
   const form = useFormContext<TFamilyInfoSchema>();
+  const t = useTypedTranslations('ClientRegistration');
+  const p = useTypedTranslations('Placeholder');
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <FormField
         control={form.control}
         name="fatherName"
         render={({ field }) => (
-          <FormWrapper label="Enter father full name" isRequired>
-            <Input {...field} placeholder="Enter father Name" autoFocus />
+          <FormWrapper label={t('familyInfo.fatherName')} isRequired>
+            <Input {...field} placeholder={p('fatherName')} autoFocus />
           </FormWrapper>
         )}
       />
@@ -24,8 +27,8 @@ export default function FamilyInfoForm() {
         control={form.control}
         name="motherName"
         render={({ field }) => (
-          <FormWrapper label="Enter mother full name" isRequired>
-            <Input {...field} placeholder="Enter mother Name" />
+          <FormWrapper label={t('familyInfo.motherName')} isRequired>
+            <Input {...field} placeholder={p('motherName')} />
           </FormWrapper>
         )}
       />
@@ -33,8 +36,8 @@ export default function FamilyInfoForm() {
         control={form.control}
         name="guardianName"
         render={({ field }) => (
-          <FormWrapper label="Enter guardian full name">
-            <Input {...field} placeholder="Enter guardian Name" />
+          <FormWrapper label={t('familyInfo.guardianName')}>
+            <Input {...field} placeholder={p('guardianName')} />
           </FormWrapper>
         )}
       />
@@ -43,10 +46,10 @@ export default function FamilyInfoForm() {
         control={form.control}
         name="maritalStatus"
         render={({ field }) => (
-          <FormWrapper label="Marital Status" isRequired>
+          <FormWrapper label={t('familyInfo.maritalStatus')} isRequired>
             <FormSelect
               options={mapEnumToOptions(MarriageStatus)}
-              placeholder="Select Marital Status"
+              placeholder={p('maritalStatus')}
               {...field}
               required
               variant="basic"
@@ -59,8 +62,8 @@ export default function FamilyInfoForm() {
         control={form.control}
         name="spouseName"
         render={({ field }) => (
-          <FormWrapper label="Enter spouse full name">
-            <Input {...field} placeholder="Enter spouse Name" />
+          <FormWrapper label={t('familyInfo.spouseName')}>
+            <Input {...field} placeholder={p('spouseName')} />
           </FormWrapper>
         )}
       />

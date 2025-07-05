@@ -41,6 +41,7 @@ export default function ClientRegistrationModal({
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const t = useTypedTranslations('Validation');
+  const ct = useTypedTranslations('ClientRegistration');
   const clientSchema = getClientSchema(t);
   const steps = getClientFormSteps();
   const user = useUserStore((state) => state.user);
@@ -99,10 +100,10 @@ export default function ClientRegistrationModal({
       setCurrentStep(currentStep - 1);
     }
   };
-  const onSubmit = (data: TClientSchema) => {
+  const onSubmit = (_data: TClientSchema) => {
     //TODO: Handle form submission logic here
     setIsSubmitted(true);
-    console.log('Form submitted with data:', data);
+    // Form submitted with data
   };
 
   const progress = (currentStep / steps.length) * 100;
@@ -121,11 +122,9 @@ export default function ClientRegistrationModal({
               <div className="text-center">
                 <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-500" />
                 <h2 className="mb-2 text-2xl font-bold text-gray-900">
-                  Registration Complete!
+                  {ct('registrationComplete')}
                 </h2>
-                <p className="text-gray-600">
-                  Patient registration has been submitted successfully.
-                </p>
+                <p className="text-gray-600">{ct('registrationSuccess')}</p>
                 <Button
                   onClick={() => {
                     setIsSubmitted(false);
@@ -134,7 +133,7 @@ export default function ClientRegistrationModal({
                   }}
                   className="mt-4"
                 >
-                  Register Another Patient
+                  {ct('registerAnother')}
                 </Button>
               </div>
             </CardContent>
@@ -144,20 +143,18 @@ export default function ClientRegistrationModal({
         <div className="mx-auto w-4xl">
           {/* Header */}
           <div className="mb-4 text-center">
-            <h1 className="mb-2 text-3xl font-bold">Patient Registration</h1>
-            <p className="text-lg">
-              Complete the form to register a new patient
-            </p>
+            <h1 className="mb-2 text-3xl font-bold">{ct('title')}</h1>
+            <p className="text-lg">{ct('subtitle')}</p>
           </div>
 
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-medium">
-                Step {currentStep} of {steps.length}
+                {ct('stepOf', { current: currentStep, total: steps.length })}
               </span>
               <span className="text-sm font-medium">
-                {Math.round(progress)}% Complete
+                {ct('percentComplete', { percent: Math.round(progress) })}
               </span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -241,7 +238,7 @@ export default function ClientRegistrationModal({
                       className="flex items-center gap-2"
                     >
                       <ChevronLeft className="h-4 w-4" />
-                      Previous
+                      {ct('previous')}
                     </Button>
 
                     {currentStep < steps.length ? (
@@ -250,12 +247,12 @@ export default function ClientRegistrationModal({
                         onClick={nextStep}
                         className="flex items-center gap-2"
                       >
-                        Next
+                        {ct('next')}
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     ) : (
                       <Button type="submit" className="flex items-center gap-2">
-                        Submit Registration
+                        {ct('submitRegistration')}
                         <CheckCircle className="h-4 w-4" />
                       </Button>
                     )}
