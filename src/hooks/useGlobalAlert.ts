@@ -66,7 +66,7 @@ export function useGlobalAlert() {
         (isDestructive ? t('action.delete') : t('dialog.confirm')),
       cancelName: cancelText || t('action.cancel'),
       btnAction: onConfirm,
-      img: '/cancelEdit.png',
+      img: '/images/cancelEdit.png',
       cancelAction: () => {
         hideAlertDialog();
         if (onCancel) {
@@ -104,7 +104,7 @@ export function useGlobalAlert() {
           onCancel();
         }
       },
-      img: '/trash.png',
+      img: '/images/trash.png',
     });
   };
 

@@ -14,6 +14,10 @@ export const queryKeys = {
   },
   staff: {
     staffs: ['staffs'],
-    singleStaff: (id: string) => ['staff', id],
+    singleStaff: (id: string) => ['staffs', id],
+  },
+  client: {
+    clients: ['clients'],
+    singleClient: (id: string) => ['clients', id],
   },
 };

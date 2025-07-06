@@ -1,5 +1,4 @@
 import { Permissions } from '@/zustand/permissions';
-import { UserType } from './user.constant';
 import {
   Home,
   Users,
@@ -22,49 +21,6 @@ import {
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem, TTypeFunction } from '@/types/global';
-const LOCALES = ['en', 'np'] as const;
-
-const PUBLIC_PATHS = ['login'] as const;
-
-export const PUBLIC_ROUTES: string[] = LOCALES.flatMap((locale) =>
-  UserType.flatMap((role) =>
-    PUBLIC_PATHS.map((path) => `/${locale}/${role}/${path}`),
-  ),
-);
-
-export function isPublicRoute(pathname: string): boolean {
-  if (pathname.includes('unauthorized') || pathname.includes('404')) {
-    return true;
-  }
-  return PUBLIC_ROUTES.some(
-    (route) => pathname === route.replace(/\/$/, ''), // Handle trailing slashes
-  );
-}
-
-export const ADMIN_ROUTES = [
-  '/admin/dashboard',
-  '/admin/users',
-  '/admin/settings',
-];
-
-export const PATIENT_ROUTES = ['/patient/dashboard', '/patient/records'];
-
-export const HEALTHPOST_ROUTES = [
-  '/clinical/records',
-  '/clinical/lab',
-  '/clinical/maternal',
-  '/community/reports',
-  '/inventory',
-];
-
-export const EMAIL_ROUTES = ['/email/inbox', '/email/new'];
-
-export const PROTECTED_ROUTES = [
-  ...ADMIN_ROUTES,
-  ...HEALTHPOST_ROUTES,
-  ...PATIENT_ROUTES,
-  ...EMAIL_ROUTES,
-];
 
 export const getMenuItems = ({
   itemsFor,
@@ -81,28 +37,28 @@ export const getMenuItems = ({
           icon: Home,
           label: t('SidebarItems.dashboard'),
           href: `hp/dashboard`,
-          // permission: Permissions.HEALTH_POST_DASHBOARD,
+          permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
-          label: 'Patient Registry',
-          href: `hp/patients`,
-          // permission: Permissions.PATIENT_RECORDS,
+          label: t('SidebarItems.patientsRegistration'),
+          href: `clients`,
+          permission: Permissions.PATIENT_RECORDS,
         },
         {
           key: 'medical-records',
           icon: FileText,
           label: 'Medical Records',
           href: `hp/medical-records`,
-          // permission: Permissions.MEDICINE_DISPENSE,
+          permission: Permissions.MEDICINE_DISPENSE,
         },
         {
           key: 'medicalhistory',
           icon: FileText,
           label: t('SidebarItems.medicalhistory'),
           href: `/hp/medicalhistory`,
-          // permission: Permissions.ADMIN_MANAGEMENT,
+          permission: Permissions.ADMIN_MANAGEMENT,
         },
         {
           key: 'pharmacy',

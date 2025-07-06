@@ -5,7 +5,7 @@ import {
   Permissions,
   TPermissionResource,
 } from '@/zustand/permissions';
-import { useUserStore } from '@/zustand/useUserDetails';
+import { useUserStore } from '@/zustand/useUserStore';
 import { useState, useEffect } from 'react';
 import { useGetPathInfo } from './useGetPortal';
 
@@ -69,12 +69,15 @@ export function useHasPermission(
     // Filter permissions that match the resource
     const relevantPermissions = userPermissions.filter(
       (perm: TPermission) =>
-        perm.resource === resource || perm.resource === Permissions.ALL,
+        perm.resource === resource ||
+        (perm.resource === Permissions.ALL && !isAdminPortal),
       // && perm.healthPost === healthPostId, // Uncomment if needed
     );
 
     const newReadPermission = relevantPermissions.some(
-      (perm) => perm.action === Action.READ || perm.action === Action.WRITE,
+      (perm) =>
+        perm.action === Action.READ ||
+        (perm.action === Action.WRITE && !isAdminPortal),
     );
     const newWritePermission = relevantPermissions.some(
       (perm) => perm.action === Action.WRITE,

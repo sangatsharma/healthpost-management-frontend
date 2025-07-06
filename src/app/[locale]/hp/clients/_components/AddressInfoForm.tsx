@@ -1,6 +1,7 @@
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { TAddressInfoSchema } from '@/schemas/healthpostPortal/clients.schema';
 import { useFormContext } from 'react-hook-form';
 
@@ -8,9 +9,9 @@ export default function AddressInfoForm() {
   const form = useFormContext<TAddressInfoSchema>();
   return (
     <div className="space-y-6">
-      <div>
+      <section>
         <h3 className="mb-4 text-lg font-semibold">Permanent Address</h3>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <FormField
             control={form.control}
             name="districtId"
@@ -48,13 +49,32 @@ export default function AddressInfoForm() {
             )}
           />
         </div>
-      </div>
-
-      <div>
-        <h3 className="mb-4 text-lg font-semibold">
-          Temporary Address (Optional)
-        </h3>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      </section>
+      <section>
+        <section className="mb-4 flex justify-start gap-4">
+          <span className="text-lg font-semibold">
+            Temporary Address (Optional)
+          </span>
+          <span className="flex items-center gap-2 text-xs">
+            <Switch
+              onCheckedChange={(val) => {
+                if (val) {
+                  form.setValue('tDistrictId', form.getValues('districtId'));
+                  form.setValue('tPalityId', form.getValues('palityId'));
+                  form.setValue('tWardNo', form.getValues('wardNo'));
+                  form.setValue('tTole', form.getValues('tole'));
+                } else {
+                  form.setValue('tDistrictId', '');
+                  form.setValue('tPalityId', '');
+                  form.setValue('tWardNo', '');
+                  form.setValue('tTole', '');
+                }
+              }}
+            />
+            Same as Permanent Address
+          </span>
+        </section>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
           <FormField
             control={form.control}
             name="tDistrictId"
@@ -92,7 +112,7 @@ export default function AddressInfoForm() {
             )}
           />
         </div>
-      </div>
+      </section>
     </div>
   );
 }

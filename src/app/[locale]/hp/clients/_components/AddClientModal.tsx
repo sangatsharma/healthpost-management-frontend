@@ -28,7 +28,9 @@ import FamilyInfoForm from './FamilyInfoForm';
 import HealthAndBankingInfo from './HealthAndBankingInfo';
 import FormDialog from '@/components/reusables/form-dialog';
 import { UserRole, UserType } from '@/types/user.types';
-import { useUserStore } from '@/zustand/useUserDetails';
+import { useUserStore } from '@/zustand/useUserStore';
+import { useClientMutation } from '@/api/mutation';
+import { convertToFormData } from '@/lib/utils';
 
 export default function ClientRegistrationModal({
   isOpen,
@@ -45,6 +47,13 @@ export default function ClientRegistrationModal({
   const steps = getClientFormSteps();
   const user = useUserStore((state) => state.user);
 
+  const { mutateClient, isPending } = useClientMutation({
+    onSuccess: () => {
+      setIsSubmitted(true);
+      handleExit();
+    },
+  });
+
   const form = useForm<TClientSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -52,7 +61,7 @@ export default function ClientRegistrationModal({
       middleName: '',
       lastName: '',
       dobBs: '',
-      dobAd: '',
+      dobAd: '2002-01-01',
       phoneNumber: '',
       citizenshipNumber: '',
       casteType: undefined,
@@ -75,13 +84,18 @@ export default function ClientRegistrationModal({
       disabilityIdentityType: undefined,
       role: UserRole.PATIENT,
       accountType: UserType.PATIENT,
-      healthPostId: user?.healthPostId || 'asdas-asdas-asda',
-
-      //   nshiNumber: '',
-      //   bankId: '',
-      //   bankBranchId: '',
-      //   bankAccountNumber: '',
+      healthPostId: user?.healthPostId,
+      nshiNumber: '',
+      bank: '',
+      bankBranch: '',
+      bankAccountNumber: '',
+      isEligibleForSgc: false,
+      isVaccineCompleted: false,
+      isMinor: false,
+      lockReport: false,
+      profileImage: [],
     },
+    mode: 'onChange',
   });
   const { dirtyFields } = form.formState;
 
@@ -100,9 +114,11 @@ export default function ClientRegistrationModal({
     }
   };
   const onSubmit = (data: TClientSchema) => {
-    //TODO: Handle form submission logic here
-    setIsSubmitted(true);
-    console.log('Form submitted with data:', data);
+    mutateClient({
+      method: 'POST',
+      data: convertToFormData(data, ['profileImage']),
+      healthPostId: user?.healthPostId || '',
+    });
   };
 
   const progress = (currentStep / steps.length) * 100;
@@ -141,7 +157,7 @@ export default function ClientRegistrationModal({
           </Card>
         </div>
       ) : (
-        <div className="mx-auto w-4xl">
+        <div className="mx-auto w-7xl px-2">
           {/* Header */}
           <div className="mb-4 text-center">
             <h1 className="mb-2 text-3xl font-bold">Patient Registration</h1>
@@ -193,7 +209,6 @@ export default function ClientRegistrationModal({
                     >
                       {step.title}
                     </p>
-                    <p className="text-xs text-gray-400">{step.description}</p>
                   </div>
                 </div>
               );
@@ -254,7 +269,11 @@ export default function ClientRegistrationModal({
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     ) : (
-                      <Button type="submit" className="flex items-center gap-2">
+                      <Button
+                        type="submit"
+                        isLoading={isPending}
+                        className="flex items-center gap-2"
+                      >
                         Submit Registration
                         <CheckCircle className="h-4 w-4" />
                       </Button>

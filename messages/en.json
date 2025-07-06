@@ -5,6 +5,7 @@
     "images": "Images",
     "search": "Search",
     "select": "Select",
+    "SN": "S.N",
     "NotFound": {
       "title": "Page Not Found",
       "description": "The page you are looking for doesn't exist or has been moved.",
@@ -20,7 +21,8 @@
       "healthpost": "Health Posts",
       "patients": "Patients",
       "staffsmanagement": "Staffs Management",
-      "medicalhistory": "Medical History"
+      "medicalhistory": "Medical History",
+      "patientsRegistration": "Patients Registration"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -79,7 +81,10 @@
       "gender": "Gender",
       "profileImage": "Profile Image",
       "addStaff": "Add New Staff",
-      "editStaff": "Edit Staff"
+      "editStaff": "Edit Staff",
+      "editClient": "Edit Client",
+      "casteType": "Caste Type",
+      "dateOfBirth": "Date of Birth"
     }
   },
 
@@ -99,7 +104,6 @@
       "wardNo": "HealthPost ward number is required.",
       "municipality": "HealthPost municipality is required.",
       "location": "HealthPost location is required.",
-
       "email": "HealthPost email is required.",
       "description": "HealthPost description is required."
     },

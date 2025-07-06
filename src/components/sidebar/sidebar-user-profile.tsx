@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/tooltip';
 import { TUser } from '@/types/user.types';
 import LanguageSwitcher from '../LanguageSwitcher';
-import { useUserStore } from '@/zustand/useUserDetails';
+import { useUserStore } from '@/zustand/useUserStore';
 
 interface SidebarUserProfileProps {
   user: TUser;

@@ -14,11 +14,13 @@ type FormFieldProps = {
   label?: string;
   isRequired?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   showSwitch?: {
     label: string;
     checked: boolean;
     onChange: (e: boolean) => void;
+    node?: React.ReactNode;
+    nodeSide?: 'left' | 'right';
   };
 };
 
@@ -36,7 +38,7 @@ const FormWrapper: React.FC<FormFieldProps> = ({
           <FormLabel className="mb-2 flex items-start gap-x-[0.5px] pl-1 font-medium">
             {label}
             {isRequired ? (
-              <span className="text-xs leading-[8px] font-thin text-red-500">
+              <span className="text-sm leading-[8px] font-thin text-red-500">
                 *
               </span>
             ) : null}
@@ -44,14 +46,22 @@ const FormWrapper: React.FC<FormFieldProps> = ({
         )}
         {showSwitch && (
           <div className="flex items-center space-x-2">
-            <Label htmlFor={showSwitch.label} className="text-xs font-normal">
+            <Label htmlFor={showSwitch.label} className="text-sm font-medium">
               {showSwitch.label}
+              {isRequired ? (
+                <span className="text-sm leading-[8px] font-thin text-red-500">
+                  *
+                </span>
+              ) : null}
             </Label>
+            {showSwitch.nodeSide === 'left' && showSwitch.node}
             <Switch
+              className="cursor-pointer"
               id={showSwitch.label}
               checked={showSwitch.checked}
               onCheckedChange={showSwitch.onChange}
             />
+            {showSwitch.nodeSide === 'right' && showSwitch.node}
           </div>
         )}
       </div>
