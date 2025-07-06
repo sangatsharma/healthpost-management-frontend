@@ -16,11 +16,11 @@ import { renderFullName } from '@/lib/utils';
 import { TUser } from '@/types/user.types';
 import { fetchStaffInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
-import { useQuery } from '@tanstack/react-query';
 import { ImagePreviewer } from '@/components/reusables/ImagePreviewer';
 import Image from 'next/image';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useStaffMutation } from '@/api/mutation';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -35,7 +35,7 @@ export default function Page() {
   const tToast = useTypedTranslations('Toast');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
-  const { mutatestaff } = useStaffMutation({
+  const { mutateStaff } = useStaffMutation({
     onSuccess: () => {
       toast.success(tToast('staffDeleted'));
     },
@@ -60,7 +60,7 @@ export default function Page() {
       onClick: () =>
         showDeleteConfirmDialog({
           onConfirm() {
-            mutatestaff({
+            mutateStaff({
               staffId: row.original.id,
               method: 'DELETE',
             });
@@ -226,7 +226,7 @@ export default function Page() {
         return (
           <span
             className={
-              row?.original?.permissions.length > 1
+              row?.original?.permissions.length >= 1
                 ? 'text-green-600'
                 : 'text-red-600'
             }
@@ -273,7 +273,7 @@ export default function Page() {
                 ))}
               </ImagePreviewer>
             ) : (
-              <span className="text-muted-foreground">No Image</span>
+              <span className="text-muted-foreground">-</span>
             )}
           </div>
         );

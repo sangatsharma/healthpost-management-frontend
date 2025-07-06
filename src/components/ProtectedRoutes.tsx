@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { TPermissionResource } from '@/zustand/permissions';
 import { toast } from 'sonner';
 import { useHasPermission } from '@/hooks/useHasPermission';
-import { useUserStore } from '@/zustand/useUserDetails';
+import { useUserStore } from '@/zustand/useUserStore';
 import UnauthorizedPage from '@/app/[locale]/unauthorized/page';
 
 type ProtectedRouteProps = {
@@ -25,6 +25,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
   }, [hasReadPermission, isLoading, userLoaded]);
 
+  if (typeof window !== 'undefined' && !navigator.onLine) {
+    return <>{children}</>;
+  }
   if (userLoaded && !isLoading && !hasReadPermission)
     return <UnauthorizedPage />;
 

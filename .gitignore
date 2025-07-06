@@ -39,5 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/src/components/ThemeScript.tsx
 messages/*.d.json.ts
+
+# Serwist
+public/sw*
+public/swe-worker*

@@ -1,5 +1,7 @@
 import axios, { isAxiosError } from 'axios';
 import { toast } from 'sonner';
+import { idbPersister } from '@/lib/idbPersister';
+import { fetchRefreshToken } from '@/hooks/useAuthQuery';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -9,6 +11,31 @@ export const api = axios.create({
   headers: {
     // 'Content-Type': 'application/json',
   },
+});
+
+api.interceptors.request.use(async (config) => {
+  if (
+    !navigator.onLine &&
+    config.url &&
+    config.method &&
+    ['post', 'put', 'delete', 'patch'].includes(config.method)
+  ) {
+    // Save to IndexedDB for later sync
+    await idbPersister.saveOfflineMutation(config.url, {
+      method: config.method,
+      data: Object.fromEntries((config.data as FormData).entries()),
+    });
+
+    // Reject the request to trigger the response error handler
+    return Promise.reject(
+      new axios.AxiosError(
+        'Offline: request saved for later sync',
+        'ERR_OFFLINE',
+        config,
+      ),
+    );
+  }
+  return config;
 });
 
 api.interceptors.response.use(
@@ -24,10 +51,18 @@ const errorHandler = (error: unknown) => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          toast.error(
-            error?.response?.data?.message ||
-              'Session expired. Please log in again',
-          );
+          if (error?.response?.data?.error === 'TokenExpiredError') {
+            fetchRefreshToken().then((data) => {
+              if (data) {
+                window.location.reload();
+              }
+            });
+          } else {
+            toast.error(
+              error?.response?.data?.message ||
+                'Session expired. Please log in again',
+            );
+          }
           break;
         case 403:
           toast.warning(
@@ -55,7 +90,7 @@ const errorHandler = (error: unknown) => {
       toast.error('Network error. Please check your connection');
     } else {
       // Something happened in setting up the request
-      toast.error('Request setup error');
+      toast.error(error.message || 'Request setup error');
     }
   } else {
     toast.error('An unknown error occurred');

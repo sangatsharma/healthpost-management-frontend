@@ -10,6 +10,7 @@ import type React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 type FileUploaderProps = {
   name?: string;
@@ -18,7 +19,6 @@ type FileUploaderProps = {
   maxSize?: number;
   allowImage?: boolean;
   allowFile?: boolean;
-  showPreview?: boolean;
   maxFiles?: number;
   uploaderType?: 'dropzone' | 'input';
   label?: string;
@@ -26,14 +26,14 @@ type FileUploaderProps = {
 };
 
 const fileTypeIconMap: Record<string, string> = {
-  pdf: '/pdf.png',
-  doc: '/doc.png',
-  docx: '/doc.png',
-  xls: '/xls.png',
-  xlsx: '/xls.png',
-  csv: '/txt-file.png',
-  txt: '/txt-file.png',
-  default: '/file.png',
+  pdf: '/images/pdf.png',
+  doc: '/images/doc.png',
+  docx: '/images/doc.png',
+  xls: '/images/xls.png',
+  xlsx: '/images/xls.png',
+  csv: '/images/txt-file.png',
+  txt: '/images/txt-file.png',
+  default: '/images/file.png',
 };
 
 function getFileExtension(filename: string) {
@@ -62,7 +62,6 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   maxSize = 2 * 1024 * 1024,
   allowImage = true,
   allowFile = false,
-  showPreview = true,
   maxFiles = 5,
   uploaderType = 'dropzone',
   className,
@@ -151,6 +150,11 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
     accept: getAcceptTypes(),
     maxSize,
     maxFiles,
+    onDropRejected: (_rejectedFiles) => {
+      toast.error(
+        `Max file size is ${Math.round(maxSize / (1024 * 1024))} MB and you can upload up to ${maxFiles} file(s).`,
+      );
+    },
   });
 
   const renderFileItem = (item: string | File, index: number) => {
@@ -278,7 +282,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         className,
       )}
     >
-      {showPreview && previews.length > 0 ? (
+      {previews.length > 0 ? (
         <div className="flex flex-wrap gap-4">
           {previews.map((item, idx) => {
             if (typeof item === 'string') {

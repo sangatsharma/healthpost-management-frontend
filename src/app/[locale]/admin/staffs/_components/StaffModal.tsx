@@ -1,17 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
 import { Form, FormField } from '@/components/ui/form';
 import FormDialog from '@/components/reusables/form-dialog';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-
-import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  fetchHealthPostInfo,
-  fetchStaffInfo,
-  mutateStaffInfo,
-} from '@/api/queries';
+import { fetchHealthPostInfo, fetchStaffInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -28,6 +21,8 @@ import {
   getStaffSchema,
   TStaffSchema,
 } from '@/schemas/adminPortal/admin.schema';
+import { useStaffMutation } from '@/api/mutation';
+import { useQuery } from '@tanstack/react-query';
 
 type TProps = {
   isOpen: boolean;
@@ -79,12 +74,7 @@ export const AddAdminModal: React.FC<TProps> = ({
         })),
     });
 
-  const { mutate: mutateStaff, isPending } = useMutation({
-    mutationKey: staffId
-      ? queryKeys.staff.singleStaff(staffId)
-      : queryKeys.staff.staffs,
-    mutationFn: mutateStaffInfo,
-    retry: false,
+  const { mutateStaff, isPending } = useStaffMutation({
     onSuccess: () => {
       toast.success(tToast(staffId ? 'staffUpdated' : 'staffCreated'));
       handleExit();
@@ -332,7 +322,6 @@ export const AddAdminModal: React.FC<TProps> = ({
                       defaultValue={field.value || []}
                       allowFile={false}
                       allowImage
-                      showPreview
                       maxFiles={2}
                       maxSize={2 * 1024 * 1024}
                       uploaderType="dropzone"

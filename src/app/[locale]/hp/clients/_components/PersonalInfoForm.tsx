@@ -18,7 +18,7 @@ export default function PersonalInfoForm() {
   const form = useFormContext<TPersonalInfoSchema & TSystemInfoSchema>();
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
       <FormField
         control={form.control}
         name="firstName"
@@ -127,11 +127,11 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label="Enter date of birth" isRequired>
             <NepaliDatePicker
-              inputClassName="form-control w-full h-10 px-3 py-2"
-              className="focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border-emerald-200 bg-emerald-50 focus:border-emerald-500 focus:ring-emerald-200 focus-visible:ring-[3px]"
+              inputClassName="w-full h-10 px-3 py-2 border rounded-md focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-background border-emerald-200 bg-emerald-50 focus:border-emerald-500 focus:ring-emerald-200 focus-visible:ring-[3px] outline-none"
+              className=""
               options={{
                 calenderLocale: 'ne',
-                valueLocale: 'ne',
+                valueLocale: 'en',
                 closeOnSelect: true,
               }}
               todayIfEmpty
@@ -194,7 +194,7 @@ export default function PersonalInfoForm() {
           </FormWrapper>
         )}
       />
-      <div className="col-span-3 flex w-full flex-col gap-4">
+      <div className="col-span-4 flex w-full flex-col gap-4">
         <FormField
           control={form.control}
           name="profileImage"
@@ -202,9 +202,7 @@ export default function PersonalInfoForm() {
             <FormWrapper label="Images">
               <FileUploader
                 defaultValue={field.value || []}
-                allowFile={false}
                 allowImage
-                showPreview
                 maxFiles={1}
                 maxSize={2 * 1024 * 1024}
                 uploaderType="dropzone"

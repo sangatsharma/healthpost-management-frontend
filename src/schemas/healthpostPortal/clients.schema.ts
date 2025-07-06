@@ -300,7 +300,7 @@ export const getSystemInfoSchema = (t: TTypeFunction<'Validation'>) => {
     profileImage: createFileUploadValidator({
       required: false,
     }),
-    //todo - Add authorization for lockReport
+    //TODO: - Add authorization for lockReport
     lockReport: z.boolean().optional(),
   });
 };
@@ -406,10 +406,10 @@ export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
       'isEligibleForSgc',
       'isVaccineCompleted',
       'isMinor',
-      // 'nshiNumber',
-      // 'bankId',
-      // 'bankBranchId',
-      // 'bankAccountNumber',
+      'nshiNumber',
+      'bank',
+      'bankBranch',
+      'bankAccountNumber',
     ],
   },
 ];
