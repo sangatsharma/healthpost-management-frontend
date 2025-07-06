@@ -88,7 +88,7 @@ export default function LoginPage() {
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
-      if (data) setUser(data.data.user);
+      if (data) setUser(data.data);
       toast.success(data?.message);
       navigate.push(`/${portal?.toLocaleLowerCase()}/dashboard`);
     },
