@@ -1,11 +1,11 @@
 'use client';
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { ProtectedRoute } from '@/components/ProtectedRoutes';
+// import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
-import { Permissions } from '@/zustand/permissions';
+// import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
@@ -24,6 +24,8 @@ import { TClient } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
 import BlockEditor from '@/components/block-editor';
 import { useQuery } from '@tanstack/react-query';
+import { ProtectedRoute } from '@/components/ProtectedRoutes';
+import { Permissions } from '@/zustand/permissions';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{

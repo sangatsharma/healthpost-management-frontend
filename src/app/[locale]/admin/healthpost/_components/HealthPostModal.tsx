@@ -143,7 +143,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FormWrapper label={t2('HealthPost.name')} isRequired>
                     <Input
                       {...field}
-                      placeholder={tPlaceholder('healthPostName')}
+                      placeholder={tPlaceholder('fullName')}
                       autoFocus
                       required
                     />
@@ -183,7 +183,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FormWrapper label={t2('HealthPost.location')} isRequired>
                     <Input
                       {...field}
-                      placeholder={tPlaceholder('location')}
+                      placeholder={tPlaceholder('tole')}
                       required
                     />
                   </FormWrapper>
@@ -216,7 +216,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
                     <Input
                       type="number"
-                      placeholder={tPlaceholder('wardNo')}
+                      placeholder={tPlaceholder('wardNumber')}
                       {...field}
                     />
                   </FormWrapper>

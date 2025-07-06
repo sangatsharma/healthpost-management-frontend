@@ -16,23 +16,28 @@ import {
 } from '@/types/user.types';
 import { Tooltip } from '@radix-ui/react-tooltip';
 import { InfoIcon } from 'lucide-react';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { useFormContext } from 'react-hook-form';
 
 export default function HealthAndBankingInfo() {
   const form = useFormContext<THealthInfoSchema>();
+  const t = useTypedTranslations('ClientRegistration');
+  const p = useTypedTranslations('Placeholder');
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="mb-4 text-lg font-semibold">Health Information</h3>
+        <h3 className="mb-4 text-lg font-semibold">
+          {t('healthInfo.healthInformation')}
+        </h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
           <FormField
             control={form.control}
             name="bloodGroup"
             render={({ field }) => (
-              <FormWrapper label="Blood Group " isRequired>
+              <FormWrapper label={t('healthInfo.bloodGroup')} isRequired>
                 <FormSelect
                   options={mapEnumToOptions(BloodGroup)}
-                  placeholder="Select Blood Group"
+                  placeholder={p('bloodGroup')}
                   {...field}
                   required
                   variant="basic"
@@ -45,8 +50,8 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="height"
             render={({ field }) => (
-              <FormWrapper label="Enter height (CM)">
-                <Input {...field} placeholder="Enter height" />
+              <FormWrapper label={t('healthInfo.height')}>
+                <Input {...field} placeholder={p('height')} />
               </FormWrapper>
             )}
           />
@@ -54,8 +59,8 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="weight"
             render={({ field }) => (
-              <FormWrapper label="Enter Weight (KG)">
-                <Input {...field} placeholder="Enter weight" />
+              <FormWrapper label={t('healthInfo.weight')}>
+                <Input {...field} placeholder={p('weight')} />
               </FormWrapper>
             )}
           />
@@ -63,10 +68,10 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="disabilityType"
             render={({ field }) => (
-              <FormWrapper label="Disability Type">
+              <FormWrapper label={t('healthInfo.disabilityType')}>
                 <FormSelect
                   options={mapEnumToOptions(DisabilityType)}
-                  placeholder="Select Disability Type"
+                  placeholder={p('disabilityType')}
                   {...field}
                   required
                   variant="basic"
@@ -80,10 +85,10 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="disabilityIdentityType"
             render={({ field }) => (
-              <FormWrapper label="Disability Identity Type">
+              <FormWrapper label={t('healthInfo.disabilityIdentityType')}>
                 <FormSelect
                   options={mapEnumToOptions(DisabilityIdentityType)}
-                  placeholder="Select Disability ID Type"
+                  placeholder={p('disabilityIdentityType')}
                   {...field}
                   required
                   variant="basic"
@@ -160,15 +165,15 @@ export default function HealthAndBankingInfo() {
 
       <div>
         <h3 className="mb-4 text-lg font-semibold">
-          Banking Information (Optional)
+          {t('healthInfo.bankingInformation')}
         </h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
           <FormField
             control={form.control}
             name="bank"
             render={({ field }) => (
-              <FormWrapper label="Enter Bank Name">
-                <Input {...field} placeholder="Enter Bank Name" />
+              <FormWrapper label={t('healthInfo.bank')}>
+                <Input {...field} placeholder={p('bank')} />
               </FormWrapper>
             )}
           />
@@ -176,8 +181,8 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="bankBranch"
             render={({ field }) => (
-              <FormWrapper label="Enter Bank Branch">
-                <Input {...field} placeholder="Enter Bank Branch" />
+              <FormWrapper label={t('healthInfo.bankBranch')}>
+                <Input {...field} placeholder={p('bankBranch')} />
               </FormWrapper>
             )}
           />
@@ -185,8 +190,8 @@ export default function HealthAndBankingInfo() {
             control={form.control}
             name="bankAccountNumber"
             render={({ field }) => (
-              <FormWrapper label="Enter Bank number">
-                <Input {...field} placeholder="Enter Bank number" />
+              <FormWrapper label={t('healthInfo.bankAccountNumber')}>
+                <Input {...field} placeholder={p('bankAccountNumber')} />
               </FormWrapper>
             )}
           />
