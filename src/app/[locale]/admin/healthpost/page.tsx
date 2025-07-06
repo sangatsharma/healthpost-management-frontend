@@ -12,12 +12,12 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { AddHealthPostModal } from './_components/HealthPostModal';
 import { THealthPost } from '@/types/healthpost.types';
-import { useQuery } from '@tanstack/react-query';
 import { fetchHealthPostInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useHealthPostMutation } from '@/api/mutation';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{

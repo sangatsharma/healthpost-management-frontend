@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
 import { login, verifyOTP } from '@/api/queries';
 import { toast } from 'sonner';
-import { useUserStore } from '@/zustand/useUserDetails';
+import { useUserStore } from '@/zustand/useUserStore';
 import { useRouter } from '@/i18n/navigation';
 import { Mail } from 'lucide-react';
 import Loading from './ui/loading';
@@ -88,7 +88,7 @@ export default function LoginPage() {
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
-      if (data) setUser(data.data.user);
+      if (data) setUser(data.data);
       toast.success(data?.message);
       navigate.push(`/${portal?.toLocaleLowerCase()}/dashboard`);
     },
@@ -125,7 +125,7 @@ export default function LoginPage() {
         >
           <header className="mb-4 flex flex-col items-center justify-center">
             <Image
-              src="/doctor.png"
+              src="/images/doctor.png"
               alt={'Hero avatar'}
               width={150}
               height={150}

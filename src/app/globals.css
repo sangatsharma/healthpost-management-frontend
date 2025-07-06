@@ -170,3 +170,69 @@
 .dark .scrollbar-thin-custom {
   scrollbar-color: rgba(200, 200, 200, 0.2) transparent;
 }
+
+/* Define base styles for Tiptap editor content */
+/* Heading styles */
+.editorContent h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1a202c; /* Dark gray */
+}
+
+.editorContent h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  color: #2d3748;
+}
+
+.editorContent h3 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+}
+
+.editorContent h4 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #718096;
+}
+
+.editorContent h5 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #a0aec0;
+}
+
+.editorContent h6 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #cbd5e0;
+}
+
+.editorContent a {
+  color: #3182ce;
+  text-decoration: underline;
+}
+
+.editorContent ul {
+  list-style-type: disc;
+  margin-left: 2rem;
+}
+
+.editorContent ol {
+  list-style-type: decimal;
+  margin-left: 2rem;
+}
+.editorContent blockquote {
+  border-left: 4px solid #d1d5db; /* Tailwind gray-300 */
+  padding-left: 1rem;
+  color: #6b7280; /* Tailwind gray-500 */
+  font-style: italic;
+  margin: 1rem 0;
+}

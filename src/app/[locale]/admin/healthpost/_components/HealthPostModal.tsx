@@ -6,7 +6,6 @@ import { Form, FormField } from '@/components/ui/form';
 import FormDialog from '@/components/reusables/form-dialog';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
-import { useQuery } from '@tanstack/react-query';
 import { fetchHealthPostInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { Input } from '@/components/ui/input';
@@ -23,6 +22,7 @@ import {
   getHealthPostSchema,
   THealthPostSchema,
 } from '@/schemas/adminPortal/healthPost.schema';
+import { useQuery } from '@tanstack/react-query';
 
 type TProps = {
   isOpen: boolean;
@@ -91,7 +91,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
     reset,
     formState: { dirtyFields },
   } = form;
-  const onSubmit = (data: THealthPostSchema): void => {
+  const onSubmit = async (data: THealthPostSchema): Promise<void> => {
     mutateHealthPost({
       healthPostId: healthPostId || undefined,
       data: convertToFormData(
@@ -232,6 +232,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                       {...field}
                       defaultCountry="NP"
                       placeholder={tPlaceholder('phone')}
+                      error={!!form.formState.errors.phone}
                       required
                       countrySelectProps={{
                         disabled: true,
@@ -249,9 +250,8 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                       <FileUploader
                         onChange={field.onChange}
                         defaultValue={field.value || []}
-                        allowFile={true}
+                        allowFile
                         allowImage
-                        showPreview
                         maxFiles={5}
                         maxSize={10 * 1024 * 1024} // 10MB
                         name="images"

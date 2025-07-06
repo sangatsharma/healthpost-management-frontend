@@ -35,6 +35,10 @@ const getInitialData = (set: {
       .then(() => {
         set({ user: null, isLoggedIn: false, isLoading: false });
         toast.success('Logged out successfully!');
+        localStorage.removeItem('userInfo');
+        document.cookie =
+          'portal=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // Redirect to home page after logout
         window.location.href = '/';
       })
       .catch((error) => {

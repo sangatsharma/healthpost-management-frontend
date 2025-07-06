@@ -1,9 +1,8 @@
 import { TResponse } from '@/types/global';
 import { api } from './axios';
-import { TLoginReponse, TUser, TUserType } from '@/types/user.types';
+import { TClient, TLoginReponse, TUser, TUserType } from '@/types/user.types';
 import { THealthPost } from '@/types/healthpost.types';
 import { TStaffSchema } from '@/schemas/adminPortal/admin.schema';
-
 //function to handle user login
 export const login = async (values: {
   email: string;
@@ -79,7 +78,9 @@ export const mutateHealthPostInfo = async ({
 // If staffId is provided, it will fetch the specific staff information
 // If staffId is not provided, it will fetch all staff information
 export const fetchStaffInfo = async ({ staffId }: { staffId?: string }) => {
-  const res = await api.get<TResponse<TUser[] | TUser>>(`/user/${staffId}`);
+  const res = await api.get<TResponse<TUser[] | TUser>>(
+    `/user${staffId ? `/${staffId}` : ''}`,
+  );
   if (res.data) {
     return res.data;
   }
@@ -99,9 +100,51 @@ export const mutateStaffInfo = async ({
   if (method === 'POST') {
     res = await api.post<TStaffSchema>(url, data);
   } else if (method === 'PUT') {
-    res = await api.put<TStaffSchema>(`/user/${staffId}/admin`, data);
+    res = await api.put<TStaffSchema>(`/user/${staffId}`, data);
   } else if (method === 'DELETE') {
     res = await api.delete<TStaffSchema>(`/user/${staffId}`);
+  } else {
+    throw new Error('Invalid method');
+  }
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const fetchClientsInfo = async ({
+  clientId,
+  healthPostId,
+}: {
+  healthPostId: string;
+  clientId?: string;
+}) => {
+  const res = await api.get<TResponse<TClient[] | TClient>>(
+    `/healthpost/${healthPostId}/patient${clientId ? `/${clientId}` : ''}`,
+  );
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const mutateClientInfo = async ({
+  clientId,
+  data,
+  method,
+  healthPostId,
+}: {
+  clientId?: string;
+  data?: FormData;
+  method: 'POST' | 'PUT' | 'DELETE';
+  healthPostId: string;
+}) => {
+  let res;
+  const url = `/healthpost/${healthPostId}/patient`;
+  if (method === 'POST') {
+    res = await api.post<TStaffSchema>(url, data);
+  } else if (method === 'PUT') {
+    res = await api.put<TStaffSchema>(`${url}/${clientId}`, data);
+  } else if (method === 'DELETE') {
+    res = await api.delete<TStaffSchema>(`${url}/${clientId}`);
   } else {
     throw new Error('Invalid method');
   }

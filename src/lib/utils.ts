@@ -89,7 +89,7 @@ export const convertToFormData = (
 
 export interface RenderFullNameProps {
   userData?: Partial<TUser> | null;
-  params?: TFullname;
+  params?: Partial<TFullname>;
 }
 
 export const renderFullName = ({

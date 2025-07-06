@@ -1,6 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { queryKeys } from './queryKeys';
-import { mutateHealthPostInfo, mutateStaffInfo } from './queries';
+import {
+  mutateClientInfo,
+  mutateHealthPostInfo,
+  mutateStaffInfo,
+} from './queries';
 import { queryClient } from '@/lib/queryClient';
 
 export function useHealthPostMutation({
@@ -25,8 +29,8 @@ export function useHealthPostMutation({
 }
 
 export function useStaffMutation({ onSuccess }: { onSuccess?: () => void }) {
-  const { mutate: mutatestaff, isPending } = useMutation({
-    mutationKey: queryKeys.healthPost.healthPosts,
+  const { mutate: mutateStaff, isPending } = useMutation({
+    mutationKey: queryKeys.staff.staffs,
     mutationFn: mutateStaffInfo,
     retry: false,
     onSuccess: () => {
@@ -38,5 +42,22 @@ export function useStaffMutation({ onSuccess }: { onSuccess?: () => void }) {
     },
   });
 
-  return { mutatestaff, isPending };
+  return { mutateStaff, isPending };
+}
+
+export function useClientMutation({ onSuccess }: { onSuccess?: () => void }) {
+  const { mutate: mutateClient, isPending } = useMutation({
+    mutationKey: queryKeys.client.clients,
+    mutationFn: mutateClientInfo,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.client.clients,
+      });
+
+      onSuccess?.();
+    },
+  });
+
+  return { mutateClient, isPending };
 }

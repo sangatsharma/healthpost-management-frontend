@@ -1,3 +1,4 @@
+import { TClientSchema } from '@/schemas/healthpostPortal/clients.schema';
 import { TPermission } from './global';
 
 export enum UserRole {
@@ -85,16 +86,7 @@ export enum DisabilityIdentityType {
 export type TLoginReponse = {
   success: boolean;
   message: string;
-  data: {
-    token: {
-      accessToken: string;
-      refreshToken: string;
-    };
-    user: TUser;
-    isVerified: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
+  data: TUser;
 };
 
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
@@ -115,6 +107,7 @@ export type TUser = {
     name: string;
   };
   createdAt?: string;
+  refreshToken?: string;
 };
 
 export type TFullname = {
@@ -124,3 +117,8 @@ export type TFullname = {
 };
 
 export type TGender = 'MALE' | 'FEMALE' | 'OTHER';
+
+export type TClient = TClientSchema & {
+  createdAt: string;
+  id: string;
+};

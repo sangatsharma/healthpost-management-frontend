@@ -9,72 +9,81 @@ import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { differenceInYears } from 'date-fns';
 import { toast } from 'sonner';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { renderFullName } from '@/lib/utils';
-import { TUser } from '@/types/user.types';
-import { fetchStaffInfo } from '@/api/queries';
+import { fetchClientsInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
-import { useQuery } from '@tanstack/react-query';
-import { ImagePreviewer } from '@/components/reusables/ImagePreviewer';
-import Image from 'next/image';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useStaffMutation } from '@/api/mutation';
 import ClientRegistrationModal from './_components/AddClientModal';
+import AvatarText from '@/components/reusables/AvatarText';
+import { BSToAD } from 'bikram-sambat-js';
+import { TClient } from '@/types/user.types';
+import { useUserStore } from '@/zustand/useUserStore';
+import BlockEditor from '@/components/block-editor';
+import { useQuery } from '@tanstack/react-query';
+import { ProtectedRoute } from '@/components/ProtectedRoutes';
+import { Permissions } from '@/zustand/permissions';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
     isOpen: boolean;
-    staffId?: string;
+    client?: TClient;
   }>({
     isOpen: false,
-    staffId: undefined,
+    client: undefined,
   });
+  const [value, setValue] = useState('');
+
   const t = useTypedTranslations('GeneralPages');
+  const tAlert = useTypedTranslations('AlertDialog');
+  const tMed = useTypedTranslations('MedicalHistory');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
-  const { mutatestaff } = useStaffMutation({
+  const { mutateStaff } = useStaffMutation({
     onSuccess: () => {
       toast.success('Health Post deleted successfully!');
     },
   });
 
-  const ActionOptions = (row: Row<TUser>): ActionButtonDataTypes[] => [
+  const ActionOptions = (row: Row<TClient>): ActionButtonDataTypes[] => [
     {
-      name: 'Edit',
+      name: t('User.editClient'),
       icon: Edit,
       onClick: () => {
         setIsOpenAddModal({
           isOpen: true,
-          staffId: row.original.id,
+          client: row.original,
         });
       },
     },
     {
-      name: 'Delete',
+      name: tAlert('action.delete'),
       isTrash: true,
       icon: Delete,
 
       onClick: () =>
         showDeleteConfirmDialog({
           onConfirm() {
-            mutatestaff({
+            mutateStaff({
               staffId: row.original.id,
               method: 'DELETE',
             });
           },
           itemName: renderFullName({
-            userData: row.original,
+            params: row.original,
           }),
         }),
     },
   ];
 
-  const columns: ExtendedColumnDef<TUser>[] = [
+  const columns: ExtendedColumnDef<TClient>[] = [
     {
       id: 'select',
       map: {
-        key: 'S/N',
+        key: t('SN'),
         valueFrom: 'id',
       },
       header: ({ table }) => (
@@ -105,26 +114,65 @@ export default function Page() {
     },
     {
       map: {
-        key: 'Name',
+        key: t('User.fullName'),
         dataTransformer: (data) =>
           renderFullName({
-            userData: data,
+            params: data,
           }),
       },
       accessorKey: 'name',
       header: () => t('User.fullName'),
       cell: ({ row }) => (
-        <span className="font-medium">
-          {renderFullName({
-            userData: row.original,
+        <AvatarText
+          title={renderFullName({
+            params: row.original,
           })}
-        </span>
+          name={renderFullName({
+            params: row.original,
+          })}
+          subtitle={`${tMed('age')}: ${differenceInYears(
+            Date.now(),
+            BSToAD(row.original.dobBs),
+          )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
+          src={
+            typeof row?.original?.profileImage === 'string'
+              ? row.original.profileImage
+              : ''
+          }
+        />
       ),
+    },
+    {
+      map: {
+        key: t('User.gender'),
+        valueFrom: 'gender',
+      },
+      id: 'gender',
+      enableHiding: false,
     },
 
     {
       map: {
-        key: 'Email',
+        key: t('User.casteType'),
+        valueFrom: 'casteType',
+      },
+      accessorKey: 'casteType',
+      header: () => t('User.casteType'),
+      cell: ({ row }) => <span>{row.original.casteType}</span>,
+    },
+    {
+      map: {
+        key: t('User.dateOfBirth'),
+        valueFrom: 'dobBs',
+      },
+      accessorKey: 'dobBs',
+      header: () => t('User.dateOfBirth'),
+      cell: ({ row }) => <span>{row.original.dobBs}</span>,
+    },
+
+    {
+      map: {
+        key: t('User.email'),
         valueFrom: 'email',
       },
       accessorKey: 'email',
@@ -135,7 +183,7 @@ export default function Page() {
     },
     {
       map: {
-        key: 'Phone',
+        key: t('HealthPost.phone'),
         valueFrom: 'phoneNumber',
       },
       accessorKey: 'phone',
@@ -144,95 +192,7 @@ export default function Page() {
     },
     {
       map: {
-        key: 'Gender',
-        valueFrom: 'gender',
-      },
-      accessorKey: 'gender',
-      header: () => t('User.gender'),
-      cell: ({ row }) => <span>{row.original.gender}</span>,
-    },
-    {
-      map: {
-        key: 'Status',
-        valueFrom: 'status',
-      },
-      accessorKey: 'status',
-      header: () => t('HealthPost.status'),
-      cell: ({ row }) => {
-        const status = row.getValue('status');
-        return (
-          <span
-            className={status === 'ACTIVE' ? 'text-green-600' : 'text-red-600'}
-          >
-            {row?.original?.status}
-          </span>
-        );
-      },
-    },
-    {
-      map: {
-        key: 'Role',
-        valueFrom: 'role',
-      },
-      accessorKey: 'role',
-      header: () => t('User.role'),
-      cell: ({ row }) => <span>{row.original.role}</span>,
-    },
-    {
-      map: {
-        key: 'Account Type',
-        dataTransformer: (data) =>
-          data.accountType ? data.accountType : 'N/A',
-      },
-      accessorKey: 'accountType',
-      header: () => t('User.accountType'),
-      cell: ({ row }) => <span>{row.original.accountType}</span>,
-    },
-    {
-      map: {
-        key: 'Healthpost',
-        dataTransformer: (data) => {
-          return data?.healthPost?.name || 'NOT ASSIGNED';
-        },
-      },
-      accessorKey: 'Healthpost',
-      header: () => t('HealthPost.name'),
-      cell: ({ row }) => (
-        <>
-          {row.original?.healthPost?.name || (
-            <span className="text-red-500">NOT ASSIGNED</span>
-          )}
-        </>
-      ),
-    },
-
-    {
-      map: {
-        key: 'Permissions',
-        dataTransformer: (data) =>
-          data.permissions && data.permissions.length > 0
-            ? `${data.permissions.length}' Permissions'`
-            : 'No Permissions',
-      },
-      accessorKey: 'permissions',
-      header: () => t('User.permissions'),
-      cell: ({ row }) => {
-        return (
-          <span
-            className={
-              row?.original?.permissions.length > 1
-                ? 'text-green-600'
-                : 'text-red-600'
-            }
-          >
-            {row?.original?.permissions.length} Permissions
-          </span>
-        );
-      },
-    },
-    {
-      map: {
-        key: 'Created At',
+        key: t('HealthPost.createdAt'),
         dataTransformer: (data) =>
           data.createdAt ? new Date(data?.createdAt).toLocaleDateString() : '-',
       },
@@ -242,40 +202,6 @@ export default function Page() {
         <span>{new Date(row.getValue('createdAt')).toLocaleDateString()}</span>
       ),
     },
-    {
-      map: {
-        key: 'profileImage',
-        valueFrom: 'profileImage',
-      },
-      id: 'profileImage',
-      header: () => t('User.profileImage'),
-      cell: ({ row }) => {
-        const profileImage = row.original.profileImage;
-        return (
-          <div className="flex items-center justify-center">
-            {profileImage && profileImage.length ? (
-              <ImagePreviewer>
-                {profileImage.map((image, index) => (
-                  <Image
-                    key={'image-' + index}
-                    src={image}
-                    alt={row.original.fullName.firstName}
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                ))}
-              </ImagePreviewer>
-            ) : (
-              <span className="text-muted-foreground">No Image</span>
-            )}
-          </div>
-        );
-      },
-      enableSorting: false,
-      enableHiding: false,
-    },
-
     {
       id: 'actions',
       header: ({ column }) => (
@@ -297,51 +223,53 @@ export default function Page() {
 
   const { data } = useQuery({
     queryKey: queryKeys.staff.staffs,
-    queryFn: async () =>
-      fetchStaffInfo({
-        staffId: 'all',
+    queryFn: () =>
+      fetchClientsInfo({
+        healthPostId: useUserStore.getState().user?.healthPostId || '',
       }),
   });
 
   return (
-    // <ProtectedRoute requiredPermission={Permissions.ADMIN_MANAGEMENT}>
-    <>
-      <div className="p-4">
-        <DataTable
-          columns={columns}
-          header={{
-            label: t('SidebarItems.staffsmanagement'),
-            className: 'text-2xl font-bold mb-4',
-          }}
-          data={(data?.data as TUser[]) || []}
-          utils={{
-            showPagination: true,
-            hasExport: true,
-          }}
-          addButton={{
-            label: t('User.addStaff'),
-            icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () =>
-              setIsOpenAddModal({
-                isOpen: true,
-                staffId: undefined,
-              }),
-          }}
-          onRowClick={() => () => {}}
-        />
-      </div>
-      {isOpenAddModal.isOpen && (
-        <ClientRegistrationModal
-          isOpen={isOpenAddModal.isOpen}
-          handleExit={() =>
-            setIsOpenAddModal((prev) => ({
-              ...prev,
-              isOpen: !prev.isOpen,
-            }))
-          }
-        />
-      )}
-    </>
-    // {/* </ProtectedRoute> */}
+    <ProtectedRoute requiredPermission={Permissions.PATIENT_RECORDS}>
+      <>
+        <div className="p-4">
+          <DataTable
+            columns={columns}
+            header={{
+              label: t('SidebarItems.patientsRegistration'),
+              className: 'text-2xl font-bold mb-4',
+            }}
+            data={(data?.data as TClient[]) || []}
+            utils={{
+              showPagination: true,
+              hasExport: true,
+            }}
+            addButton={{
+              label: t('User.addStaff'),
+              icon: <Plus className="mr-2 h-4 w-4" />,
+              onClick: () =>
+                setIsOpenAddModal({
+                  isOpen: true,
+                  client: undefined,
+                }),
+            }}
+            onRowClick={() => () => {}}
+          />
+        </div>
+        {isOpenAddModal.isOpen && (
+          <ClientRegistrationModal
+            isOpen={isOpenAddModal.isOpen}
+            handleExit={() =>
+              setIsOpenAddModal((prev) => ({
+                ...prev,
+                isOpen: !prev.isOpen,
+              }))
+            }
+          />
+        )}
+      </>
+
+      <BlockEditor value={value} onChange={setValue} />
+    </ProtectedRoute>
   );
 }
