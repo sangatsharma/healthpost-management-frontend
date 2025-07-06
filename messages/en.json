@@ -266,6 +266,9 @@
     }
   },
   "Placeholder": {
+    "enterFileName": "Enter file name",
+    "fileType": "File Type",
+    "fileName": "File Name",
     "firstName": "Enter first name",
     "middleName": "Enter middle name",
     "lastName": "Enter last name",
@@ -288,7 +291,6 @@
     "citizenshipNumber": "Enter citizenship number",
     "nationalId": "Enter national ID number",
     "district": "Enter district",
-    "municipality": "Enter municipality",
     "wardNumber": "Enter ward number",
     "tole": "Enter tole",
     "fatherName": "Enter father's full name",
@@ -337,6 +339,17 @@
     "dietaryRestrictions": "Enter dietary restrictions",
     "selectRole": "Select role",
     "selectAccountType": "Select account type",
-    "selectHealthPost": "Select health post"
+    "selectHealthPost": "Select health post",
+    "healthPostName": "Enter health post name",
+    "municipality": "Enter municipality",
+    "location": "Enter location",
+    "description": "Enter description",
+    "search": "Search",
+    "searchHealthPosts": "Search health posts",
+    "subject": "Subject",
+    "emailBody": "Enter your message here...",
+    "searchCountry": "Search country...",
+    "searchHere": "Search here",
+    "searchOptions": "Search options..."
   }
 }
