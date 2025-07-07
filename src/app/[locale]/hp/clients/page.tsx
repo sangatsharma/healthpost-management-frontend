@@ -132,7 +132,7 @@ export default function Page() {
           })}
           subtitle={`${tMed('age')}: ${differenceInYears(
             Date.now(),
-            BSToAD(row.original.dobBs),
+            BSToAD('2076-01-01'),
           )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
           src={
             typeof row?.original?.profileImage === 'string'

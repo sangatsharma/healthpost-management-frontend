@@ -44,7 +44,21 @@ export function useHasPermission(
       return;
     }
     const isAdminPortal = portal?.toLowerCase() === 'admin';
-    const { role, permissions: userPermissions = [], healthPostId } = user;
+    const {
+      role,
+      permissions: userPermissions = [],
+      healthPostId,
+      accountType,
+    } = user;
+
+    if (accountType !== portal) {
+      setPermissions({
+        hasReadPermission: false,
+        hasWritePermission: false,
+        isLoading: false,
+      });
+      return;
+    }
 
     // Super admin has all permissions
     if (role === UserRole.SUPERADMIN && isAdminPortal) {
@@ -71,13 +85,11 @@ export function useHasPermission(
       (perm: TPermission) =>
         perm.resource === resource ||
         (perm.resource === Permissions.ALL && !isAdminPortal),
-      // && perm.healthPost === healthPostId, // Uncomment if needed
+      // && perm.healthPost === healthPostId,
     );
 
     const newReadPermission = relevantPermissions.some(
-      (perm) =>
-        perm.action === Action.READ ||
-        (perm.action === Action.WRITE && !isAdminPortal),
+      (perm) => perm.action === Action.READ || perm.action === Action.WRITE,
     );
     const newWritePermission = relevantPermissions.some(
       (perm) => perm.action === Action.WRITE,
