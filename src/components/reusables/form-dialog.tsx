@@ -145,50 +145,48 @@ const FormDialog: React.FC<TProps> = ({
   };
 
   return (
-    <div className="relative">
-      <Dialog open={isOpen} onOpenChange={handleModalClose}>
-        <DialogTrigger>{trigger}</DialogTrigger>
-        <DialogContent
-          className={cn(
-            'scrollbar-thin-custom flex h-fit max-h-[90vh] max-w-screen-2xl flex-col justify-between md:max-w-2xl',
-            className,
-          )}
-        >
-          {renderContent()}
-          {(resetAction || mutateAction) && !isLoading && !isError && (
-            <DialogFooter className="mt-4">
-              {resetAction && (
-                <Button
-                  onClick={resetAction.onClick && resetAction.onClick}
-                  variant={resetAction.variant || 'ghost'}
-                  className={cn(
-                    'cursor-pointer space-x-2',
-                    resetAction.className,
-                  )}
-                >
-                  {resetAction.icon} {resetAction.label}
-                </Button>
-              )}
-              {mutateAction && (
-                <Button
-                  onClick={mutateAction.onClick && mutateAction.onClick}
-                  type="submit"
-                  variant={mutateAction.variant || 'default'}
-                  className={cn(
-                    'cursor-pointer space-x-2',
-                    mutateAction.className,
-                  )}
-                  disabled={mutateAction.disabled}
-                  isLoading={mutateAction.isLoading}
-                >
-                  {mutateAction.icon} {mutateAction.label}
-                </Button>
-              )}
-            </DialogFooter>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
+    <Dialog open={isOpen} onOpenChange={handleModalClose}>
+      <DialogTrigger>{trigger}</DialogTrigger>
+      <DialogContent
+        className={cn(
+          'scrollbar-thin-custom flex h-fit max-h-[90vh] max-w-screen-2xl flex-col justify-between md:max-w-2xl',
+          className,
+        )}
+      >
+        {renderContent()}
+        {(resetAction || mutateAction) && !isLoading && !isError && (
+          <DialogFooter className="mt-4">
+            {resetAction && (
+              <Button
+                onClick={resetAction.onClick && resetAction.onClick}
+                variant={resetAction.variant || 'ghost'}
+                className={cn(
+                  'cursor-pointer space-x-2',
+                  resetAction.className,
+                )}
+              >
+                {resetAction.icon} {resetAction.label}
+              </Button>
+            )}
+            {mutateAction && (
+              <Button
+                onClick={mutateAction.onClick && mutateAction.onClick}
+                type="submit"
+                variant={mutateAction.variant || 'default'}
+                className={cn(
+                  'cursor-pointer space-x-2',
+                  mutateAction.className,
+                )}
+                disabled={mutateAction.disabled}
+                isLoading={mutateAction.isLoading}
+              >
+                {mutateAction.icon} {mutateAction.label}
+              </Button>
+            )}
+          </DialogFooter>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

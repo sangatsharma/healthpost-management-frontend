@@ -90,7 +90,7 @@ export default function LoginPage() {
     onSuccess: (data) => {
       if (data) setUser(data.data);
       toast.success(data?.message);
-      navigate.push(`/${portal?.toLocaleLowerCase()}/dashboard`);
+      navigate.push(`/${data?.data.accountType.toLowerCase()}/dashboard`);
     },
   });
 

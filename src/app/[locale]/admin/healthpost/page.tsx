@@ -219,32 +219,30 @@ export default function Page() {
   });
 
   return (
-    <>
-      <div className="p-4">
-        <DataTable
-          columns={columns}
-          header={{
-            label: t('SidebarItems.healthpost'),
-            className: 'text-2xl font-bold mb-4',
-          }}
-          data={(data?.data as THealthPost[]) || []}
-          utils={{
-            showPagination: true,
-            hasExport: true,
-          }}
-          addButton={{
-            label: t('HealthPost.addHealthPost'),
-            icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () =>
-              setIsOpenAddModal({
-                isOpen: true,
-                healthPostId: undefined,
-              }),
-          }}
-          onRowClick={() => () => {}}
-        />
-      </div>
-      {isOpenAddModal && (
+    <div className="p-4">
+      <DataTable
+        columns={columns}
+        header={{
+          label: t('SidebarItems.healthpost'),
+          className: 'text-2xl font-bold mb-4',
+        }}
+        data={(data?.data as THealthPost[]) || []}
+        utils={{
+          showPagination: true,
+          hasExport: true,
+        }}
+        addButton={{
+          label: t('HealthPost.addHealthPost'),
+          icon: <Plus className="mr-2 h-4 w-4" />,
+          onClick: () =>
+            setIsOpenAddModal({
+              isOpen: true,
+              healthPostId: undefined,
+            }),
+        }}
+        onRowClick={() => () => {}}
+      />
+      {isOpenAddModal.isOpen && (
         <AddHealthPostModal
           isOpen={isOpenAddModal.isOpen}
           healthPostId={isOpenAddModal.healthPostId}
@@ -256,6 +254,6 @@ export default function Page() {
           }
         />
       )}
-    </>
+    </div>
   );
 }

@@ -65,7 +65,9 @@ const FormWrapper: React.FC<FormFieldProps> = ({
           </div>
         )}
       </div>
-      <FormControl>{children}</FormControl>
+      <FormControl>
+        <div>{children}</div>
+      </FormControl>
       <FormMessage />
     </FormItem>
   );
