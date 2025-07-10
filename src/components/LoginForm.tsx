@@ -88,9 +88,14 @@ export default function LoginPage() {
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
-      if (data) setUser(data.data);
-      toast.success(data?.message);
-      navigate.push(`/${portal?.toLocaleLowerCase()}/dashboard`);
+      if (data) {
+        const user = data.data.user;
+        setUser(user);
+        const { refreshToken: _refreshToken, ...dataToStore } = user;
+        localStorage.setItem('userInfo', JSON.stringify(dataToStore));
+        toast.success(data?.message);
+        navigate.push(`/${data?.data.user.accountType.toLowerCase()}`);
+      }
     },
   });
 
