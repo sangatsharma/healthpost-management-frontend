@@ -163,6 +163,7 @@ export default function LoginPage() {
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   errors={errors.email}
                   {...register('email')}
+                  hideError={false}
                   placeholder={t('email_placeholder')}
                   className="w-full text-[18px] placeholder:text-[16px]"
                 />

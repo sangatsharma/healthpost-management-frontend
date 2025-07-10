@@ -104,166 +104,161 @@ export const AddHealthPostModal: React.FC<TProps> = ({
   };
 
   return (
-    <React.Fragment>
-      <FormDialog
-        isOpen={isOpen}
-        toggleModal={handleExit}
-        title={
-          healthPostId
-            ? t2('HealthPost.editHealthPost')
-            : t2('HealthPost.addHealthPost')
-        }
-        className="sm:max-w-lg md:max-w-fit"
-        isFormDirty={Object.keys(dirtyFields).length > 0}
-        mutateAction={{
-          label: healthPostId
-            ? t2('HealthPost.editHealthPost')
-            : t2('HealthPost.addHealthPost'),
-          isLoading: isPending,
-          onClick: handleSubmit(onSubmit),
-          disabled: !Object.keys(dirtyFields).length,
-          className: 'rounded-sm',
-        }}
-        resetAction={{
-          label: t2('reset'),
-          onClick: () => reset(),
-          className: 'font-normal hover:bg-transparent',
-        }}
-        isLoading={rest.isLoading}
-        isError={rest.isError}
-        refetch={rest.refetch}
-      >
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid w-full grid-cols-2 gap-4 px-1 xl:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.name')} isRequired>
-                    <Input
-                      {...field}
-                      placeholder={tPlaceholder('healthPostName')}
-                      autoFocus
-                      required
-                    />
-                  </FormWrapper>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.email')} isRequired>
-                    <Input
-                      {...field}
-                      placeholder={tPlaceholder('email')}
-                      required
-                    />
-                  </FormWrapper>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="municipality"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.municipality')} isRequired>
-                    <Input
-                      {...field}
-                      placeholder={tPlaceholder('municipality')}
-                      required
-                    />
-                  </FormWrapper>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.location')} isRequired>
-                    <Input
-                      {...field}
-                      placeholder={tPlaceholder('location')}
-                      required
-                    />
-                  </FormWrapper>
-                )}
-              />
-
-              {healthPostId && (
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormWrapper label={t2('HealthPost.status')} isRequired>
-                      {' '}
-                      <FormSelect
-                        options={mapEnumToOptions(Status)}
-                        placeholder={tPlaceholder('selectStatus')}
-                        {...field}
-                        required
-                        variant="basic"
-                        error={!!form.formState.errors.status}
-                      />
-                    </FormWrapper>
-                  )}
+    <FormDialog
+      isOpen={isOpen}
+      toggleModal={handleExit}
+      title={
+        healthPostId
+          ? t2('HealthPost.editHealthPost')
+          : t2('HealthPost.addHealthPost')
+      }
+      className="sm:max-w-lg md:max-w-fit"
+      isFormDirty={Object.keys(dirtyFields).length > 0}
+      mutateAction={{
+        label: healthPostId
+          ? t2('HealthPost.editHealthPost')
+          : t2('HealthPost.addHealthPost'),
+        isLoading: isPending,
+        onClick: handleSubmit(onSubmit),
+        disabled: !Object.keys(dirtyFields).length,
+        className: 'rounded-sm',
+      }}
+      resetAction={{
+        label: t2('reset'),
+        onClick: () => reset(),
+        className: 'font-normal hover:bg-transparent',
+      }}
+      isLoading={rest.isLoading}
+      isError={rest.isError}
+      refetch={rest.refetch}
+    >
+      <Form {...form}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid w-full grid-cols-2 gap-4 px-1 xl:grid-cols-2"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.name')} isRequired>
+                <Input
+                  {...field}
+                  placeholder={tPlaceholder('fullName')}
+                  autoFocus
+                  required
                 />
+              </FormWrapper>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.email')} isRequired>
+                <Input
+                  {...field}
+                  placeholder={tPlaceholder('email')}
+                  required
+                />
+              </FormWrapper>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="municipality"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.municipality')} isRequired>
+                <Input
+                  {...field}
+                  placeholder={tPlaceholder('municipality')}
+                  required
+                />
+              </FormWrapper>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.location')} isRequired>
+                <Input {...field} placeholder={tPlaceholder('tole')} required />
+              </FormWrapper>
+            )}
+          />
+
+          {healthPostId && (
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormWrapper label={t2('HealthPost.status')} isRequired>
+                  {' '}
+                  <FormSelect
+                    options={mapEnumToOptions(Status)}
+                    placeholder={tPlaceholder('selectStatus')}
+                    {...field}
+                    required
+                    variant="basic"
+                    error={!!form.formState.errors.status}
+                  />
+                </FormWrapper>
               )}
-              <FormField
-                control={form.control}
-                name="wardNo"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
-                    <Input
-                      type="number"
-                      placeholder={tPlaceholder('wardNo')}
-                      {...field}
-                    />
-                  </FormWrapper>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormWrapper label={t2('HealthPost.phone')} isRequired>
-                    <PhoneInput
-                      {...field}
-                      defaultCountry="NP"
-                      placeholder={tPlaceholder('phone')}
-                      error={!!form.formState.errors.phone}
-                      required
-                      countrySelectProps={{
-                        disabled: true,
-                      }}
-                    />
-                  </FormWrapper>
-                )}
-              />
-              <div className="col-span-2">
-                <FormField
-                  control={form.control}
-                  name="images"
-                  render={({ field }) => (
-                    <FormWrapper label={t2('images')} isRequired>
-                      <FileUploader
-                        onChange={field.onChange}
-                        defaultValue={field.value || []}
-                        allowFile
-                        allowImage
-                        maxFiles={5}
-                        maxSize={10 * 1024 * 1024} // 10MB
-                        name="images"
-                      />
-                    </FormWrapper>
-                  )}
+            />
+          )}
+          <FormField
+            control={form.control}
+            name="wardNo"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.wardNo')} isRequired>
+                <Input
+                  type="number"
+                  placeholder={tPlaceholder('wardNumber')}
+                  {...field}
                 />
-              </div>
-            </div>
-          </form>
-        </Form>
-      </FormDialog>
-    </React.Fragment>
+              </FormWrapper>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormWrapper label={t2('HealthPost.phone')} isRequired>
+                <PhoneInput
+                  {...field}
+                  defaultCountry="NP"
+                  placeholder={tPlaceholder('phone')}
+                  error={!!form.formState.errors.phone}
+                  required
+                  countrySelectProps={{
+                    disabled: true,
+                  }}
+                />
+              </FormWrapper>
+            )}
+          />
+          <div className="col-span-2">
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormWrapper label={t2('images')} isRequired>
+                  <FileUploader
+                    onChange={field.onChange}
+                    defaultValue={field.value || []}
+                    allowFile
+                    allowImage
+                    maxFiles={5}
+                    maxSize={10 * 1024 * 1024} // 10MB
+                    name="images"
+                  />
+                </FormWrapper>
+              )}
+            />
+          </div>
+        </form>
+      </Form>
+    </FormDialog>
   );
 };

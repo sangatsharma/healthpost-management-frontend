@@ -1,11 +1,9 @@
 'use client';
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
-import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
 import { Edit, Plus, Trash } from 'lucide-react';
 import { useState } from 'react';
@@ -221,32 +219,30 @@ export default function Page() {
   });
 
   return (
-    <ProtectedRoute requiredPermission={Permissions.HP_MANAGEMENT}>
-      <div className="p-4">
-        <DataTable
-          columns={columns}
-          header={{
-            label: t('SidebarItems.healthpost'),
-            className: 'text-2xl font-bold mb-4',
-          }}
-          data={(data?.data as THealthPost[]) || []}
-          utils={{
-            showPagination: true,
-            hasExport: true,
-          }}
-          addButton={{
-            label: t('HealthPost.addHealthPost'),
-            icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () =>
-              setIsOpenAddModal({
-                isOpen: true,
-                healthPostId: undefined,
-              }),
-          }}
-          onRowClick={() => () => {}}
-        />
-      </div>
-      {isOpenAddModal && (
+    <div className="p-4">
+      <DataTable
+        columns={columns}
+        header={{
+          label: t('SidebarItems.healthpost'),
+          className: 'text-2xl font-bold mb-4',
+        }}
+        data={(data?.data as THealthPost[]) || []}
+        utils={{
+          showPagination: true,
+          hasExport: true,
+        }}
+        addButton={{
+          label: t('HealthPost.addHealthPost'),
+          icon: <Plus className="mr-2 h-4 w-4" />,
+          onClick: () =>
+            setIsOpenAddModal({
+              isOpen: true,
+              healthPostId: undefined,
+            }),
+        }}
+        onRowClick={() => () => {}}
+      />
+      {isOpenAddModal.isOpen && (
         <AddHealthPostModal
           isOpen={isOpenAddModal.isOpen}
           healthPostId={isOpenAddModal.healthPostId}
@@ -258,6 +254,6 @@ export default function Page() {
           }
         />
       )}
-    </ProtectedRoute>
+    </div>
   );
 }

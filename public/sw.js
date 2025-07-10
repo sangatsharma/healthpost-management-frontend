@@ -85,6 +85,12 @@ self.addEventListener('fetch', (event) => {
 
   // Handle different types of requests
   if (request.method === 'GET') {
+    //TODO: if error remove below line in future
+    if (url.pathname.startsWith('/api/')) {
+      event.respondWith(fetch(request));
+      return;
+    }
+
     // CSS and static assets
     if (
       request.url.match(/\.css$/) ||

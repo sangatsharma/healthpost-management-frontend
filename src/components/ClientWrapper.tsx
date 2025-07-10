@@ -21,7 +21,7 @@ export const devnagari = Noto_Sans_Devanagari({
 });
 export function ClientWrapper({ children }: { children: React.ReactNode }) {
   const { user } = useUserStore();
-
+  //TODO: Register service worker based on user accountType
   useEffect(() => {
     // Register service worker
     if ('serviceWorker' in navigator && user) {

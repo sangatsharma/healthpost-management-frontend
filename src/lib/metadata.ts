@@ -91,6 +91,22 @@ export const pageMetadata = {
       ],
       locale,
     }),
+  healthpost: (locale?: string) =>
+    generateMetadata({
+      title: 'HealthPosts',
+      description:
+        'Manage health post information, locations, and operational details',
+      keywords: ['health posts', 'overview', 'health post management'],
+      locale,
+    }),
+
+  staffs: (locale?: string) =>
+    generateMetadata({
+      title: 'Staffs',
+      description: 'Manage health post staff, roles, and responsibilities',
+      keywords: ['staffs', 'health post staff', 'medical staff management'],
+      locale,
+    }),
 
   patients: (locale?: string) =>
     generateMetadata({

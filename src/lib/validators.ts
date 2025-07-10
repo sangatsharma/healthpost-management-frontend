@@ -27,7 +27,7 @@ export const basicValidator = ({
     .max(maxLength, {
       message: useReqMsg
         ? message
-        : translationFunction('maxLength', { max: 4 }),
+        : translationFunction('maxLength', { max: maxLength }),
     });
   if (isEmail) {
     schema = schema.email({

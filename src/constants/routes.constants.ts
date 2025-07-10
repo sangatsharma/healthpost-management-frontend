@@ -42,7 +42,7 @@ export const getMenuItems = ({
         {
           key: 'patients',
           icon: Users,
-          label: t('SidebarItems.patientsRegistration'),
+          label: t('SidebarItems.clientsRegistration'),
           href: `clients`,
           permission: Permissions.PATIENT_RECORDS,
         },

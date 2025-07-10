@@ -12,37 +12,53 @@ import { CasteType, Gender, Nationality, Status } from '@/types/user.types';
 import { useFormContext } from 'react-hook-form';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { FileUploader } from '@/components/reusables/image-uploader';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 export default function PersonalInfoForm() {
   const form = useFormContext<TPersonalInfoSchema & TSystemInfoSchema>();
+  const t = useTypedTranslations('ClientRegistration');
+  const p = useTypedTranslations('Placeholder');
 
   return (
     <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
       <FormField
         control={form.control}
         name="firstName"
-        render={({ field }) => (
-          <FormWrapper label="First Name" isRequired>
-            <Input {...field} placeholder="Enter First Name" autoFocus />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.firstName')} isRequired>
+            <Input
+              {...field}
+              placeholder={p('firstName')}
+              autoFocus
+              errors={formState.errors.firstName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="middleName"
-        render={({ field }) => (
-          <FormWrapper label="Middle Name">
-            <Input {...field} placeholder="Enter Middle Name" />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.middleName')}>
+            <Input
+              {...field}
+              placeholder={p('middleName')}
+              errors={formState.errors.middleName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="lastName"
-        render={({ field }) => (
-          <FormWrapper label="Last Name" isRequired>
-            <Input {...field} placeholder="Enter Last Name" />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.lastName')} isRequired>
+            <Input
+              {...field}
+              placeholder={p('lastName')}
+              errors={formState.errors.lastName}
+            />
           </FormWrapper>
         )}
       />
@@ -50,10 +66,10 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="casteType"
         render={({ field }) => (
-          <FormWrapper label="Caste Type" isRequired>
+          <FormWrapper label={t('personalInfo.casteType')} isRequired>
             <FormSelect
               options={mapEnumToOptions(CasteType)}
-              placeholder="Select caste Type"
+              placeholder={`${t('personalInfo.casteType')} `}
               {...field}
               required
               variant="basic"
@@ -66,10 +82,10 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="gender"
         render={({ field }) => (
-          <FormWrapper label="Gender" isRequired>
+          <FormWrapper label={t('personalInfo.gender')} isRequired>
             <FormSelect
               options={mapEnumToOptions(Gender)}
-              placeholder="Select gender"
+              placeholder={p('selectGender')}
               {...field}
               required
               variant="basic"
@@ -82,10 +98,10 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="status"
         render={({ field }) => (
-          <FormWrapper label="Status" isRequired>
+          <FormWrapper label={t('personalInfo.status')} isRequired>
             <FormSelect
               options={mapEnumToOptions(Status)}
-              placeholder="Select status"
+              placeholder={p('selectStatus')}
               {...field}
               required
               variant="basic"
@@ -97,9 +113,14 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="email"
-        render={({ field }) => (
-          <FormWrapper label="Email" isRequired>
-            <Input {...field} placeholder="Enter Email" required />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.email')} isRequired>
+            <Input
+              {...field}
+              placeholder={p('email')}
+              required
+              errors={formState.errors.email}
+            />
           </FormWrapper>
         )}
       />
@@ -107,11 +128,11 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="phoneNumber"
         render={({ field }) => (
-          <FormWrapper label="Phone Number" isRequired>
+          <FormWrapper label={t('personalInfo.phoneNumber')} isRequired>
             <PhoneInput
               {...field}
               defaultCountry="NP"
-              placeholder="Enter Phone Number"
+              placeholder={p('phone')}
               required
               countrySelectProps={{
                 disabled: true,
@@ -125,7 +146,7 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="dobBs"
         render={({ field }) => (
-          <FormWrapper label="Enter date of birth" isRequired>
+          <FormWrapper label={t('personalInfo.dateOfBirth')} isRequired>
             <NepaliDatePicker
               inputClassName="w-full h-10 px-3 py-2 border rounded-md focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-background border-emerald-200 bg-emerald-50 focus:border-emerald-500 focus:ring-emerald-200 focus-visible:ring-[3px] outline-none"
               className=""
@@ -146,10 +167,10 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="nationality"
         render={({ field }) => (
-          <FormWrapper label="Nationality" isRequired>
+          <FormWrapper label={t('personalInfo.nationality')} isRequired>
             <FormSelect
               options={mapEnumToOptions(Nationality)}
-              placeholder="Select status"
+              placeholder={`${t('personalInfo.nationality')}`}
               {...field}
               required
               variant="basic"
@@ -161,18 +182,26 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="citizenshipNumber"
-        render={({ field }) => (
-          <FormWrapper label="Citizenship number">
-            <Input {...field} placeholder="Enter citizenship number" />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.citizenshipNumber')}>
+            <Input
+              {...field}
+              placeholder={p('citizenshipNumber')}
+              errors={formState.errors.citizenshipNumber}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="nationalId"
-        render={({ field }) => (
-          <FormWrapper label="National Id number">
-            <Input {...field} placeholder="Enter national Id number" />
+        render={({ field, formState }) => (
+          <FormWrapper label={t('personalInfo.nationalId')}>
+            <Input
+              {...field}
+              placeholder={p('nationalId')}
+              errors={formState.errors.nationalId}
+            />
           </FormWrapper>
         )}
       />
@@ -180,11 +209,11 @@ export default function PersonalInfoForm() {
         control={form.control}
         name="emergencyContact"
         render={({ field }) => (
-          <FormWrapper label="Emergency contact Number" isRequired>
+          <FormWrapper label={t('personalInfo.emergencyContact')} isRequired>
             <PhoneInput
               {...field}
               defaultCountry="NP"
-              placeholder="Enter Phone Number"
+              placeholder={p('phone')}
               required
               countrySelectProps={{
                 disabled: true,
@@ -199,7 +228,7 @@ export default function PersonalInfoForm() {
           control={form.control}
           name="profileImage"
           render={({ field }) => (
-            <FormWrapper label="Images">
+            <FormWrapper label={t('personalInfo.profileImage')}>
               <FileUploader
                 defaultValue={field.value || []}
                 allowImage
