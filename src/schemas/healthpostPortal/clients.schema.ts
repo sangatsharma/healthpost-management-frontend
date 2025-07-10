@@ -329,8 +329,9 @@ export type TSystemInfoSchema = z.infer<ReturnType<typeof getSystemInfoSchema>>;
 // Main client schema type
 export type TClientSchema = z.infer<ReturnType<typeof getClientSchema>>;
 
-export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
-: {
+export const getClientFormSteps = (
+  t: TTypeFunction<'ClientRegistration'>,
+): {
   id: number;
   title: string;
   description: string;
@@ -339,8 +340,8 @@ export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
 }[] => [
   {
     id: 1,
-    title: 'Personal Information',
-    description: 'Basic personal details',
+    title: t('personalInfo.title'),
+    description: t('personalInfo.description'),
     icon: User,
     fields: [
       'firstName',
@@ -365,8 +366,8 @@ export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
   },
   {
     id: 2,
-    title: 'Address Information',
-    description: 'Permanent and temporary address',
+    title: t('addressInfo.title'),
+    description: t('addressInfo.description'),
     icon: MapPin,
     fields: [
       'districtId',
@@ -381,8 +382,8 @@ export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
   },
   {
     id: 3,
-    title: 'Family Information',
-    description: 'Family and guardian details',
+    title: t('familyInfo.title'),
+    description: t('familyInfo.description'),
     icon: Users,
     fields: [
       'fatherName',
@@ -394,8 +395,8 @@ export const getClientFormSteps = () // t: TTypeFunction<'Validation'>,
   },
   {
     id: 4,
-    title: 'Health & Banking',
-    description: 'Health and financial information',
+    title: t('healthInfo.title'),
+    description: t('healthInfo.description'),
     icon: Heart,
     fields: [
       'bloodGroup',

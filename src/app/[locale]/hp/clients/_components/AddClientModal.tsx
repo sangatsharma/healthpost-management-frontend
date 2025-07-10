@@ -45,7 +45,7 @@ export default function ClientRegistrationModal({
   const t = useTypedTranslations('Validation');
   const ct = useTypedTranslations('ClientRegistration');
   const clientSchema = getClientSchema(t);
-  const steps = getClientFormSteps();
+  const steps = getClientFormSteps(ct);
   const user = useUserStore((state) => state.user);
 
   const { mutateClient, isPending } = useClientMutation({
@@ -104,7 +104,7 @@ export default function ClientRegistrationModal({
     const currentStepFields = steps[currentStep - 1].fields;
     const isValid = await form.trigger(currentStepFields);
 
-    if ((isValid && currentStep < steps.length) || 1) {
+    if (isValid && currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -159,7 +159,7 @@ export default function ClientRegistrationModal({
         <div className="mx-auto w-7xl px-2">
           {/* Header */}
           <div className="mb-4 text-center">
-            <h1 className="mb-2 text-3xl font-bold">{ct('title')}</h1>
+            <h1 className="mb-2 pt-1 text-3xl font-bold">{ct('title')}</h1>
             <p className="text-lg">{ct('subtitle')}</p>
           </div>
 
@@ -269,6 +269,7 @@ export default function ClientRegistrationModal({
                       <Button
                         type="submit"
                         isLoading={isPending}
+                        disabled={!form.formState.isValid}
                         className="flex items-center gap-2"
                       >
                         {ct('submitRegistration')}

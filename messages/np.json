@@ -22,7 +22,7 @@
       "patients": "रोगीहरू",
       "staffsmanagement": "कर्मचारी व्यवस्थापन",
       "medicalhistory": "चिकित्सा इतिहास",
-      "patientsRegistration": "सेवाग्राही दर्ता"
+      "clientsRegistration": "सेवाग्राही दर्ता"
     },
     "HealthPost": {
       "name": "स्वास्थ्य चौकीको नाम",
@@ -205,16 +205,17 @@
     "fileName": "फाइलको नाम"
   },
   "ClientRegistration": {
-    "title": "बिरामी दर्ता",
-    "subtitle": "नयाँ बिरामी दर्ता गर्न फारम भर्नुहोस्",
+    "title": "सेवाग्राही दर्ता",
+    "subtitle": "नयाँ सेवाग्राही दर्ता गर्न फारम भर्नुहोस्",
     "registrationComplete": "दर्ता सम्पन्न!",
-    "registrationSuccess": "बिरामी दर्ता सफलतापूर्वक पेश गरिएको छ।",
-    "registerAnother": "अर्को बिरामी दर्ता गर्नुहोस्",
+    "registrationSuccess": "सेवाग्राही दर्ता सफलतापूर्वक पेश गरिएको छ।",
+    "registerAnother": "अर्को सेवाग्राही दर्ता गर्नुहोस्",
     "stepOf": "चरण {current} को {total}",
     "percentComplete": "{percent}% पूरा",
     "previous": "अघिल्लो",
     "next": "अर्को",
     "submitRegistration": "दर्ता पेश गर्नुहोस्",
+    "addNewClient": "नयाँ सेवाग्राही थप्नुहोस्",
     "personalInfo": {
       "title": "व्यक्तिगत जानकारी",
       "description": "आधारभूत व्यक्तिगत विवरणहरू प्रविष्ट गर्नुहोस्",
@@ -241,7 +242,8 @@
       "district": "जिल्ला",
       "municipality": "नगरपालिका",
       "wardNumber": "वडा नम्बर",
-      "tole": "टोल"
+      "tole": "टोल",
+      "sameAsPerm": "स्थायी ठेगाना जस्तै"
     },
     "familyInfo": {
       "title": "पारिवारिक जानकारी",
@@ -264,7 +266,11 @@
       "disabilityIdentityType": "अपाङ्गता परिचय प्रकार",
       "bank": "बैंकको नाम",
       "bankBranch": "बैंकको शाखा",
-      "bankAccountNumber": "बैंक खाता नम्बर"
+      "bankAccountNumber": "बैंक खाता नम्बर",
+      "isVaccineCompleted": "खोप पूरा भएको छ?",
+      "isMinor": "अवयस्क हो?",
+      "isEligibleForSgc": "SGC को लागि योग्य हो?",
+      "isEligibleForSgcTooltip": "यो सामाजिक अनुदान प्रमाणपत्र (SGC) कार्यक्रमका लागि योग्य ग्राहकहरूका लागि हो।"
     }
   },
   "Placeholder": {

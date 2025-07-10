@@ -104,7 +104,7 @@ export default function HealthAndBankingInfo() {
             render={() => (
               <FormWrapper
                 showSwitch={{
-                  label: 'Is vaccine completed ?',
+                  label: t('healthInfo.isVaccineCompleted'),
                   checked: form.watch('isVaccineCompleted') ?? false,
                   onChange: (val: boolean) =>
                     form.setValue('isVaccineCompleted', val),
@@ -120,7 +120,7 @@ export default function HealthAndBankingInfo() {
             render={() => (
               <FormWrapper
                 showSwitch={{
-                  label: 'Is Minor ?',
+                  label: t('healthInfo.isMinor'),
                   checked: form.watch('isMinor') ?? false,
                   onChange: (val: boolean) => form.setValue('isMinor', val),
                 }}
@@ -134,7 +134,7 @@ export default function HealthAndBankingInfo() {
             render={() => (
               <FormWrapper
                 showSwitch={{
-                  label: 'Is Elligible for SGC ?',
+                  label: t('healthInfo.isEligibleForSgc'),
                   checked: form.watch('isEligibleForSgc') ?? false,
                   onChange: (val: boolean) =>
                     form.setValue('isEligibleForSgc', val),
@@ -148,8 +148,7 @@ export default function HealthAndBankingInfo() {
                           side="top"
                           className="text-xs font-medium"
                         >
-                          This is for the clients who are eligible for Social
-                          Grant Certificate (SGC) program.
+                          {t('healthInfo.isEligibleForSgcTooltip')}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

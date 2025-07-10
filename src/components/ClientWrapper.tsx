@@ -10,6 +10,7 @@ import HealthPostSidebar from './sidebar/sidebar';
 import { Noto_Sans_Devanagari } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
+import { useUserStore } from '@/zustand/useUserStore';
 
 export const devnagari = Noto_Sans_Devanagari({
   subsets: ['latin'],
@@ -19,9 +20,11 @@ export const devnagari = Noto_Sans_Devanagari({
   fallback: ['system-ui', 'sans-serif'],
 });
 export function ClientWrapper({ children }: { children: React.ReactNode }) {
+  const { user } = useUserStore();
+  //TODO: Register service worker based on user accountType
   useEffect(() => {
     // Register service worker
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && user) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
@@ -31,7 +34,7 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
           console.log('SW registration failed: ', registrationError);
         });
     }
-  }, []);
+  }, [JSON.stringify(user)]);
 
   return (
     <ErrorBoundary>

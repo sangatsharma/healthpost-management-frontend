@@ -41,11 +41,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     if (
-      !pathname.includes('/login') &&
-      ((!user.isLoggedIn && !user.isLoading) || isError)
+      isError ||
+      (!pathname.includes('/login') && !user.isLoggedIn && !user.isLoading)
     ) {
-      setIsLoading(false);
       router.replace(`/${portal?.toLowerCase()}/login`);
+      setIsLoading(false);
     }
   }, [
     JSON.stringify(data),

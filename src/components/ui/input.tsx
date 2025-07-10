@@ -8,8 +8,13 @@ function Input({
   className,
   errors,
   type,
+  hideError = true,
   ...props
-}: React.ComponentProps<'input'> & { errors?: FieldError; icon?: LucideIcon }) {
+}: React.ComponentProps<'input'> & {
+  errors?: FieldError;
+  icon?: LucideIcon;
+  hideError?: boolean;
+}) {
   return (
     <div>
       <div className="relative flex w-full items-center">
@@ -32,7 +37,7 @@ function Input({
           className={cn(
             props.icon && '!pl-10',
             'file:text-foreground placeholder:text-muted-foreground selection:text-primary-foreground dark:bg-input/30 border-input my-auto flex h-10 min-w-0 rounded-md border bg-transparent px-3 py-2 shadow-xs transition-[color,box-shadow] outline-none selection:bg-blue-500 file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-sm disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-            'focus-visible:border-ring focus-visible:ring-ring/50 border-emerald-200 bg-emerald-50 focus:border-emerald-500 focus:ring-emerald-200 focus-visible:ring-[3px]',
+            'focus-visible:border-ring focus-visible:ring-ring/50 border-emerald-200 bg-emerald-50 focus:border-emerald-500 focus:ring-emerald-200 focus-visible:ring-[1px]',
             'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-[300px]',
             className,
             errors?.message &&
@@ -41,7 +46,7 @@ function Input({
           {...props}
         />
       </div>
-      {errors && (
+      {errors && !hideError && (
         <p
           className="text-md mt-1 text-left text-red-600"
           id={errors.message}

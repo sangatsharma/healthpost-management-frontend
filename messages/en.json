@@ -22,7 +22,7 @@
       "patients": "Patients",
       "staffsmanagement": "Staffs Management",
       "medicalhistory": "Medical History",
-      "patientsRegistration": "Patients Registration"
+      "clientsRegistration": "Clients Registration"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -208,7 +208,7 @@
   },
 
   "ClientRegistration": {
-    "title": "Patient Registration",
+    "title": "Clients Registration",
     "subtitle": "Complete the form to register a new patient",
     "registrationComplete": "Registration Complete!",
     "registrationSuccess": "Patient registration has been submitted successfully.",
@@ -218,6 +218,7 @@
     "previous": "Previous",
     "next": "Next",
     "submitRegistration": "Submit Registration",
+    "addNewClient": "Add New Client",
     "personalInfo": {
       "title": "Personal Information",
       "description": "Enter basic personal details",
@@ -244,7 +245,8 @@
       "district": "District",
       "municipality": "Municipality",
       "wardNumber": "Ward Number",
-      "tole": "Tole"
+      "tole": "Tole",
+      "sameAsPerm": "Same as Permanent Address"
     },
     "familyInfo": {
       "title": "Family Information",
@@ -267,7 +269,11 @@
       "disabilityIdentityType": "Disability Identity Type",
       "bank": "Bank Name",
       "bankBranch": "Bank Branch",
-      "bankAccountNumber": "Bank Account Number"
+      "bankAccountNumber": "Bank Account Number",
+      "isVaccineCompleted": "Is Vaccine Completed ?",
+      "isMinor": "Is Minor ?",
+      "isEligibleForSgc": "Is Eligible for SGC ?",
+      "isEligibleForSgcTooltip": "This is for the clients who are eligible for Social Grant Certificate (SGC) program."
     }
   },
   "Placeholder": {

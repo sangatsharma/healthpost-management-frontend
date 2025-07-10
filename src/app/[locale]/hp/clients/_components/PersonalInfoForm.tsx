@@ -25,27 +25,40 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="firstName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.firstName')} isRequired>
-            <Input {...field} placeholder={p('firstName')} autoFocus />
+            <Input
+              {...field}
+              placeholder={p('firstName')}
+              autoFocus
+              errors={formState.errors.firstName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="middleName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.middleName')}>
-            <Input {...field} placeholder={p('middleName')} />
+            <Input
+              {...field}
+              placeholder={p('middleName')}
+              errors={formState.errors.middleName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="lastName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.lastName')} isRequired>
-            <Input {...field} placeholder={p('lastName')} />
+            <Input
+              {...field}
+              placeholder={p('lastName')}
+              errors={formState.errors.lastName}
+            />
           </FormWrapper>
         )}
       />
@@ -100,9 +113,14 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="email"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.email')} isRequired>
-            <Input {...field} placeholder={p('email')} required />
+            <Input
+              {...field}
+              placeholder={p('email')}
+              required
+              errors={formState.errors.email}
+            />
           </FormWrapper>
         )}
       />
@@ -164,18 +182,26 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="citizenshipNumber"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.citizenshipNumber')}>
-            <Input {...field} placeholder={p('citizenshipNumber')} />
+            <Input
+              {...field}
+              placeholder={p('citizenshipNumber')}
+              errors={formState.errors.citizenshipNumber}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="nationalId"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.nationalId')}>
-            <Input {...field} placeholder={p('nationalId')} />
+            <Input
+              {...field}
+              placeholder={p('nationalId')}
+              errors={formState.errors.nationalId}
+            />
           </FormWrapper>
         )}
       />

@@ -76,7 +76,7 @@ export default function AddressInfoForm() {
                 }
               }}
             />
-            Same as Permanent Address
+            {t('addressInfo.sameAsPerm')}
           </span>
         </section>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">

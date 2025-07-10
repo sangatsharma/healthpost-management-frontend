@@ -9,7 +9,7 @@ import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { differenceInYears } from 'date-fns';
+// import { differenceInYears } from 'date-fns';
 import { toast } from 'sonner';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { renderFullName } from '@/lib/utils';
@@ -19,7 +19,7 @@ import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useStaffMutation } from '@/api/mutation';
 import ClientRegistrationModal from './_components/AddClientModal';
 import AvatarText from '@/components/reusables/AvatarText';
-import { BSToAD } from 'bikram-sambat-js';
+// import { BSToAD } from 'bikram-sambat-js';
 import { TClient } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
 import BlockEditor from '@/components/block-editor';
@@ -39,7 +39,8 @@ export default function Page() {
 
   const t = useTypedTranslations('GeneralPages');
   const tAlert = useTypedTranslations('AlertDialog');
-  const tMed = useTypedTranslations('MedicalHistory');
+  // const tMed = useTypedTranslations('MedicalHistory');
+  const ct = useTypedTranslations('ClientRegistration');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
   const { mutateStaff } = useStaffMutation({
@@ -122,25 +123,33 @@ export default function Page() {
       },
       accessorKey: 'name',
       header: () => t('User.fullName'),
-      cell: ({ row }) => (
-        <AvatarText
-          title={renderFullName({
+      cell: ({ row }) => {
+        console.log(
+          'test',
+          renderFullName({
             params: row.original,
-          })}
-          name={renderFullName({
-            params: row.original,
-          })}
-          subtitle={`${tMed('age')}: ${differenceInYears(
-            Date.now(),
-            BSToAD('2076-01-01'),
-          )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
-          src={
-            typeof row?.original?.profileImage === 'string'
-              ? row.original.profileImage
-              : ''
-          }
-        />
-      ),
+          }),
+        );
+        return (
+          <AvatarText
+            title={renderFullName({
+              params: row.original,
+            })}
+            name={renderFullName({
+              params: row.original,
+            })}
+            // subtitle={`${tMed('age')}: ${differenceInYears(
+            //   Date.now(),
+            //   BSToAD('2076-01-01'),
+            // )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
+            src={
+              typeof row?.original?.profileImage === 'string'
+                ? row.original.profileImage
+                : ''
+            }
+          />
+        );
+      },
     },
     {
       map: {
@@ -236,7 +245,7 @@ export default function Page() {
           <DataTable
             columns={columns}
             header={{
-              label: t('SidebarItems.patientsRegistration'),
+              label: t('SidebarItems.clientsRegistration'),
               className: 'text-2xl font-bold mb-4',
             }}
             data={(data?.data as TClient[]) || []}
@@ -245,7 +254,7 @@ export default function Page() {
               hasExport: true,
             }}
             addButton={{
-              label: t('User.addStaff'),
+              label: ct('addNewClient'),
               icon: <Plus className="mr-2 h-4 w-4" />,
               onClick: () =>
                 setIsOpenAddModal({

@@ -86,7 +86,9 @@ export enum DisabilityIdentityType {
 export type TLoginReponse = {
   success: boolean;
   message: string;
-  data: TUser;
+  data: {
+    user: TUser;
+  };
 };
 
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';

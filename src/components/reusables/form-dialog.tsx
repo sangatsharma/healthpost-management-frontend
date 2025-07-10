@@ -153,6 +153,8 @@ const FormDialog: React.FC<TProps> = ({
           className,
         )}
       >
+        <DialogTitle className="sr-only">{props.title}</DialogTitle>
+
         {renderContent()}
         {(resetAction || mutateAction) && !isLoading && !isError && (
           <DialogFooter className="mt-4">
