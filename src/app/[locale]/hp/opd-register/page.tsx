@@ -35,7 +35,7 @@ interface PatientData {
   user: string;
 }
 
-const dummyPatientData: PatientData = {
+const data: PatientData = {
   date: '2082-03-27',
   insuranceNo: 'N/A',
   registrationNo: '10',
@@ -71,11 +71,7 @@ const dummyPatientData: PatientData = {
   user: 'Sanju Sharma - ID 130',
 };
 
-export default function PatientHealthCard({
-  data = dummyPatientData,
-}: {
-  data?: PatientData;
-}) {
+export default function PatientHealthCard() {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const renderGridRow = (label: string, value: string) => (
