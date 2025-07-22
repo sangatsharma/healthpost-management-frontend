@@ -158,33 +158,10 @@ const FormDialog: React.FC<TProps> = ({
         {renderContent()}
         {(resetAction || mutateAction) && !isLoading && !isError && (
           <DialogFooter className="mt-4">
-            {resetAction && (
-              <Button
-                onClick={resetAction.onClick && resetAction.onClick}
-                variant={resetAction.variant || 'ghost'}
-                className={cn(
-                  'cursor-pointer space-x-2',
-                  resetAction.className,
-                )}
-              >
-                {resetAction.icon} {resetAction.label}
-              </Button>
-            )}
-            {mutateAction && (
-              <Button
-                onClick={mutateAction.onClick && mutateAction.onClick}
-                type="submit"
-                variant={mutateAction.variant || 'default'}
-                className={cn(
-                  'cursor-pointer space-x-2',
-                  mutateAction.className,
-                )}
-                disabled={mutateAction.disabled}
-                isLoading={mutateAction.isLoading}
-              >
-                {mutateAction.icon} {mutateAction.label}
-              </Button>
-            )}
+            <FormButtons
+              resetAction={resetAction}
+              mutateAction={mutateAction}
+            />
           </DialogFooter>
         )}
       </DialogContent>
@@ -193,3 +170,41 @@ const FormDialog: React.FC<TProps> = ({
 };
 
 export default FormDialog;
+
+export const FormButtons = ({
+  className,
+  resetAction,
+  mutateAction,
+}: {
+  className?: string;
+  resetAction?: baseButtonType;
+  mutateAction?: baseButtonType;
+}) => {
+  const t = useTypedTranslations('GeneralPages');
+  return (
+    <div className={cn('flex w-full justify-between', className)}>
+      {resetAction && (
+        <Button
+          onClick={resetAction.onClick && resetAction.onClick}
+          variant={resetAction.variant || 'outline'}
+          className={cn('cursor-pointer space-x-2', resetAction.className)}
+          type="reset"
+        >
+          {resetAction.icon} {resetAction.label || t('reset')}
+        </Button>
+      )}
+      {mutateAction && (
+        <Button
+          onClick={mutateAction.onClick && mutateAction.onClick}
+          type="submit"
+          variant={mutateAction.variant || 'default'}
+          className={cn('cursor-pointer space-x-2', mutateAction.className)}
+          disabled={mutateAction.disabled}
+          isLoading={mutateAction.isLoading}
+        >
+          {mutateAction.icon} {mutateAction.label || t('submit')}
+        </Button>
+      )}
+    </div>
+  );
+};

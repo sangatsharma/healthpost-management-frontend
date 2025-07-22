@@ -2,7 +2,6 @@ import { Permissions } from '@/zustand/permissions';
 import {
   Home,
   Users,
-  Activity,
   FileText,
   Pill,
   UserCheck,
@@ -18,6 +17,7 @@ import {
   TrendingUp,
   HeartPlusIcon,
   Mail,
+  FileInputIcon,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem, TTypeFunction } from '@/types/global';
@@ -36,22 +36,22 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: t('SidebarItems.dashboard'),
-          href: `hp/dashboard`,
+          href: `/hp/dashboard`,
           permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
           label: t('SidebarItems.clientsRegistration'),
-          href: `clients`,
+          href: `/hp/clients`,
           permission: Permissions.PATIENT_RECORDS,
         },
         {
-          key: 'medical-records',
-          icon: FileText,
-          label: 'Medical Records',
-          href: `hp/medical-records`,
-          permission: Permissions.MEDICINE_DISPENSE,
+          key: 'opd-section',
+          icon: FileInputIcon,
+          label: t('SidebarItems.opdSection'),
+          href: `/hp/opd-section`,
+          permission: Permissions.LAB_RESULTS_UPLOAD,
         },
         {
           key: 'medicalhistory',
@@ -88,13 +88,7 @@ export const getMenuItems = ({
             },
           ],
         },
-        {
-          key: 'lab-results',
-          icon: Activity,
-          label: 'Lab Results',
-          href: `hp/lab-results`,
-          permission: Permissions.LAB_RESULTS_UPLOAD,
-        },
+
         {
           key: 'staff',
           icon: UserCheck,

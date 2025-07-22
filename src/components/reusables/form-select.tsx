@@ -2,13 +2,7 @@
 import { useState } from 'react';
 import { type FieldPath, type FieldValues } from 'react-hook-form';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -49,7 +43,7 @@ interface FormSelectProps<
   variant?: SelectVariant;
   searchable?: boolean;
   emptyMessage?: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | undefined) => void;
   value: string | undefined;
   popoverClassName?: string;
 }
@@ -76,43 +70,6 @@ export function FormSelect<
 
   const isSearchable = variant === 'searchable' || searchable;
 
-  const renderBasicSelect = (value: string) => (
-    <Select
-      onValueChange={(val) => {
-        if (val === value) {
-          onChange('');
-          setOpen(false);
-          return;
-        }
-        onChange(val);
-        setOpen(false);
-      }}
-      value={options.map((item) => item.value).includes(value) ? value : ''}
-      disabled={disabled}
-    >
-      <SelectTrigger
-        className={cn(
-          'flex !h-10 w-full justify-between bg-emerald-50 text-center font-normal',
-          'border-emerald-200 bg-emerald-50',
-          error && 'border-red-500',
-        )}
-      >
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent className={cn('w-full', popoverClassName)}>
-        {options.map((option) => (
-          <SelectItem
-            key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-          >
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-
   const renderSearchableSelect = (value: string) => {
     const selectedOption = options.find((option) => option.value === value);
 
@@ -124,42 +81,52 @@ export function FormSelect<
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'flex w-full justify-between bg-emerald-50 font-normal',
+              'dark:bg-input/30 flex w-full justify-between bg-emerald-50 font-normal',
               '!border-emerald-200',
               error && '!border-red-500',
+              disabled && 'cursor-not-allowed opacity-100',
             )}
             disabled={disabled}
           >
-            {selectedOption ? (
-              selectedOption.label
-            ) : (
-              <span className="text-muted-foreground">{placeholder}</span>
-            )}
+            <span className="flex w-[90%] items-start truncate text-ellipsis">
+              {selectedOption ? (
+                selectedOption.label
+              ) : (
+                <span className="text-muted-foreground">{placeholder}</span>
+              )}
+            </span>
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className={(cn('w-full p-0'), popoverClassName)}>
           <Command
             className="max-h-64"
-            filter={(value, search) => {
-              if (value.includes(search.toLowerCase())) {
+            filter={(commandValue, search) => {
+              const label = commandValue.split('||')[1] || commandValue;
+              if (label.toLowerCase().includes(search.toLowerCase())) {
                 return 1;
               }
-
               return 0;
             }}
           >
-            <CommandInput placeholder={searchPlaceholder} />
+            {isSearchable && <CommandInput placeholder={searchPlaceholder} />}
             <CommandList>
               <CommandEmpty>{emptyMessage}</CommandEmpty>
-              <CommandGroup>
+              <CommandGroup
+                tabIndex={isSearchable ? -1 : 0}
+                className="focus:outline-none"
+              >
                 {options.map((option) => (
                   <CommandItem
                     key={option.value}
-                    value={option.value}
+                    value={`${option.value}||${option.label}`}
                     onSelect={(currentValue) => {
+                      // Extract the actual value from the unique identifier
+                      const selectedValue = currentValue.split('||')[0];
                       onChange(
-                        currentValue === value && !required ? '' : currentValue,
+                        selectedValue === value && !required
+                          ? undefined
+                          : selectedValue,
                       );
                       setOpen(false);
                     }}
@@ -167,7 +134,7 @@ export function FormSelect<
                   >
                     <Check
                       className={cn(
-                        'mr-2 h-4 w-4',
+                        'h-4 w-4',
                         value === option.value ? 'opacity-100' : 'opacity-0',
                       )}
                     />
@@ -184,9 +151,7 @@ export function FormSelect<
 
   return (
     <div className={cn('w-full', className)}>
-      {isSearchable
-        ? renderSearchableSelect(value || '')
-        : renderBasicSelect(value || '')}
+      {renderSearchableSelect(value || '')}
     </div>
   );
 }

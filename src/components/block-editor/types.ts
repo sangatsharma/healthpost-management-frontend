@@ -9,6 +9,7 @@ export interface BlockEditorProps {
   disabled?: boolean;
   imageUploadEndpoint?: string;
   maxImageSize?: number;
+  outerClassName?: string;
 }
 
 export interface BlockEditorRef {

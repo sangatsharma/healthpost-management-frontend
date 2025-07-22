@@ -45,7 +45,7 @@ export function Toolbar({
   if (!editor) return null;
 
   return (
-    <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur">
+    <div className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 border-b backdrop-blur dark:bg-[#181818]">
       <div className="flex flex-wrap items-center gap-1 p-2">
         {/* Undo/Redo */}
         <Button

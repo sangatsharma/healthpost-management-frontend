@@ -11,14 +11,15 @@ import {
 import { CasteType, Gender, Nationality, Status } from '@/types/user.types';
 import { useFormContext } from 'react-hook-form';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import 'nepali-datepicker-reactjs/dist/index.css';
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import 'nepali-datepicker-reactjs/dist/index.css';
 
 export default function PersonalInfoForm() {
   const form = useFormContext<TPersonalInfoSchema & TSystemInfoSchema>();
   const t = useTypedTranslations('ClientRegistration');
   const p = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
 
   return (
     <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
@@ -68,7 +69,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.casteType')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(CasteType)}
+              options={mapEnumToOptions(CasteType, tEnumKeys, 'casteType')}
               placeholder={`${t('personalInfo.casteType')} `}
               {...field}
               required
@@ -84,7 +85,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.gender')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Gender)}
+              options={mapEnumToOptions(Gender, tEnumKeys, 'gender')}
               placeholder={p('selectGender')}
               {...field}
               required
@@ -100,7 +101,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.status')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Status)}
+              options={mapEnumToOptions(Status, tEnumKeys, 'status')}
               placeholder={p('selectStatus')}
               {...field}
               required
@@ -169,7 +170,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.nationality')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Nationality)}
+              options={mapEnumToOptions(Nationality, tEnumKeys, 'nationality')}
               placeholder={`${t('personalInfo.nationality')}`}
               {...field}
               required

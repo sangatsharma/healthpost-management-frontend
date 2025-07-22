@@ -31,6 +31,8 @@ type TTypeFunction<N extends keyof TTranslations> = <
   options?: Record<string, string | number>,
 ) => string;
 
+type TEnumKeys = keyof typeof en.Enums;
+
 type TLocale = 'en' | 'np';
 
 type TPermission = {
@@ -83,7 +85,7 @@ type dataTableHeaderType = {
 
 type baseButtonType =
   | {
-      label: string;
+      label?: string;
       onClick: () => void;
       variant?: IbtnVariant;
       disabled?: boolean;

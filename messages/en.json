@@ -2,6 +2,7 @@
   "GeneralPages": {
     "actions": "Actions",
     "reset": "Reset",
+    "submit": "Submit",
     "images": "Images",
     "search": "Search",
     "select": "Select",
@@ -22,7 +23,8 @@
       "patients": "Patients",
       "staffsmanagement": "Staffs Management",
       "medicalhistory": "Medical History",
-      "clientsRegistration": "Clients Registration"
+      "clientsRegistration": "Clients Registration",
+      "opdSection": "OPD Section"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -276,6 +278,41 @@
       "isEligibleForSgcTooltip": "This is for the clients who are eligible for Social Grant Certificate (SGC) program."
     }
   },
+  "OpdSection": {
+    "formTitle": "OPD Registration Form",
+    "formSubtitle": "Please fill out the form below to register a new OPD patient.",
+    "newOpdReg": "New OPD Registration",
+    "patientName": "Patient Name",
+    "visitedDate": "Date of Visit",
+    "visitType": "Visit Type",
+    "healthPost": "Health Post",
+    "bp": "Blood Pressure",
+    "pulse": "Pulse Rate",
+    "temperature": "Temperature",
+    "respiration": "Respiration",
+    "weight": "Weight",
+    "height": "Height",
+    "mucus": "Mucus",
+    "complaintsHistory": "Complaints/History",
+    "observedExamination": "Observation/Examination",
+    "diagnosis": "Diagnosis",
+    "treatment": "Treatment",
+    "medicines": "Medicines",
+    "dosage": "Medicine Dosage",
+    "duration": "Duration (Days)",
+    "frequency": "Frequency (Daily, Weekly, etc.)",
+    "intakeTime": "Intake Time",
+    "quantity": "Quantity",
+    "intakeRoute": "Intake Route",
+    "followUpRequired": "Follow-up Required?",
+    "followUpDate": "Follow-up Date",
+    "isGenderViolence": "Gender-based violence?",
+    "isPregnant": "Is Pregnant?",
+    "timing": "Before/After Meal",
+    "afterMeal": "After Meal",
+    "beforeMeal": "Before Meal",
+    "anyTime": "Any Time"
+  },
   "Placeholder": {
     "enterFileName": "Enter file name",
     "fileType": "File Type",
@@ -291,10 +328,11 @@
     "selectGender": "Select gender",
     "selectStatus": "Select status",
     "searchPatients": "Search patients",
+    "selectPatient": "Select patient",
     "bloodGroup": "Select your blood group",
     "height": "Enter height in centimeters",
     "weight": "Enter weight in kilograms",
-    "disabilityType": "Select disability type if applicable",
+    "disabilityType": "Disability type if applicable",
     "disabilityIdentityType": "Select disability identity type",
     "bank": "Enter your bank name",
     "bankBranch": "Enter your bank branch name",
@@ -316,9 +354,7 @@
     "uploadImage": "Click to upload image",
     "selectFile": "Select file",
     "enterOTP": "Enter OTP",
-    "diagnosis": "Enter diagnosis",
     "symptoms": "Enter symptoms",
-    "treatment": "Enter treatment details",
     "medications": "Enter medications",
     "notes": "Enter notes",
     "bloodPressure": "Enter blood pressure",
@@ -361,6 +397,174 @@
     "emailBody": "Enter your message here...",
     "searchCountry": "Search country...",
     "searchHere": "Search here",
-    "searchOptions": "Search options..."
+    "searchOptions": "Search options...",
+    "selectVisitType": "Select visit type",
+    "complaintsHistory": "Enter complaints or history...",
+    "observedExamination": "Enter observed examination details...",
+    "diagnosis": "Enter diagnosis...",
+    "treatment": "Enter treatment details...",
+    "selectMedicines": "Select medicines"
+  },
+  "Enums": {
+    "visitType": {
+      "CONSULTATION": "Consultation",
+      "FOLLOW_UP": "Follow-up",
+      "EMERGENCY": "Emergency",
+      "ROUTINE_CHECKUP": "Routine Check-up",
+      "TELEMEDICINE": "Telemedicine",
+      "HOME_VISIT": "Home Visit",
+      "GENERAL": "General",
+      "OTHER": "Other"
+    },
+    "treatmentType": {
+      "MEDICATION": "Medication",
+      "SURGERY": "Surgery",
+      "THERAPY": "Therapy",
+      "DIAGNOSTIC_TEST": "Diagnostic Test",
+      "REHABILITATION": "Rehabilitation",
+      "PALLIATIVE_CARE": "Palliative Care",
+      "OTHER": "Other"
+    },
+    "userRole": {
+      "SUPERADMIN": "Super Admin",
+      "ADMIN": "Admin",
+      "PATIENT": "Patient",
+      "HEALTH_ASSISTANT": "Health Assistant",
+      "ANM": "ANM (Auxiliary Nurse Midwife)",
+      "LAB_TECHNICIAN": "Lab Technician",
+      "FCHV": "FCHV (Female Community Health Volunteer)",
+      "INVENTORY_KEEPER": "Inventory Keeper",
+      "OFFICE_HELPER": "Office Helper",
+      "ALL": "All"
+    },
+    "userType": {
+      "PATIENT": "Patient",
+      "HP": "Health Post",
+      "ADMIN": "Admin"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive"
+    },
+    "gender": {
+      "MALE": "Male",
+      "FEMALE": "Female",
+      "OTHER": "Other"
+    },
+    "casteType": {
+      "BRAMAN_CHHETRI": "Brahmin/Chhetri",
+      "DALIT": "Dalit",
+      "JANAJATI": "Janajati",
+      "MUSLIM": "Muslim",
+      "MADESHI": "Madhesi",
+      "OTHERS": "Others"
+    },
+    "nationality": {
+      "NEPALI": "Nepali",
+      "INDIAN": "Indian",
+      "OTHER": "Other"
+    },
+    "marriageStatus": {
+      "MARRIED": "Married",
+      "UNMARRIED": "Unmarried",
+      "DIVORCED": "Divorced",
+      "WIDOWED": "Widowed",
+      "SEPARATED": "Separated",
+      "OTHER": "Other"
+    },
+    "disabilityType": {
+      "PHYSICAL": "Physical",
+      "VISUAL": "Visual",
+      "HEARING": "Hearing",
+      "INTELLECTUAL": "Intellectual",
+      "MENTAL": "Mental",
+      "MULTIPLE": "Multiple",
+      "OTHER": "Other"
+    },
+    "disabilityIdentityType": {
+      "NATIONAL_CARD": "National Disability Card",
+      "PROVINCIAL_CARD": "Provincial Disability Card",
+      "LOCAL_CARD": "Local Disability Card",
+      "HOSPITAL_CERTIFICATE": "Hospital Certificate",
+      "OTHER": "Other"
+    },
+    "bloodGroup": {
+      "A_POSITIVE": "A+",
+      "A_NEGATIVE": "A-",
+      "B_POSITIVE": "B+",
+      "B_NEGATIVE": "B-",
+      "O_POSITIVE": "O+",
+      "O_NEGATIVE": "O-",
+      "AB_POSITIVE": "AB+",
+      "AB_NEGATIVE": "AB-"
+    },
+    "permissions": {
+      "ALL": "All Permissions",
+      "SYSTEM_CONFIG": "System Configuration",
+
+      "PATIENT_DASHBOARD": "Patient Dashboard",
+      "ADMIN_DASHBOARD": "Admin Dashboard",
+      "HP_MANAGEMENT": "Health Post Management",
+      "ADMIN_MANAGEMENT": "Admin Management",
+      "HEALTH_POST_DASHBOARD": "Health Post Dashboard",
+
+      "PATIENT_RECORDS": "Patient Records",
+
+      "PRESCRIBE_MEDICATION": "Prescribe Medication",
+      "ORDER_LAB_TESTS": "Order Lab Tests",
+      "VACCINATION_RECORD": "Vaccination Record",
+      "MATERNAL_HEALTH_EDIT": "Edit Maternal Health",
+
+      "LAB_RESULTS_UPLOAD": "Upload Lab Results",
+      "LAB_RESULTS_VERIFY": "Verify Lab Results",
+
+      "COMMUNITY_REPORTS": "Community Reports",
+      "HOME_VISIT_RECORD": "Home Visit Record",
+
+      "INVENTORY_VIEW": "View Inventory",
+      "INVENTORY_MANAGE": "Manage Inventory",
+      "MEDICINE_DISPENSE": "Dispense Medicine",
+
+      "USER_MANAGE": "Manage Users",
+      "REPORTS_GENERATE": "Generate Reports",
+      "DATA_EXPORT": "Export Data"
+    },
+    "action": {
+      "READ": "Read",
+      "WRITE": "Write"
+    },
+    "intakeRoute": {
+      "PO": "Oral (By Mouth)",
+      "IV": "Intravenous (IV)",
+      "LOCAL": "Local Application",
+      "IM": "Intramuscular (IM)",
+      "PR": "Rectal (PR)",
+      "INHALATION": "Inhalation",
+      "INTRAOCULAR": "Intraocular",
+      "TRANSDERMAL": "Transdermal",
+      "INTRATHECAL": "Intrathecal",
+      "VAGINAL": "Vaginal",
+      "IA": "Intra-arterial (IA)",
+      "SC": "Subcutaneous (SC)",
+      "SUBLINGUAL": "Sublingual",
+      "INTRANASAL": "Intranasal"
+    },
+    "frequency": {
+      "OD": "Once a day",
+      "BD": "Twice a day",
+      "TDS": "Three times a day",
+      "QID": "Four times a day",
+      "HS": "At bedtime",
+      "STAT": "Immediately / One time only",
+      "ONCE_A_WEEK": "Once a week",
+      "SOS": "As needed",
+      "null": "Not specified"
+    },
+    "intakeTime": {
+      "MORNING": "Morning",
+      "AFTERNOON": "Afternoon",
+      "EVENING": "Evening",
+      "NIGHT": "Night"
+    }
   }
 }

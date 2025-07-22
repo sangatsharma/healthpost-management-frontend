@@ -23,6 +23,7 @@ export default function HealthAndBankingInfo() {
   const form = useFormContext<THealthInfoSchema>();
   const t = useTypedTranslations('ClientRegistration');
   const p = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
   return (
     <div className="space-y-6">
       <div>
@@ -36,7 +37,11 @@ export default function HealthAndBankingInfo() {
             render={({ field }) => (
               <FormWrapper label={t('healthInfo.bloodGroup')} isRequired>
                 <FormSelect
-                  options={mapEnumToOptions(BloodGroup)}
+                  options={mapEnumToOptions(
+                    BloodGroup,
+                    tEnumKeys,
+                    'bloodGroup',
+                  )}
                   placeholder={p('bloodGroup')}
                   {...field}
                   required
@@ -70,11 +75,15 @@ export default function HealthAndBankingInfo() {
             render={({ field }) => (
               <FormWrapper label={t('healthInfo.disabilityType')}>
                 <FormSelect
-                  options={mapEnumToOptions(DisabilityType)}
+                  options={mapEnumToOptions(
+                    DisabilityType,
+                    tEnumKeys,
+                    'disabilityType',
+                  )}
                   placeholder={p('disabilityType')}
                   {...field}
-                  required
-                  variant="basic"
+                  variant="searchable"
+                  required={false}
                   error={!!form.formState.errors.disabilityType}
                 />
               </FormWrapper>
@@ -87,11 +96,15 @@ export default function HealthAndBankingInfo() {
             render={({ field }) => (
               <FormWrapper label={t('healthInfo.disabilityIdentityType')}>
                 <FormSelect
-                  options={mapEnumToOptions(DisabilityIdentityType)}
+                  options={mapEnumToOptions(
+                    DisabilityIdentityType,
+                    tEnumKeys,
+                    'disabilityIdentityType',
+                  )}
                   placeholder={p('disabilityIdentityType')}
                   {...field}
-                  required
-                  variant="basic"
+                  variant="searchable"
+                  required={false}
                   error={!!form.formState.errors.disabilityIdentityType}
                 />
               </FormWrapper>

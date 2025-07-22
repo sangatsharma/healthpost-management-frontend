@@ -126,6 +126,7 @@ export interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+  popoverClassName?: string;
   isLoading?: boolean;
   /**
    * Additional props to pass to the multi-select component.
@@ -168,12 +169,14 @@ export const SelectMultiple = React.forwardRef<
       maxCount = Number.MAX_SAFE_INTEGER,
       modalPopover = false,
       className,
+      popoverClassName,
       isLoading,
       Values,
       maxSelection,
       addButton,
       deleteAction,
       node,
+      value,
       ...props
     },
     ref,
@@ -204,8 +207,11 @@ export const SelectMultiple = React.forwardRef<
           defaultValue.includes(option.value),
         );
         setSelectedValues(matchedOptions || []);
+      } else if (Array.isArray(value) && value?.length === 0) {
+        setSelectedValues([]);
       }
     }, [Values, JSON.stringify(defaultValue), JSON.stringify(options)]);
+
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>,
     ): void => {
@@ -361,15 +367,19 @@ export const SelectMultiple = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="popover-content-width-full border-input shadow-select -mt-2 rounded-[0.5rem] border p-2"
+          className={cn(
+            'popover-content-width-full border-input shadow-select -mt-2 w-full rounded-[0.5rem] border p-2',
+            popoverClassName,
+          )}
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
           side={props.side}
         >
           <Command
             // className="z-10 h-72"
+
             filter={(value, search) => {
-              if (value.includes(search.toLowerCase())) {
+              if (value.toLowerCase().includes(search.toLowerCase())) {
                 return 1;
               }
 
@@ -423,16 +433,16 @@ export const SelectMultiple = React.forwardRef<
                             <div className="flex flex-1 items-center">
                               <div
                                 className={cn(
-                                  'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-gray-600',
+                                  'mr-2 flex h-4 w-4 items-center justify-center border border-gray-600',
                                   isSelected
-                                    ? 'bg-primary text-primary-foreground'
+                                    ? 'bg-emerald-200'
                                     : 'opacity-50 [&_svg]:invisible',
                                 )}
                               >
                                 <CheckIcon className="h-4 w-4" />
                               </div>
                               {option.icon && (
-                                <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
+                                <option.icon className="text-muted-foreground text-green- mr-2 h-4 w-4" />
                               )}
                               <span>{option.label}</span>
                             </div>

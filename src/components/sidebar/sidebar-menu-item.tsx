@@ -34,12 +34,10 @@ export default function SidebarMenuItem({
   const portal = userPortal?.toLowerCase();
   //todo handle /:id
   const isActive =
-    `/${locale}/${portal}/${item.href}` === pathname ||
-    item.submenu?.some(
-      (sub) => `/${locale}/${portal}/${sub.href}` === pathname,
-    );
-  const hasActiveSubmenu = item.submenu?.some(
-    (sub) => `/${locale}/${portal}/${sub.href}` === pathname,
+    pathname.includes(`/${locale}${item.href}`) ||
+    item.submenu?.some((sub) => `/${locale}${sub.href}`.includes(pathname));
+  const hasActiveSubmenu = item.submenu?.some((sub) =>
+    pathname.includes(`/${locale}/${portal}/${sub.href}`),
   );
 
   const handleMainClick = () => {
