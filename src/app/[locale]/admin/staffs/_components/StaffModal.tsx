@@ -63,10 +63,7 @@ export const AddAdminModal: React.FC<TProps> = ({
   const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
     useQuery({
       queryKey: queryKeys.healthPost.healthPosts,
-      queryFn: async () =>
-        fetchHealthPostInfo({
-          healthPostId: undefined,
-        }),
+      queryFn: async () => fetchHealthPostInfo({}),
       select: (data) =>
         (data?.data as THealthPost[]).map((hp) => ({
           label: hp.name,
@@ -85,6 +82,7 @@ export const AddAdminModal: React.FC<TProps> = ({
   const t2 = useTypedTranslations('GeneralPages');
   const tToast = useTypedTranslations('Toast');
   const tPlaceholder = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
   const staffSchema = getStaffSchema(t);
 
   const form = useForm<TStaffSchema>({
@@ -234,7 +232,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.gender')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(Gender)}
+                      options={mapEnumToOptions(Gender, tEnumKeys, 'gender')}
                       placeholder={tPlaceholder('selectGender')}
                       {...field}
                       required
@@ -251,7 +249,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.status')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(Status)}
+                      options={mapEnumToOptions(Status, tEnumKeys, 'status')}
                       placeholder={tPlaceholder('selectStatus')}
                       {...field}
                       required
@@ -268,7 +266,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.role')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(UserRole)}
+                      options={mapEnumToOptions(
+                        UserRole,
+                        tEnumKeys,
+                        'userRole',
+                      )}
                       placeholder={tPlaceholder('selectRole')}
                       {...field}
                       required
@@ -284,7 +286,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.accountType')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(UserType)}
+                      options={mapEnumToOptions(
+                        UserType,
+                        tEnumKeys,
+                        'userType',
+                      )}
                       placeholder={tPlaceholder('selectAccountType')}
                       {...field}
                       required

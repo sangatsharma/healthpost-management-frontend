@@ -100,7 +100,13 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   const getAcceptTypes = () => {
     const types: string[] = [];
     if (allowImage)
-      types.push('image/png', 'image/jpeg', 'image/jpg', 'image/webp');
+      types.push(
+        'image/png',
+        'image/jpeg',
+        'image/jpg',
+        'image/webp',
+        'image/gif',
+      );
     if (allowFile)
       types.push(
         'application/pdf',

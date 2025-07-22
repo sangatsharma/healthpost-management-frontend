@@ -179,6 +179,13 @@
   margin-bottom: 1rem;
   color: #1a202c; /* Dark gray */
 }
+.editorContent p.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a0a0a0;
+  pointer-events: none;
+  height: 0;
+}
 
 .editorContent h2 {
   font-size: 2rem;

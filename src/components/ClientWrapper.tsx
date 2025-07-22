@@ -11,6 +11,7 @@ import { Noto_Sans_Devanagari } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import { useUserStore } from '@/zustand/useUserStore';
+import { HealthPostProvider } from '@/provider/HealthPostProvider';
 
 export const devnagari = Noto_Sans_Devanagari({
   subsets: ['latin'],
@@ -21,7 +22,7 @@ export const devnagari = Noto_Sans_Devanagari({
 });
 export function ClientWrapper({ children }: { children: React.ReactNode }) {
   const { user } = useUserStore();
-  //TODO: Register service worker based on user accountType
+  // //TODO: Register service worker based on user accountType
   useEffect(() => {
     // Register service worker
     if ('serviceWorker' in navigator && user) {
@@ -49,16 +50,20 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
             }}
           />
           <AuthProvider>
-            <div
-              className={cn(
-                'flex min-h-screen justify-start gap-4',
-                devnagari.variable,
-              )}
-            >
-              <GlobalAlertDialog />
-              <HealthPostSidebar />
-              <div className="h-screen w-full overflow-scroll">{children}</div>
-            </div>
+            <HealthPostProvider>
+              <div
+                className={cn(
+                  'flex min-h-screen justify-start gap-4',
+                  devnagari.variable,
+                )}
+              >
+                <GlobalAlertDialog />
+                <HealthPostSidebar />
+                <div className="h-screen w-full overflow-scroll">
+                  {children}
+                </div>
+              </div>
+            </HealthPostProvider>
           </AuthProvider>
         </TooltipProvider>
       </QueryProvider>

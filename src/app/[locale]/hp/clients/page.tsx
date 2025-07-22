@@ -22,10 +22,11 @@ import AvatarText from '@/components/reusables/AvatarText';
 // import { BSToAD } from 'bikram-sambat-js';
 import { TClient } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
-import BlockEditor from '@/components/block-editor';
 import { useQuery } from '@tanstack/react-query';
 import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { Permissions } from '@/zustand/permissions';
+import { BSToAD } from 'bikram-sambat-js';
+import { differenceInYears } from 'date-fns';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -35,11 +36,9 @@ export default function Page() {
     isOpen: false,
     client: undefined,
   });
-  const [value, setValue] = useState('');
-
   const t = useTypedTranslations('GeneralPages');
   const tAlert = useTypedTranslations('AlertDialog');
-  // const tMed = useTypedTranslations('MedicalHistory');
+  const tMed = useTypedTranslations('MedicalHistory');
   const ct = useTypedTranslations('ClientRegistration');
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
@@ -138,10 +137,10 @@ export default function Page() {
             name={renderFullName({
               params: row.original,
             })}
-            // subtitle={`${tMed('age')}: ${differenceInYears(
-            //   Date.now(),
-            //   BSToAD('2076-01-01'),
-            // )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
+            subtitle={`${tMed('age')}: ${differenceInYears(
+              Date.now(),
+              BSToAD('2076-01-01'),
+            )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
             src={
               typeof row?.original?.profileImage === 'string'
                 ? row.original.profileImage
@@ -237,7 +236,6 @@ export default function Page() {
         healthPostId: useUserStore.getState().user?.healthPostId || '',
       }),
   });
-
   return (
     <ProtectedRoute requiredPermission={Permissions.PATIENT_RECORDS}>
       <>
@@ -277,8 +275,6 @@ export default function Page() {
           />
         )}
       </>
-
-      <BlockEditor value={value} onChange={setValue} />
     </ProtectedRoute>
   );
 }

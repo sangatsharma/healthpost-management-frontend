@@ -95,6 +95,9 @@ export default function ClientRegistrationModal({
       isMinor: false,
       lockReport: false,
       profileImage: [],
+
+      email: '',
+      emergencyContact: '',
     },
     mode: 'onChange',
   });

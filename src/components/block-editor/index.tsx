@@ -17,6 +17,7 @@ import { Toolbar } from './toolbar';
 import { BubbleMenuComponent } from './bubble-menu';
 import { SlashCommandMenu } from './slash-command-menu';
 import { FontSize, LineHeight, ResizableImage } from './extensions';
+import { cn } from '@/lib/utils';
 
 const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
   (
@@ -28,6 +29,7 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
       disabled = false,
       imageUploadEndpoint = '/api/upload-image',
       maxImageSize = 1 * 1024 * 1024, // 5MB
+      outerClassName,
     },
     ref,
   ) => {
@@ -38,37 +40,11 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
     } | null>(null);
 
     const editor = useEditor({
-      extensions: [
-        StarterKit.configure({
-          bulletList: { keepMarks: true, keepAttributes: false },
-          orderedList: { keepMarks: true, keepAttributes: false },
-        }),
-        TextAlign.configure({ types: ['heading', 'paragraph'] }),
-        TextStyle,
-        Color.configure({ types: [TextStyle.name] }),
-        Highlight.configure({ multicolor: true }),
-        FontFamily.configure({ types: ['textStyle'] }),
-        FontSize,
-        LineHeight,
-        Blockquote,
-        Underline,
-        ResizableImage.configure({
-          inline: true,
-          HTMLAttributes: { class: 'rounded-lg max-w-full h-auto' },
-        }),
-        Placeholder.configure({
-          placeholder: ({ node }) => {
-            if (node.type.name === 'heading')
-              return `Heading ${node.attrs.level}`;
-            return placeholder;
-          },
-        }),
-      ],
       content: value,
       editable: !disabled,
       editorProps: {
         attributes: {
-          class: `prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none max-w-4xl min-h-[400px] p-8 ${className}`,
+          class: `prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none max-w-4xl min-h-[400px] p-8 dark:bg-[#181818] ${className}`,
         },
         handleKeyDown: (view, event) => {
           // Use Ctrl+Space to trigger showSlashMenu (avoids browser Alt conflicts)
@@ -105,6 +81,32 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
           setShowSlashMenu(false);
         }
       },
+      extensions: [
+        StarterKit.configure({
+          bulletList: { keepMarks: true, keepAttributes: false },
+          orderedList: { keepMarks: true, keepAttributes: false },
+        }),
+        TextAlign.configure({ types: ['heading', 'paragraph'] }),
+        TextStyle,
+        Color.configure({ types: [TextStyle.name] }),
+        Highlight.configure({ multicolor: true }),
+        FontFamily.configure({ types: ['textStyle'] }),
+        FontSize,
+        LineHeight,
+        Blockquote,
+        Underline,
+        ResizableImage.configure({
+          inline: true,
+          HTMLAttributes: { class: 'rounded-lg max-w-full h-auto' },
+        }),
+        Placeholder.configure({
+          placeholder: ({ node }) => {
+            if (node.type.name === 'heading')
+              return `Heading ${node.attrs.level}`;
+            return placeholder;
+          },
+        }),
+      ],
     });
 
     useEffect(() => {
@@ -123,38 +125,40 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
     if (!editor) return null;
 
     return (
-      <div className="mx-auto w-full max-w-6xl">
-        <div className="bg-background overflow-hidden rounded-lg border">
-          <Toolbar
-            editor={editor}
-            imageUploadEndpoint={imageUploadEndpoint}
-            maxImageSize={maxImageSize}
-          />
-          <BubbleMenuComponent editor={editor} />
+      <div
+        className={cn(
+          'bg-background flex flex-col rounded-lg border',
+          outerClassName,
+        )}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <Toolbar
+          editor={editor}
+          imageUploadEndpoint={imageUploadEndpoint}
+          maxImageSize={maxImageSize}
+        />
+        <BubbleMenuComponent editor={editor} />
 
-          {showSlashMenu && slashRange && (
-            <div
-              className="fixed z-50 mt-2"
-              style={{ left: '20%', top: '30%' }}
-            >
-              <SlashCommandMenu
-                editor={editor}
-                range={slashRange}
-                onClose={() => setShowSlashMenu(false)}
-              />
-            </div>
+        {showSlashMenu && slashRange && (
+          <div className="fixed z-50 mt-2" style={{ left: '20%', top: '30%' }}>
+            <SlashCommandMenu
+              editor={editor}
+              range={slashRange}
+              onClose={() => setShowSlashMenu(false)}
+            />
+          </div>
+        )}
+
+        <EditorContent
+          editor={editor}
+          className={cn(
+            'editorContent w-full overflow-y-scroll border',
+            className,
           )}
-
-          <div className="min-h-[500px]">
-            <EditorContent editor={editor} className="editorContent" />
-          </div>
-        </div>
-
-        <div className="text-muted-foreground mt-4 flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4 text-xs">
-            <span>Press Ctrl + space to show commands menu.</span>
-          </div>
-        </div>
+        />
       </div>
     );
   },
@@ -162,5 +166,4 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
 
 BlockEditor.displayName = 'BlockEditor';
 
-export { BlockEditor };
 export default BlockEditor;

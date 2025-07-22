@@ -12,6 +12,7 @@ export default function FamilyInfoForm() {
   const form = useFormContext<TFamilyInfoSchema>();
   const t = useTypedTranslations('ClientRegistration');
   const p = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
       <FormField
@@ -48,7 +49,11 @@ export default function FamilyInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('familyInfo.maritalStatus')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(MarriageStatus)}
+              options={mapEnumToOptions(
+                MarriageStatus,
+                tEnumKeys,
+                'marriageStatus',
+              )}
               placeholder={p('maritalStatus')}
               {...field}
               required

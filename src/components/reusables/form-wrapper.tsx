@@ -68,7 +68,7 @@ const FormWrapper: React.FC<FormFieldProps> = ({
       <FormControl>
         <div>{children}</div>
       </FormControl>
-      <FormMessage />
+      <FormMessage className="ml-2" />
     </FormItem>
   );
 };
