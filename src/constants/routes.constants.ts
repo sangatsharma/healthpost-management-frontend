@@ -192,20 +192,69 @@ export const getMenuItems = ({
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];
-    default:
+    case 'PATIENT':
       return [
         {
           key: 'dashboard',
           icon: Home,
-          label: 'Dashboard',
-          href: `/patient/test`,
+          label: t('SidebarItems.dashboard'),
+          href: `/patient/dashboard`,
           permission: Permissions.PATIENT_DASHBOARD,
         },
         {
-          key: 'patients',
+          key: 'profile',
+          icon: UserCog,
+          label: 'profile',
+          href: `/patient/profile`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'pregnancy',
+          icon: HeartPlusIcon,
+          label: 'Pregnancy Dashboard',
+          href: `/patient/pregnancy`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'vaccinations',
+          icon: UserCheck,
+          label: 'Vaccination Records',
+          href: `/patient/vaccinations`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'chronic-conditions',
+          icon: TrendingUp,
+          label: 'Chronic Conditions',
+          href: `/patient/chronic-conditions`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'medical-history',
+          icon: FileText,
+          label: 'Medical History',
+          href: `/patient/medical-history`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'medications',
+          icon: Pill,
+          label: 'Medications',
+          href: `/patient/medications`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'reminders',
+          icon: Clock,
+          label: 'Reminders',
+          href: `/patient/reminders`,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'child-health',
           icon: Users,
-          label: 'Patient Records',
-          href: `/patient/records`,
+          label: 'Child Health',
+          href: `/patient/child-health`,
           permission: Permissions.PATIENT_RECORDS,
         },
         {
