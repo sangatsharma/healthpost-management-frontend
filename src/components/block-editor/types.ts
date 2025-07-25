@@ -20,7 +20,7 @@ export interface BlockEditorRef {
 }
 
 export interface EditorComponentProps {
-  editor: Editor;
+  editor?: Editor;
 }
 
 export interface ImageUploaderProps extends EditorComponentProps {
@@ -53,7 +53,8 @@ export interface ColorPalette {
 
 export interface ImageUploadResponse {
   success: boolean;
-  url?: string;
+  message?: string;
+  data?: string[];
   error?: string;
 }
 

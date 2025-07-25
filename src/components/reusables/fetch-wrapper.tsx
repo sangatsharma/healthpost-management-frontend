@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import React from 'react';
 
 import { Button } from '../ui/button';
@@ -7,9 +6,8 @@ import TableSkeleton from '../ui/table-skeleton';
 
 type TProps = {
   children: React.ReactNode;
-  isLoading: boolean;
-  isError: boolean;
-  error?: null | AxiosError;
+  isLoading?: boolean;
+  isError?: boolean;
   refetch?: () => void;
   loaderComp?: React.ReactNode;
   errorComp?: React.ReactNode;

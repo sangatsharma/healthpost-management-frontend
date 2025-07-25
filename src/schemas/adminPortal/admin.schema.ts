@@ -1,6 +1,11 @@
 import { basicValidator, createFileUploadValidator } from '@/lib/validators';
 import { TTypeFunction } from '@/types/global';
-import { Gender, Status, UserRole, UserType } from '@/types/user.types';
+import {
+  Gender,
+  HealthPostUserType,
+  Status,
+  UserRole,
+} from '@/types/user.types';
 import { Action, Permissions } from '@/zustand/permissions';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
@@ -63,7 +68,7 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       required_error: t('required'),
     }),
-    accountType: z.nativeEnum(UserType, {
+    accountType: z.nativeEnum(HealthPostUserType, {
       invalid_type_error: t('required'),
       message: t('required'),
       required_error: t('required'),
@@ -90,6 +95,9 @@ export const getStaffSchema = (t: TTypeFunction<'Validation'>) => {
       }),
     profileImage: createFileUploadValidator({
       required: false,
+    }),
+    signature: createFileUploadValidator({
+      required: true,
     }),
   });
 };

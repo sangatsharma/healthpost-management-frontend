@@ -248,7 +248,6 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FileUploader
                     onChange={field.onChange}
                     defaultValue={field.value || []}
-                    allowFile
                     allowImage
                     maxFiles={5}
                     maxSize={10 * 1024 * 1024} // 10MB

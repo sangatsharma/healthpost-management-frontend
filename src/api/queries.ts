@@ -1,8 +1,15 @@
 import { TResponse } from '@/types/global';
 import { api } from './axios';
-import { TClient, TLoginReponse, TUser, TUserType } from '@/types/user.types';
+import {
+  TClient,
+  TLoginReponse,
+  TOpd,
+  TUser,
+  TUserType,
+} from '@/types/user.types';
 import { THealthPost } from '@/types/healthpost.types';
 import { TStaffSchema } from '@/schemas/adminPortal/admin.schema';
+import { TOpdSchema } from '@/schemas/healthpostPortal/opd.schema';
 //function to handle user login
 export const login = async (values: {
   email: string;
@@ -115,12 +122,19 @@ export const fetchClientsInfo = async ({
   clientId,
   healthPostId,
 }: {
-  healthPostId: string;
+  healthPostId?: string;
   clientId?: string;
 }) => {
-  const res = await api.get<TResponse<TClient[] | TClient>>(
-    `/healthpost/${healthPostId}/patient${clientId ? `/${clientId}` : ''}`,
-  );
+  let res;
+  if (!healthPostId) {
+    res = await api.get<TResponse<TClient[] | TClient>>(
+      `/patient${clientId ? `/${clientId}` : ''}`,
+    );
+  } else {
+    res = await api.get<TResponse<TClient[] | TClient>>(
+      `/healthpost/${healthPostId}/patient${clientId ? `/${clientId}` : ''}`,
+    );
+  }
   if (res.data) {
     return res.data;
   }
@@ -147,6 +161,45 @@ export const mutateClientInfo = async ({
     res = await api.delete<TStaffSchema>(`${url}/${clientId}`);
   } else {
     throw new Error('Invalid method');
+  }
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const mutateOpdInfo = async ({
+  patientId,
+  data,
+  method,
+}: {
+  patientId?: string;
+  data?: object;
+  method: 'POST' | 'PUT' | 'DELETE';
+}) => {
+  let res;
+  const url = `/opd`;
+  if (method === 'POST') {
+    res = await api.post<TOpdSchema>(url, data);
+  } else if (method === 'PUT') {
+    res = await api.put<TOpdSchema>(`${url}/${patientId}`, data);
+  } else if (method === 'DELETE') {
+    res = await api.delete<TOpdSchema>(`${url}/${patientId}`);
+  } else {
+    throw new Error('Invalid method');
+  }
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const fetchOpds = async ({ clientId }: { clientId?: string }) => {
+  let res;
+  if (clientId) {
+    res = await api.get<TResponse<TOpd[] | TOpd>>(
+      `/opd${clientId ? `/${clientId}` : ''}`,
+    );
+  } else {
+    res = await api.get<TResponse<TOpd[]>>('/opd');
   }
   if (res.data) {
     return res.data;

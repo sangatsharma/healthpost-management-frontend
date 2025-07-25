@@ -4,6 +4,7 @@
     "reset": "पुनः सेट गर्नुहोस्",
     "submit": "पेश गर्नुहोस्",
     "images": "तस्बिरहरू",
+    "signature": "हस्ताक्षर",
     "search": "खोज्नुहोस्",
     "select": "छान्नुहोस्",
     "SN": "क्र.संं",
@@ -23,8 +24,9 @@
       "patients": "रोगीहरू",
       "staffsmanagement": "कर्मचारी व्यवस्थापन",
       "medicalhistory": "चिकित्सा इतिहास",
-      "clientsRegistration": "सेवाग्राही दर्ता",
-      "opdSection": "ओपीडी क्षेत्र"
+      "clientsRegistration": "सेवाग्राही",
+      "opdSection": "ओपीडी क्षेत्र",
+      "laboratory": "प्रयोगशाला"
     },
     "HealthPost": {
       "name": "स्वास्थ्य चौकीको नाम",
@@ -198,7 +200,11 @@
     "healthPostUpdated": "स्वास्थ्य चौकी सफलतापूर्वक अपडेट गरियो!",
     "staffDeleted": "कर्मचारी सफलतापूर्वक मेटाइयो!",
     "staffCreated": "कर्मचारी सफलतापूर्वक सिर्जना गरियो!",
-    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!"
+    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!",
+    "opdCreated": "ओपीडी सफलतापूर्वक सिर्जना गरियो!",
+    "clientsCreated": "सेवाग्राही सफलतापूर्वक सिर्जना गरियो!",
+    "clientsUpdated": "सेवाग्राही सफलतापूर्वक अपडेट गरियो!",
+    "clientsDeleted": "सेवाग्राही सफलतापूर्वक मेटाइयो!"
   },
 
   "FileOperations": {
@@ -218,6 +224,8 @@
     "next": "अर्को",
     "submitRegistration": "दर्ता पेश गर्नुहोस्",
     "addNewClient": "नयाँ सेवाग्राही थप्नुहोस्",
+    "healthpostPatients": "स्वास्थ्य चौकीको बिरामीहरू",
+    "allPatients": "सबै बिरामीहरू",
     "personalInfo": {
       "title": "व्यक्तिगत जानकारी",
       "description": "आधारभूत व्यक्तिगत विवरणहरू प्रविष्ट गर्नुहोस्",
@@ -281,6 +289,7 @@
     "newOpdReg": "नयाँ ओपीडी दर्ता",
     "patientName": "बिरामीको नाम",
     "visitedDate": "भेट गरिएको मिति",
+    "treatmentType": "उपचार प्रकार",
     "visitType": "भेट प्रकार",
     "healthPost": "स्वास्थ्य चौकी",
     "bp": "रक्तचाप",
@@ -308,7 +317,36 @@
     "timing": " खाना पहिले/पछि",
     "afterMeal": "खाना पछि",
     "beforeMeal": "खाना पहिले",
-    "anyTime": "कुनै पनि समयमा"
+    "anyTime": "कुनै पनि समयमा",
+    "viewTicket": "टिकट हेर्नुहोस्",
+    "printTicket": "टिकट प्रिन्ट गर्नुहोस्",
+    "healthPostTicket": "स्वास्थ्य चौकीको टिकटहरू",
+    "allTickets": "सबै टिकटहरू",
+    "ticketPreview": "टिकट विवरण",
+    "ticketDetails": {
+      "title": "स्वास्थ्य सेवा कार्ड",
+      "patientName": "नाम थर",
+      "patientCode": "सेवाग्राही कोड",
+      "date": "मिति",
+      "opdNo": "ओ.पि.डि न",
+      "nationality": "राष्ट्रियता",
+      "district": "ठेगाना, जिल्ला",
+      "municipality": "म.न.पा./गा.पा.",
+      "wardNo": "वडा नं",
+      "gender": "लिङ्ग",
+      "age": "उमेर",
+      "contactNo": "सम्पर्क नं",
+      "followUp": "पुनः जाँच",
+      "complaintsDiagnosis": "सिकायत र निदान",
+      "complaintsHistory": "सिकायत/इतिहास",
+      "observedExamination": "अवलोकन/परीक्षण",
+      "diagnosis": "निदान",
+      "treatmentAdvice": "उपचार र औषधिहरू",
+      "medicines": "निर्धारित औषधीहरू",
+      "treatment": "उपचार",
+      "examinier": "चिकित्सा परीक्षक",
+      "reminder": "कृपया आफ्नो स्वास्थ्य सेवा कार्ड सुरक्षित राख्नुहोस् र भविष्यका भेटहरूमा यो ल्याउनुहोस्।"
+    }
   },
   "Placeholder": {
     "enterFileName": "फाइलको नाम प्रविष्ट गर्नुहोस्",
@@ -397,6 +435,7 @@
     "searchHere": "यहाँ खोज्नुहोस्",
     "searchOptions": "विकल्पहरू खोज्नुहोस्...",
     "selectVisitType": "भेट प्रकार छान्नुहोस्",
+    "selectTreatmentType": "उपचार प्रकार छान्नुहोस्",
     "complaintsHistory": "गुनासो/इतिहास प्रविष्ट गर्नुहोस्...",
     "observedExamination": "अवलोकन / परीक्षण विवरण प्रविष्ट गर्नुहोस्...",
     "diagnosis": "निदान प्रविष्ट गर्नुहोस्...",
@@ -555,7 +594,7 @@
       "HS": "सुत्ने बेलामा",
       "STAT": "तत्काल / एकपटक मात्र",
       "ONCE_A_WEEK": "हप्तामा एकपटक",
-      "SOS": "आवश्यकताअनुसार",
+      "SOS": "आवश्यकता अनुसार",
       "null": "निर्धारित छैन"
     },
     "intakeTime": {
@@ -563,6 +602,11 @@
       "AFTERNOON": "दिउँसो",
       "EVENING": "साँझ",
       "NIGHT": "बेलुका"
+    },
+    "timing": {
+      "BEFORE_FOOD": "खाना भन्दा  पहिले",
+      "AFTER_FOOD": "खाना खाए पछि",
+      "ANY_TIME": "कुनै पनि समयमा"
     }
   }
 }

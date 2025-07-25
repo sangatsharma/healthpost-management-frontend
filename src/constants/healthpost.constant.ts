@@ -10,11 +10,11 @@ export enum VisitType {
 }
 
 export enum TreatementType {
-  MEDICATION = 'Medication',
-  SURGERY = 'Surgery',
-  THERAPY = 'Therapy',
-  DIAGNOSTIC_TEST = 'Diagnostic Test',
-  REHABILITATION = 'Rehabilitation',
-  PALLIATIVE_CARE = 'Palliative Care',
-  OTHER = 'Other',
+  MEDICATION = 'MEDICATION',
+  SURGERY = 'SURGERY',
+  THERAPY = 'THERAPY',
+  DIAGNOSTIC_TEST = 'DIAGNOSTIC_TEST',
+  REHABILITATION = 'REHABILITATION',
+  PALLIATIVE_CARE = 'PALLIATIVE_CARE',
+  OTHER = 'OTHER',
 }

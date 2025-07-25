@@ -1,5 +1,6 @@
 import { TClientSchema } from '@/schemas/healthpostPortal/clients.schema';
 import { TPermission } from './global';
+import { TOpdSchema } from '@/schemas/healthpostPortal/opd.schema';
 
 export enum UserRole {
   SUPERADMIN = 'SUPERADMIN',
@@ -16,6 +17,11 @@ export enum UserRole {
 
 export enum UserType {
   PATIENT = 'PATIENT',
+  HP = 'HP',
+  ADMIN = 'ADMIN',
+}
+
+export enum HealthPostUserType {
   HP = 'HP',
   ADMIN = 'ADMIN',
 }
@@ -103,8 +109,9 @@ export type TUser = {
   status: Status;
   permissions: TPermission[];
   healthPostId?: string;
-  gender?: TGender;
+  gender: TGender;
   profileImage?: string[];
+  signature: string[];
   healthPost?: {
     name: string;
   };
@@ -123,4 +130,14 @@ export type TGender = 'MALE' | 'FEMALE' | 'OTHER';
 export type TClient = TClientSchema & {
   createdAt: string;
   id: string;
+  patientCode: string;
+};
+export type TOpd = TOpdSchema & {
+  createdAt: string;
+  id: string;
+  opdNo: string;
+  patient: TClient;
+  healthPost: {
+    name: string;
+  };
 };

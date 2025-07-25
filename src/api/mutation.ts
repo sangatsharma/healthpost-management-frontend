@@ -3,6 +3,7 @@ import { queryKeys } from './queryKeys';
 import {
   mutateClientInfo,
   mutateHealthPostInfo,
+  mutateOpdInfo,
   mutateStaffInfo,
 } from './queries';
 import { queryClient } from '@/lib/queryClient';
@@ -52,7 +53,8 @@ export function useClientMutation({ onSuccess }: { onSuccess?: () => void }) {
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.client.clients,
+        queryKey: [queryKeys.client.clients],
+        exact: false,
       });
 
       onSuccess?.();
@@ -60,4 +62,21 @@ export function useClientMutation({ onSuccess }: { onSuccess?: () => void }) {
   });
 
   return { mutateClient, isPending };
+}
+
+export function useOpdMutation({ onSuccess }: { onSuccess?: () => void }) {
+  const { mutate: mutateOpd, isPending } = useMutation({
+    mutationKey: queryKeys.opd.opds,
+    mutationFn: mutateOpdInfo,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.opd.opds,
+      });
+
+      onSuccess?.();
+    },
+  });
+
+  return { mutateOpd, isPending };
 }

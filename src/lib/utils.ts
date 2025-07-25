@@ -73,6 +73,8 @@ export const convertToFormData = (
       formData.append(key, value.toISOString());
     } else if (typeof value === 'object' && value !== null) {
       formData.append(key, JSON.stringify(value));
+    } else if (value === undefined) {
+      formData.append(key, 'null');
     } else {
       formData.append(key, value != null ? String(value) : '');
     }
@@ -123,3 +125,17 @@ export const renderFullName = ({
   // Default to an empty string (should never reach here due to earlier checks).
   return '';
 };
+
+export const cleanNepaliDate = (date: string): string => {
+  if (!date) return '';
+  return date.split('T')[0];
+};
+export function replaceWithNepali(text: string) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/\bmorning\b/gi, 'बिहान')
+    .replace(/\bafternoon\b/gi, 'दिउसो')
+    .replace(/\bnight\b/gi, 'बेलुका')
+    .replace(/\bevening\b/gi, 'साँझ');
+}

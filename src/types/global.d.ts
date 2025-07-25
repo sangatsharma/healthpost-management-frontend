@@ -111,6 +111,7 @@ type TToastTexts = Record<
 type ExtendedColumnDef<T, V = T> = ColumnDef<T, V> & {
   idForRowClick?: keyof T;
   accessorKey?: DeepKeys<T> | string;
+  hideColumn?: boolean;
   map?: {
     key: string;
     valueFrom?: DeepKeys<T> | string;
