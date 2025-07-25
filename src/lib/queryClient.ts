@@ -4,7 +4,7 @@ import { QueryClient, onlineManager } from '@tanstack/react-query';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 60,
+      staleTime: 5,
       //cache Time
       gcTime: 1000 * 60 * 60 * 24,
       retry: (failureCount, error: TAny) => {
@@ -16,6 +16,7 @@ export const queryClient = new QueryClient({
       },
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
+      refetchOnMount: true,
       enabled: typeof navigator !== 'undefined' ? navigator.onLine : true,
     },
     mutations: {

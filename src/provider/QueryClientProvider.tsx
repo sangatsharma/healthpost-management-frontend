@@ -18,7 +18,15 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
         maxAge: 1000 * 60 * 60 * 24, // 24 hours
         buster: '', // Change this to invalidate all cached data
       });
+      window.addEventListener('online', () => {
+        queryClient.refetchQueries();
+      });
     }
+    return () => {
+      window.removeEventListener('online', () => {
+        queryClient.refetchQueries();
+      });
+    };
   }, []);
 
   return (

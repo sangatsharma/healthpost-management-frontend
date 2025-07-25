@@ -20,10 +20,10 @@ import { useMutation } from '@tanstack/react-query';
 import { login, verifyOTP } from '@/api/queries';
 import { toast } from 'sonner';
 import { useUserStore } from '@/zustand/useUserStore';
-import { useRouter } from '@/i18n/navigation';
 import { Mail } from 'lucide-react';
 import Loading from './ui/loading';
 import { getLoginSchema, TLoginSchema } from '@/schemas/auth.schema';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
@@ -94,7 +94,7 @@ export default function LoginPage() {
         const { refreshToken: _refreshToken, ...dataToStore } = user;
         localStorage.setItem('userInfo', JSON.stringify(dataToStore));
         toast.success(data?.message);
-        navigate.push(`/${data?.data.user.accountType.toLowerCase()}`);
+        navigate.replace(`/${data?.data.user.accountType.toLowerCase()}`);
       }
     },
   });
@@ -166,6 +166,7 @@ export default function LoginPage() {
                   hideError={false}
                   placeholder={t('email_placeholder')}
                   className="w-full text-[18px] placeholder:text-[16px]"
+                  allowNepaliTranslation={false}
                 />
               </>
             ) : (

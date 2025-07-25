@@ -17,6 +17,7 @@ import { DataTableToolbar } from './data-table-toolbar';
 
 import {
   ColumnFiltersState,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -35,29 +36,40 @@ import {
   ExtendedColumnDef,
 } from '@/types/global';
 import SaveFile from '../reusables/SaveFile';
+import FetchWrapper from '../reusables/fetch-wrapper';
 
 interface DataTableProps<TData, TValue> {
   columns: ExtendedColumnDef<TData, TValue>[];
   data: TData[];
-  onRowClick?: (id: string) => void;
+  onRowClick?: (row: Row<TData>) => void;
   addButton?: baseButtonType;
   header?: dataTableHeaderType;
   utils?: {
     showPagination: boolean;
     hasExport?: boolean;
   };
+  Tabs?: React.ReactNode;
+  rest?: {
+    isPending?: boolean;
+    isLoading: boolean;
+    isError: boolean;
+    refetch?: () => void;
+  };
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
+  rest,
   data,
   onRowClick,
   addButton,
+  Tabs,
   header,
   utils: { showPagination = true, hasExport = true } = {
     showPagination: true,
   },
 }: DataTableProps<TData, TValue>) {
+  const filteredColumns = columns.filter((column) => !column.hideColumn);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -80,7 +92,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
   const table = useReactTable({
     data: sortedData,
-    columns,
+    columns: filteredColumns,
     getRowId: (row) => row?.id,
     state: {
       sorting,
@@ -110,101 +122,104 @@ export function DataTable<TData extends { id: string }, TValue>({
           header={header}
           hasExport={hasExport}
           setSaveModal={setSaveModal}
+          Tabs={Tabs}
         />
-        <div className="mt-4 overflow-clip rounded-md border">
-          <Table>
-            <TableHeader className="bg-[#c3f3dd] dark:bg-[#131313]">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        className={cn(
-                          header.column.columnDef.meta?.headerClassName,
-                          'border-r py-3',
-                        )}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    className="transition-colors odd:bg-[#fffefef6] even:bg-[#f6fbfd] hover:bg-[#ecfdf5] data-[state=selected]:bg-[#f4f7ef] dark:odd:bg-[#1f1f1f] dark:even:bg-[#181717] dark:hover:bg-[#2b2b2b] dark:data-[state=selected]:bg-[#262626]"
-                    data-state={row.getIsSelected() && 'selected'}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (onRowClick) {
-                        onRowClick(row.original.id);
-                      }
-                    }}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className={
-                          cell.column.columnDef.meta?.cellClassName ??
-                          'table-row-width border-r px-4'
-                        }
-                      >
-                        <span className="tablecell">
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
+        <FetchWrapper {...rest} isTable>
+          <div className="mt-4 overflow-clip rounded-md border">
+            <Table>
+              <TableHeader className="bg-[#c3f3dd] dark:bg-[#131313]">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          className={cn(
+                            header.column.columnDef.meta?.headerClassName,
+                            'border-r py-3',
                           )}
-                        </span>
-                      </TableCell>
-                    ))}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        {showPagination && (
-          <div className={cn(`flex items-center py-4`)}>
-            <div className="text-muted-foreground flex-1 text-sm whitespace-nowrap">
-              {table.getFilteredSelectedRowModel().rows.length} of{' '}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
-            <div className="flex justify-end">
-              <DataTablePagination
-                table={table}
-                currentPage={table.getState().pagination.pageIndex + 1}
-                totalPages={table.getPageCount()}
-                onPageChange={(pageNumber) =>
-                  table.setPageIndex(pageNumber - 1)
-                }
-                showPreviousNext
-              />
-            </div>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      className="transition-colors odd:bg-[#fffefef6] even:bg-[#f6fbfd] hover:bg-[#ecfdf5] data-[state=selected]:bg-[#f4f7ef] dark:odd:bg-[#1f1f1f] dark:even:bg-[#181717] dark:hover:bg-[#2b2b2b] dark:data-[state=selected]:bg-[#262626]"
+                      data-state={row.getIsSelected() && 'selected'}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (onRowClick) {
+                          onRowClick(row);
+                        }
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className={
+                            cell.column.columnDef.meta?.cellClassName ??
+                            'table-row-width border-r px-4'
+                          }
+                        >
+                          <span className="tablecell">
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </span>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={filteredColumns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
-        )}
+          {showPagination && (
+            <div className={cn(`flex items-center py-4`)}>
+              <div className="text-muted-foreground flex-1 text-sm whitespace-nowrap">
+                {table.getFilteredSelectedRowModel().rows.length} of{' '}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </div>
+              <div className="flex justify-end">
+                <DataTablePagination
+                  table={table}
+                  currentPage={table.getState().pagination.pageIndex + 1}
+                  totalPages={table.getPageCount()}
+                  onPageChange={(pageNumber) =>
+                    table.setPageIndex(pageNumber - 1)
+                  }
+                  showPreviousNext
+                />
+              </div>
+            </div>
+          )}
+        </FetchWrapper>
       </div>
-      {saveModal && sortedData?.length && (
+      {saveModal && sortedData?.length > 0 && (
         <SaveFile
           isOpen={saveModal}
           toggleModal={setSaveModal}

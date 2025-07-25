@@ -75,6 +75,7 @@ const InputComponent = React.forwardRef<
     )}
     {...props}
     ref={ref}
+    allowNepaliTranslation={false}
   />
 ));
 InputComponent.displayName = 'InputComponent';

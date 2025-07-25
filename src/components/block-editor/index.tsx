@@ -27,7 +27,7 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
       placeholder = "Type '/' for commands or start writing...",
       className = '',
       disabled = false,
-      imageUploadEndpoint = '/api/upload-image',
+      imageUploadEndpoint,
       maxImageSize = 1 * 1024 * 1024, // 5MB
       outerClassName,
     },
@@ -42,6 +42,7 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
     const editor = useEditor({
       content: value,
       editable: !disabled,
+      immediatelyRender: false,
       editorProps: {
         attributes: {
           class: `prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none max-w-4xl min-h-[400px] p-8 dark:bg-[#181818] ${className}`,
@@ -85,6 +86,7 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
         StarterKit.configure({
           bulletList: { keepMarks: true, keepAttributes: false },
           orderedList: { keepMarks: true, keepAttributes: false },
+          blockquote: false, // Disable StarterKit's blockquote since we're using the explicit extension
         }),
         TextAlign.configure({ types: ['heading', 'paragraph'] }),
         TextStyle,
@@ -130,10 +132,6 @@ const BlockEditor = forwardRef<BlockEditorRef, BlockEditorProps>(
           'bg-background flex flex-col rounded-lg border',
           outerClassName,
         )}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
       >
         <Toolbar
           editor={editor}

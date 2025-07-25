@@ -1,4 +1,5 @@
 import { TreatementType, VisitType } from '@/constants/healthpost.constant';
+import { Frequency, IntakeRoute, Timing } from '@/constants/medicine.constant';
 import { basicValidator } from '@/lib/validators';
 import { TTypeFunction } from '@/types/global';
 import { z } from 'zod';
@@ -12,7 +13,7 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
       })
       .trim()
       .min(1, t('required')),
-    vitals: z
+    Vitals: z
       .object({
         bp: z.string().optional(),
         pulse: z.string().optional(),
@@ -60,7 +61,7 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
         },
       )
       .optional(),
-    prescribtions: z
+    prescriptions: z
       .array(
         z.object({
           name: z.string({
@@ -77,12 +78,10 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
               required_error: t('required'),
             })
             .trim(),
-          frequency: z
-            .string({
-              message: t('required'),
-              required_error: t('required'),
-            })
-            .trim(),
+          frequency: z.nativeEnum(Frequency, {
+            message: t('required'),
+            required_error: t('required'),
+          }),
           intakeTime: z
             .string({
               message: t('required'),
@@ -95,11 +94,11 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
               required_error: t('required'),
             })
             .trim(),
-          intakeRoute: z.string({
+          intakeRoute: z.nativeEnum(IntakeRoute, {
             message: t('required'),
             required_error: t('required'),
           }),
-          timing: z.enum(['BEFORE_FOOD', 'AFTER_FOOD', 'ANY_TIME'], {
+          timing: z.nativeEnum(Timing, {
             message: t('required'),
             required_error: t('required'),
           }),
@@ -112,7 +111,7 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
         }),
       )
       .optional(),
-    examinier: z.string({
+    examinerId: z.string({
       message: t('required'),
       required_error: t('required'),
     }),

@@ -5,6 +5,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { ImagePreviewer } from '../reusables/ImagePreviewer';
 
 function Avatar({
   className,
@@ -63,7 +64,7 @@ type TProps = {
 };
 
 export const SAvatar = ({
-  bg = '#00FFDE',
+  bg = '#008366',
   name,
   src,
   size,
@@ -101,20 +102,22 @@ export const SAvatar = ({
       title={name || 'Avatar'}
     >
       {isValidSrc && src ? (
-        <Image
-          src={src}
-          width={1920}
-          height={1080}
-          style={{
-            width: size || '40px',
-            height: size || '40px',
-          }}
-          alt={`${name || 'User'}'s Avatar`}
-          className={cn(
-            'aspect-square h-full w-full object-cover',
-            shape === 'radius-md' && 'rounded-md',
-          )}
-        />
+        <ImagePreviewer>
+          <Image
+            src={src}
+            width={1920}
+            height={1080}
+            style={{
+              width: size || '40px',
+              height: size || '40px',
+            }}
+            alt={`${name || 'User'}'s Avatar`}
+            className={cn(
+              'aspect-square h-full w-full object-cover',
+              shape === 'radius-md' && 'rounded-md',
+            )}
+          />
+        </ImagePreviewer>
       ) : (
         <div
           style={{

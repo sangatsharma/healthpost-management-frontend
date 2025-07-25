@@ -1,6 +1,6 @@
 'use client';
 import { SearchIcon, Share, SquareChevronLeft } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -18,6 +18,7 @@ interface DataTableToolbarProps<TData> {
   allowSearch?: boolean;
   setSaveModal?: React.Dispatch<React.SetStateAction<boolean>>;
   backNavigationUrl?: string;
+  Tabs?: ReactNode;
 }
 
 export function DataTableToolbar<TData>({
@@ -28,6 +29,7 @@ export function DataTableToolbar<TData>({
   setSaveModal,
   hasExport,
   backNavigationUrl,
+  Tabs,
 }: DataTableToolbarProps<TData>) {
   const ref = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -51,14 +53,19 @@ export function DataTableToolbar<TData>({
           <SquareChevronLeft className="bg-accent size-7" />
         </Button>
       )}
-      {header && (
-        <h1
-          className={cn(header.className, 'text-2xl font-semibold text-nowrap')}
-        >
-          {header.label}
-        </h1>
-      )}
-
+      <div className="flex w-full flex-col items-start">
+        {header && (
+          <h1
+            className={cn(
+              header.className,
+              'text-2xl font-semibold text-nowrap',
+            )}
+          >
+            {header.label}
+          </h1>
+        )}
+        {Tabs}
+      </div>
       <div className="flex w-full cursor-text justify-end">
         {allowSearch && (
           <Input
@@ -69,8 +76,10 @@ export function DataTableToolbar<TData>({
             className={`origin-right transition-all duration-300 ease-out ${
               showSearch ? 'w-64' : 'w-5'
             }`}
+            value={table?.getState().globalFilter ?? ''}
             icon={SearchIcon}
             onChange={(e) => table?.setGlobalFilter(e.target.value)}
+            allowNepaliTranslation={false}
           />
         )}
       </div>
@@ -85,6 +94,7 @@ export function DataTableToolbar<TData>({
         <Button
           variant={'outline'}
           onClick={() => setSaveModal?.((prev) => !prev)}
+          disabled={!table?.getFilteredRowModel().rows.length}
         >
           <Share className="mr-2 h-4 w-4" />
           Export

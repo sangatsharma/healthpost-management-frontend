@@ -390,6 +390,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         name={name}
         type="file"
         multiple={maxFiles > 1}
+        allowNepaliTranslation={false}
       />
 
       <p className="text-center text-sm text-gray-600">

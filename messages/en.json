@@ -4,6 +4,7 @@
     "reset": "Reset",
     "submit": "Submit",
     "images": "Images",
+    "signature": "Signature",
     "search": "Search",
     "select": "Select",
     "SN": "S.N",
@@ -23,8 +24,9 @@
       "patients": "Patients",
       "staffsmanagement": "Staffs Management",
       "medicalhistory": "Medical History",
-      "clientsRegistration": "Clients Registration",
-      "opdSection": "OPD Section"
+      "clientsRegistration": "Clients",
+      "opdSection": "OPD Section",
+      "laboratory": "Laboratory"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -200,7 +202,11 @@
     "healthPostUpdated": "Health Post updated successfully!",
     "staffDeleted": "Staff deleted successfully!",
     "staffCreated": "Staff created successfully!",
-    "staffUpdated": "Staff updated successfully!"
+    "staffUpdated": "Staff updated successfully!",
+    "opdCreated": "New OPD created successfully!",
+    "clientsCreated": "New client created successfully!",
+    "clientsUpdated": "Client updated successfully!",
+    "clientsDeleted": "Client deleted successfully!"
   },
 
   "FileOperations": {
@@ -221,6 +227,8 @@
     "next": "Next",
     "submitRegistration": "Submit Registration",
     "addNewClient": "Add New Client",
+    "healthpostPatients": "HealthPost Patients",
+    "allPatients": "All Patients",
     "personalInfo": {
       "title": "Personal Information",
       "description": "Enter basic personal details",
@@ -285,6 +293,7 @@
     "patientName": "Patient Name",
     "visitedDate": "Date of Visit",
     "visitType": "Visit Type",
+    "treatmentType": "Treatment Type",
     "healthPost": "Health Post",
     "bp": "Blood Pressure",
     "pulse": "Pulse Rate",
@@ -311,7 +320,36 @@
     "timing": "Before/After Meal",
     "afterMeal": "After Meal",
     "beforeMeal": "Before Meal",
-    "anyTime": "Any Time"
+    "anyTime": "Any Time",
+    "viewTicket": "View Ticket",
+    "printTicket": "Print Ticket",
+    "healthPostTicket": "Health Post Ticket",
+    "allTickets": "All Tickets",
+    "ticketPreview": "Ticket Preview",
+    "ticketDetails": {
+      "title": "Health Service Card",
+      "patientName": "Patient Name",
+      "patientCode": "Patient Code",
+      "date": "Date",
+      "opdNo": "OPD No",
+      "nationality": "Nationality",
+      "district": "District",
+      "municipality": "Municipality",
+      "wardNo": "Ward No",
+      "gender": "Gender",
+      "age": "Age",
+      "contactNo": "Contact No",
+      "followUp": "Follow-up",
+      "complaintsDiagnosis": "Complaints/Diagnosis",
+      "complaintsHistory": "Complaints/History",
+      "observedExamination": "Observed Examination",
+      "diagnosis": "Diagnosis",
+      "treatmentAdvice": "Treatment and Medicines",
+      "medicines": "Prescribed Medicines",
+      "treatment": "Treatment",
+      "examinier": "Examiner",
+      "reminder": "Please bring this card for follow-up visits and future consultations."
+    }
   },
   "Placeholder": {
     "enterFileName": "Enter file name",
@@ -399,6 +437,7 @@
     "searchHere": "Search here",
     "searchOptions": "Search options...",
     "selectVisitType": "Select visit type",
+    "selectTreatmentType": "Select treatment type",
     "complaintsHistory": "Enter complaints or history...",
     "observedExamination": "Enter observed examination details...",
     "diagnosis": "Enter diagnosis...",
@@ -565,6 +604,11 @@
       "AFTERNOON": "Afternoon",
       "EVENING": "Evening",
       "NIGHT": "Night"
+    },
+    "timing": {
+      "BEFORE_FOOD": "Before Meal",
+      "AFTER_FOOD": "After Meal",
+      "ANY_TIME": "Any Time"
     }
   }
 }

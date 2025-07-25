@@ -17,6 +17,7 @@ import { Button } from '../ui/button';
 import { baseButtonType } from '@/types/global';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useLocale } from 'next-intl';
 
 type TProps = {
   isFormDirty?: boolean;
@@ -52,6 +53,7 @@ const FormDialog: React.FC<TProps> = ({
 }) => {
   const t = useTypedTranslations('AlertDialog');
   const { showFormLostDialog } = useGlobalAlert();
+  const locale = useLocale();
 
   const handleModalClose = (): void => {
     if (isFormDirty) {
@@ -71,7 +73,7 @@ const FormDialog: React.FC<TProps> = ({
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && locale !== 'np') {
       window.onkeydown = (e) => {
         // Trigger the submit action if Enter is pressed
         if (
