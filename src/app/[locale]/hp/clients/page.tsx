@@ -1,15 +1,12 @@
 'use client';
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-// import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
-// import { Permissions } from '@/zustand/permissions';
 import { Row } from '@tanstack/react-table';
 import { Delete, Edit, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { differenceInYears } from 'date-fns';
 import { toast } from 'sonner';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { renderFullName } from '@/lib/utils';
@@ -19,13 +16,15 @@ import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useStaffMutation } from '@/api/mutation';
 import ClientRegistrationModal from './_components/AddClientModal';
 import AvatarText from '@/components/reusables/AvatarText';
-import { BSToAD } from 'bikram-sambat-js';
 import { TClient } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
-import BlockEditor from '@/components/block-editor';
 import { useQuery } from '@tanstack/react-query';
 import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { Permissions } from '@/zustand/permissions';
+import { BSToAD } from 'bikram-sambat-js';
+import { differenceInYears } from 'date-fns';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useHasPermission } from '@/hooks/useHasPermission';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -35,16 +34,20 @@ export default function Page() {
     isOpen: false,
     client: undefined,
   });
-  const [value, setValue] = useState('');
-
+  const [selectedTab, setSelectedTab] = useState<'healthpost' | 'all'>(
+    'healthpost',
+  );
   const t = useTypedTranslations('GeneralPages');
   const tAlert = useTypedTranslations('AlertDialog');
   const tMed = useTypedTranslations('MedicalHistory');
-
+  const tEnum = useTypedTranslations('Enums');
+  const ct = useTypedTranslations('ClientRegistration');
+  const tToast = useTypedTranslations('Toast');
+  const { hasWritePermission } = useHasPermission(Permissions.PATIENT_RECORDS);
   const { showDeleteConfirmDialog } = useGlobalAlert();
   const { mutateStaff } = useStaffMutation({
     onSuccess: () => {
-      toast.success('Health Post deleted successfully!');
+      toast.success(tToast('clientsDeleted'));
     },
   });
 
@@ -119,28 +122,40 @@ export default function Page() {
           renderFullName({
             params: data,
           }),
+        valueFrom: 'firstName',
       },
-      accessorKey: 'name',
+      accessorKey: 'firstName',
       header: () => t('User.fullName'),
-      cell: ({ row }) => (
-        <AvatarText
-          title={renderFullName({
-            params: row.original,
-          })}
-          name={renderFullName({
-            params: row.original,
-          })}
-          subtitle={`${tMed('age')}: ${differenceInYears(
-            Date.now(),
-            BSToAD('2076-01-01'),
-          )} ${tMed('years')} ${tMed('gender')}: ${row.original.gender}`}
-          src={
-            typeof row?.original?.profileImage === 'string'
-              ? row.original.profileImage
-              : ''
+      cell: ({ row }) => {
+        let differenceDate;
+        try {
+          if (row?.original?.dobBs) {
+            differenceDate = differenceInYears(
+              Date.now(),
+              BSToAD(row?.original?.dobBs),
+            );
           }
-        />
-      ),
+        } catch (_error) {
+          differenceDate = '-';
+        }
+        return (
+          <AvatarText
+            title={renderFullName({
+              params: row.original,
+            })}
+            name={renderFullName({
+              params: row.original,
+            })}
+            subtitle={`${tMed('age')}: ${
+              differenceDate
+            } ${tMed('years')} ${tMed('gender')}: ${tEnum(`gender.${row.original.gender}`)}`}
+            src={(row.original?.profileImage?.[0] as string) || ''}
+            classNames={{
+              titleClassName: 'text-lg font-semibold',
+            }}
+          />
+        );
+      },
     },
     {
       map: {
@@ -148,7 +163,7 @@ export default function Page() {
         valueFrom: 'gender',
       },
       id: 'gender',
-      enableHiding: false,
+      hideColumn: true,
     },
 
     {
@@ -158,7 +173,9 @@ export default function Page() {
       },
       accessorKey: 'casteType',
       header: () => t('User.casteType'),
-      cell: ({ row }) => <span>{row.original.casteType}</span>,
+      cell: ({ row }) => (
+        <span>{tEnum(`casteType.${row.original.casteType}`)}</span>
+      ),
     },
     {
       map: {
@@ -188,7 +205,9 @@ export default function Page() {
       },
       accessorKey: 'phone',
       header: () => t('HealthPost.phone'),
-      cell: ({ row }) => <span>{row.original.phoneNumber}</span>,
+      cell: ({ row }) => (
+        <span>{row.original.phoneNumber || row.original.emergencyContact}</span>
+      ),
     },
     {
       map: {
@@ -211,6 +230,7 @@ export default function Page() {
           className="mr-10 flex justify-end"
         />
       ),
+      hideColumn: !hasWritePermission,
       cell: ({ row }) => (
         <div className="mr-14 flex justify-end">
           <ActionDropdown data={ActionOptions(row)} />
@@ -221,55 +241,83 @@ export default function Page() {
     },
   ];
 
-  const { data } = useQuery({
-    queryKey: queryKeys.staff.staffs,
+  const { data, ...rest } = useQuery({
+    queryKey: [
+      queryKeys.client.clients,
+      selectedTab,
+      selectedTab === 'healthpost'
+        ? useUserStore.getState().user?.healthPostId
+        : 'all',
+    ],
     queryFn: () =>
       fetchClientsInfo({
-        healthPostId: useUserStore.getState().user?.healthPostId || '',
+        healthPostId:
+          selectedTab === 'healthpost'
+            ? useUserStore.getState().user?.healthPostId || ''
+            : undefined,
       }),
   });
 
   return (
     <ProtectedRoute requiredPermission={Permissions.PATIENT_RECORDS}>
-      <>
-        <div className="p-4">
-          <DataTable
-            columns={columns}
-            header={{
-              label: t('SidebarItems.patientsRegistration'),
-              className: 'text-2xl font-bold mb-4',
-            }}
-            data={(data?.data as TClient[]) || []}
-            utils={{
-              showPagination: true,
-              hasExport: true,
-            }}
-            addButton={{
-              label: t('User.addStaff'),
+      <div className="p-4">
+        <DataTable
+          rest={rest}
+          Tabs={
+            <Tabs
+              defaultValue="HealthPost"
+              className="min-w-fit cursor-pointer"
+            >
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger
+                  value="HealthPost"
+                  className="px-3"
+                  onClick={() => setSelectedTab('healthpost')}
+                >
+                  {ct('healthpostPatients')}
+                </TabsTrigger>
+                <TabsTrigger value="All" onClick={() => setSelectedTab('all')}>
+                  {ct('allPatients')}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          }
+          columns={columns}
+          header={{
+            label: t('SidebarItems.clientsRegistration'),
+            className: 'text-2xl font-bold mb-4',
+          }}
+          data={(data?.data as TClient[]) || []}
+          utils={{
+            showPagination: true,
+            hasExport: true,
+          }}
+          addButton={
+            hasWritePermission && {
+              label: ct('addNewClient'),
               icon: <Plus className="mr-2 h-4 w-4" />,
               onClick: () =>
                 setIsOpenAddModal({
                   isOpen: true,
                   client: undefined,
                 }),
-            }}
-            onRowClick={() => () => {}}
-          />
-        </div>
-        {isOpenAddModal.isOpen && (
-          <ClientRegistrationModal
-            isOpen={isOpenAddModal.isOpen}
-            handleExit={() =>
-              setIsOpenAddModal((prev) => ({
-                ...prev,
-                isOpen: !prev.isOpen,
-              }))
             }
-          />
-        )}
-      </>
-
-      <BlockEditor value={value} onChange={setValue} />
+          }
+          onRowClick={() => () => {}}
+        />
+      </div>
+      {isOpenAddModal.isOpen && (
+        <ClientRegistrationModal
+          clientId={isOpenAddModal?.client?.id}
+          isOpen={isOpenAddModal.isOpen}
+          handleExit={() =>
+            setIsOpenAddModal((prev) => ({
+              client: undefined,
+              isOpen: !prev.isOpen,
+            }))
+          }
+        />
+      )}
     </ProtectedRoute>
   );
 }

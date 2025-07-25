@@ -1,18 +1,10 @@
 import { ReactNode } from 'react';
 import './globals.css';
-import { Poppins } from 'next/font/google';
 import { useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Metadata, Viewport } from 'next';
 import { ThemeProvider } from 'next-themes';
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-poppins',
-  display: 'swap',
-  fallback: ['Noto Sans Devanagari', 'system-ui', 'sans-serif'],
-});
+import { poppins } from '@/constants/fonts';
 
 export const metadata: Metadata = {
   title: {
@@ -152,7 +144,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {' '}
           {children}
         </ThemeProvider>
       </body>

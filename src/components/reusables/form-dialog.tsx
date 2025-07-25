@@ -17,6 +17,7 @@ import { Button } from '../ui/button';
 import { baseButtonType } from '@/types/global';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useLocale } from 'next-intl';
 
 type TProps = {
   isFormDirty?: boolean;
@@ -52,6 +53,7 @@ const FormDialog: React.FC<TProps> = ({
 }) => {
   const t = useTypedTranslations('AlertDialog');
   const { showFormLostDialog } = useGlobalAlert();
+  const locale = useLocale();
 
   const handleModalClose = (): void => {
     if (isFormDirty) {
@@ -71,7 +73,7 @@ const FormDialog: React.FC<TProps> = ({
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && locale !== 'np') {
       window.onkeydown = (e) => {
         // Trigger the submit action if Enter is pressed
         if (
@@ -153,36 +155,15 @@ const FormDialog: React.FC<TProps> = ({
           className,
         )}
       >
+        <DialogTitle className="sr-only">{props.title}</DialogTitle>
+
         {renderContent()}
         {(resetAction || mutateAction) && !isLoading && !isError && (
           <DialogFooter className="mt-4">
-            {resetAction && (
-              <Button
-                onClick={resetAction.onClick && resetAction.onClick}
-                variant={resetAction.variant || 'ghost'}
-                className={cn(
-                  'cursor-pointer space-x-2',
-                  resetAction.className,
-                )}
-              >
-                {resetAction.icon} {resetAction.label}
-              </Button>
-            )}
-            {mutateAction && (
-              <Button
-                onClick={mutateAction.onClick && mutateAction.onClick}
-                type="submit"
-                variant={mutateAction.variant || 'default'}
-                className={cn(
-                  'cursor-pointer space-x-2',
-                  mutateAction.className,
-                )}
-                disabled={mutateAction.disabled}
-                isLoading={mutateAction.isLoading}
-              >
-                {mutateAction.icon} {mutateAction.label}
-              </Button>
-            )}
+            <FormButtons
+              resetAction={resetAction}
+              mutateAction={mutateAction}
+            />
           </DialogFooter>
         )}
       </DialogContent>
@@ -191,3 +172,41 @@ const FormDialog: React.FC<TProps> = ({
 };
 
 export default FormDialog;
+
+export const FormButtons = ({
+  className,
+  resetAction,
+  mutateAction,
+}: {
+  className?: string;
+  resetAction?: baseButtonType;
+  mutateAction?: baseButtonType;
+}) => {
+  const t = useTypedTranslations('GeneralPages');
+  return (
+    <div className={cn('flex w-full justify-between', className)}>
+      {resetAction && (
+        <Button
+          onClick={resetAction.onClick && resetAction.onClick}
+          variant={resetAction.variant || 'outline'}
+          className={cn('cursor-pointer space-x-2', resetAction.className)}
+          type="reset"
+        >
+          {resetAction.icon} {resetAction.label || t('reset')}
+        </Button>
+      )}
+      {mutateAction && (
+        <Button
+          onClick={mutateAction.onClick && mutateAction.onClick}
+          type="submit"
+          variant={mutateAction.variant || 'default'}
+          className={cn('cursor-pointer space-x-2', mutateAction.className)}
+          disabled={mutateAction.disabled}
+          isLoading={mutateAction.isLoading}
+        >
+          {mutateAction.icon} {mutateAction.label || t('submit')}
+        </Button>
+      )}
+    </div>
+  );
+};

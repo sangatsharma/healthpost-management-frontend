@@ -27,7 +27,7 @@ export const basicValidator = ({
     .max(maxLength, {
       message: useReqMsg
         ? message
-        : translationFunction('maxLength', { max: 4 }),
+        : translationFunction('maxLength', { max: maxLength }),
     });
   if (isEmail) {
     schema = schema.email({
@@ -84,10 +84,8 @@ type EnumValidatorOptions = {
   min_selection_error?: string;
   max_selection_error?: string;
 };
-
 export function enumValidator<T extends EnumLike>(
   enumType: T,
-
   options: EnumValidatorOptions,
 ) {
   const {
@@ -112,19 +110,23 @@ export function enumValidator<T extends EnumLike>(
     message: invalid_type_error,
   });
 
+  // Add preprocessing to convert empty string to undefined
+  const preprocessedEnum = z.preprocess((val) => {
+    if (val === '') return undefined;
+    return val;
+  }, baseEnum);
+
   // Handle array case
   if (min_selection !== undefined && min_selection > 1) {
-    let arrayValidator = z.array(baseEnum, {
+    let arrayValidator = z.array(preprocessedEnum, {
       required_error,
       invalid_type_error,
     });
 
-    // Apply min selection
     if (min_selection !== undefined) {
       arrayValidator = arrayValidator.min(min_selection, min_selection_error);
     }
 
-    // Apply max selection
     if (max_selection !== undefined) {
       arrayValidator = arrayValidator.max(max_selection, max_selection_error);
     }
@@ -133,5 +135,5 @@ export function enumValidator<T extends EnumLike>(
   }
 
   // Handle single value case
-  return required ? baseEnum : baseEnum.optional();
+  return required ? preprocessedEnum : preprocessedEnum.optional();
 }

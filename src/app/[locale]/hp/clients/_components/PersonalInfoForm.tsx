@@ -11,41 +11,55 @@ import {
 import { CasteType, Gender, Nationality, Status } from '@/types/user.types';
 import { useFormContext } from 'react-hook-form';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
+import 'nepali-datepicker-reactjs/dist/index.css';
 import { FileUploader } from '@/components/reusables/image-uploader';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import 'nepali-datepicker-reactjs/dist/index.css';
 
 export default function PersonalInfoForm() {
   const form = useFormContext<TPersonalInfoSchema & TSystemInfoSchema>();
   const t = useTypedTranslations('ClientRegistration');
   const p = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
 
   return (
     <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
       <FormField
         control={form.control}
         name="firstName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.firstName')} isRequired>
-            <Input {...field} placeholder={p('firstName')} autoFocus />
+            <Input
+              {...field}
+              placeholder={p('firstName')}
+              autoFocus
+              errors={formState.errors.firstName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="middleName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.middleName')}>
-            <Input {...field} placeholder={p('middleName')} />
+            <Input
+              {...field}
+              placeholder={p('middleName')}
+              errors={formState.errors.middleName}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="lastName"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.lastName')} isRequired>
-            <Input {...field} placeholder={p('lastName')} />
+            <Input
+              {...field}
+              placeholder={p('lastName')}
+              errors={formState.errors.lastName}
+            />
           </FormWrapper>
         )}
       />
@@ -55,7 +69,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.casteType')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(CasteType)}
+              options={mapEnumToOptions(CasteType, tEnumKeys, 'casteType')}
               placeholder={`${t('personalInfo.casteType')} `}
               {...field}
               required
@@ -71,7 +85,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.gender')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Gender)}
+              options={mapEnumToOptions(Gender, tEnumKeys, 'gender')}
               placeholder={p('selectGender')}
               {...field}
               required
@@ -87,7 +101,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.status')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Status)}
+              options={mapEnumToOptions(Status, tEnumKeys, 'status')}
               placeholder={p('selectStatus')}
               {...field}
               required
@@ -100,9 +114,14 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="email"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.email')} isRequired>
-            <Input {...field} placeholder={p('email')} required />
+            <Input
+              {...field}
+              placeholder={p('email')}
+              required
+              errors={formState.errors.email}
+            />
           </FormWrapper>
         )}
       />
@@ -151,7 +170,7 @@ export default function PersonalInfoForm() {
         render={({ field }) => (
           <FormWrapper label={t('personalInfo.nationality')} isRequired>
             <FormSelect
-              options={mapEnumToOptions(Nationality)}
+              options={mapEnumToOptions(Nationality, tEnumKeys, 'nationality')}
               placeholder={`${t('personalInfo.nationality')}`}
               {...field}
               required
@@ -164,18 +183,26 @@ export default function PersonalInfoForm() {
       <FormField
         control={form.control}
         name="citizenshipNumber"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.citizenshipNumber')}>
-            <Input {...field} placeholder={p('citizenshipNumber')} />
+            <Input
+              {...field}
+              placeholder={p('citizenshipNumber')}
+              errors={formState.errors.citizenshipNumber}
+            />
           </FormWrapper>
         )}
       />
       <FormField
         control={form.control}
         name="nationalId"
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <FormWrapper label={t('personalInfo.nationalId')}>
-            <Input {...field} placeholder={p('nationalId')} />
+            <Input
+              {...field}
+              placeholder={p('nationalId')}
+              errors={formState.errors.nationalId}
+            />
           </FormWrapper>
         )}
       />

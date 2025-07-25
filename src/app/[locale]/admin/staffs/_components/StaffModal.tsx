@@ -12,7 +12,13 @@ import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
-import { Gender, Status, TUser, UserRole, UserType } from '@/types/user.types';
+import {
+  Gender,
+  HealthPostUserType,
+  Status,
+  TUser,
+  UserRole,
+} from '@/types/user.types';
 import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
 import { PermissionSelector } from './PermissionForm';
 import { FormSelect } from '@/components/reusables/form-select';
@@ -58,15 +64,13 @@ export const AddAdminModal: React.FC<TProps> = ({
     status: singleData?.status || '',
     role: singleData?.role || '',
     healthPostId: singleData?.healthPostId || '',
+    signature: singleData?.signature || [],
   } as TStaffSchema;
 
   const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
     useQuery({
       queryKey: queryKeys.healthPost.healthPosts,
-      queryFn: async () =>
-        fetchHealthPostInfo({
-          healthPostId: undefined,
-        }),
+      queryFn: async () => fetchHealthPostInfo({}),
       select: (data) =>
         (data?.data as THealthPost[]).map((hp) => ({
           label: hp.name,
@@ -85,12 +89,13 @@ export const AddAdminModal: React.FC<TProps> = ({
   const t2 = useTypedTranslations('GeneralPages');
   const tToast = useTypedTranslations('Toast');
   const tPlaceholder = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
   const staffSchema = getStaffSchema(t);
 
   const form = useForm<TStaffSchema>({
     resolver: zodResolver(staffSchema),
     defaultValues: {
-      accountType: UserType.HP,
+      accountType: HealthPostUserType.HP,
       email: '',
       firstName: '',
       middleName: '',
@@ -100,6 +105,7 @@ export const AddAdminModal: React.FC<TProps> = ({
       gender: undefined,
       status: undefined,
       profileImage: [],
+      signature: [],
     },
     values:
       staffId && !isLoading && isSuccess && singleData ? formValues : undefined,
@@ -112,15 +118,19 @@ export const AddAdminModal: React.FC<TProps> = ({
   } = form;
 
   const onSubmit = (data: TStaffSchema): void => {
-    const { permissions, ...dataToSend } = data;
+    const { permissions, healthPostId, ...dataToSend } = data;
     mutateStaff({
       staffId: staffId!,
       data: convertToFormData(
         {
           ...dataToSend,
           permissions: JSON.stringify(permissions),
+          healthPostId:
+            dataToSend.accountType === HealthPostUserType.HP
+              ? healthPostId
+              : undefined,
         },
-        ['profileImage'],
+        ['profileImage', 'signature'],
         staffId ? dirtyFields : undefined,
       ),
       method: staffId ? 'PUT' : 'POST',
@@ -234,7 +244,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.gender')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(Gender)}
+                      options={mapEnumToOptions(Gender, tEnumKeys, 'gender')}
                       placeholder={tPlaceholder('selectGender')}
                       {...field}
                       required
@@ -251,7 +261,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('HealthPost.status')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(Status)}
+                      options={mapEnumToOptions(Status, tEnumKeys, 'status')}
                       placeholder={tPlaceholder('selectStatus')}
                       {...field}
                       required
@@ -268,7 +278,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.role')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(UserRole)}
+                      options={mapEnumToOptions(
+                        UserRole,
+                        tEnumKeys,
+                        'userRole',
+                      )}
                       placeholder={tPlaceholder('selectRole')}
                       {...field}
                       required
@@ -284,7 +298,11 @@ export const AddAdminModal: React.FC<TProps> = ({
                 render={({ field }) => (
                   <FormWrapper label={t2('User.accountType')} isRequired>
                     <FormSelect
-                      options={mapEnumToOptions(UserType)}
+                      options={mapEnumToOptions(
+                        HealthPostUserType,
+                        tEnumKeys,
+                        'userType',
+                      )}
                       placeholder={tPlaceholder('selectAccountType')}
                       {...field}
                       required
@@ -313,23 +331,47 @@ export const AddAdminModal: React.FC<TProps> = ({
               />
             </div>
             <div className="col-span-2 flex w-full flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="profileImage"
-                render={({ field }) => (
-                  <FormWrapper label={t2('images')}>
-                    <FileUploader
-                      defaultValue={field.value || []}
-                      allowFile={false}
-                      allowImage
-                      maxFiles={2}
-                      maxSize={2 * 1024 * 1024}
-                      uploaderType="dropzone"
-                      {...field}
-                    />
-                  </FormWrapper>
-                )}
-              />
+              <div className="flex gap-3">
+                <FormField
+                  control={form.control}
+                  name="profileImage"
+                  render={({ field }) => (
+                    <FormWrapper label={t2('images')} className="w-1/2">
+                      <FileUploader
+                        defaultValue={field.value || []}
+                        allowFile={false}
+                        allowImage
+                        maxFiles={2}
+                        maxSize={2 * 1024 * 1024}
+                        uploaderType="dropzone"
+                        {...field}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="signature"
+                  render={({ field }) => (
+                    <FormWrapper
+                      label={t2('signature')}
+                      isRequired
+                      className="w-1/2"
+                    >
+                      <FileUploader
+                        defaultValue={field.value || []}
+                        allowFile={false}
+                        allowImage
+                        maxFiles={2}
+                        maxSize={2 * 1024 * 1024}
+                        uploaderType="dropzone"
+                        {...field}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="permissions"

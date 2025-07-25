@@ -19,6 +19,8 @@ import Image from 'next/image';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useStaffMutation } from '@/api/mutation';
 import { useQuery } from '@tanstack/react-query';
+import { useHasPermission } from '@/hooks/useHasPermission';
+import { Permissions } from '@/zustand/permissions';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -31,6 +33,9 @@ export default function Page() {
   const t = useTypedTranslations('GeneralPages');
   const tAlert = useTypedTranslations('AlertDialog');
   const tToast = useTypedTranslations('Toast');
+  const tenum = useTypedTranslations('Enums');
+
+  const { hasWritePermission } = useHasPermission(Permissions.STAFF_MANAGEMENT);
 
   const { showDeleteConfirmDialog } = useGlobalAlert();
   const { mutateStaff } = useStaffMutation({
@@ -149,7 +154,13 @@ export default function Page() {
       },
       accessorKey: 'gender',
       header: () => t('User.gender'),
-      cell: ({ row }) => <span>{row.original.gender}</span>,
+      cell: ({ row }) => (
+        <span>
+          {row?.original?.gender
+            ? tenum(`gender.${row?.original?.gender}`)
+            : '-'}
+        </span>
+      ),
     },
     {
       map: {
@@ -224,12 +235,12 @@ export default function Page() {
         return (
           <span
             className={
-              row?.original?.permissions.length >= 1
+              row?.original?.permissions?.length >= 1
                 ? 'text-green-600'
                 : 'text-red-600'
             }
           >
-            {row?.original?.permissions.length} Permissions
+            {row?.original?.permissions?.length} Permissions
           </span>
         );
       },
@@ -263,7 +274,7 @@ export default function Page() {
                   <Image
                     key={'image-' + index}
                     src={image}
-                    alt={row.original.fullName.firstName}
+                    alt={row.original.fullName?.firstName}
                     width={40}
                     height={40}
                     className="rounded-full"
@@ -289,6 +300,7 @@ export default function Page() {
           className="mr-10 flex justify-end"
         />
       ),
+      hideColumn: !hasWritePermission,
       cell: ({ row }) => (
         <div className="mr-14 flex justify-end">
           <ActionDropdown data={ActionOptions(row)} />
@@ -299,7 +311,7 @@ export default function Page() {
     },
   ];
 
-  const { data } = useQuery({
+  const { data, ...rest } = useQuery({
     queryKey: queryKeys.staff.staffs,
     queryFn: async () =>
       fetchStaffInfo({
@@ -311,6 +323,7 @@ export default function Page() {
     <>
       <div className="p-4">
         <DataTable
+          rest={rest}
           columns={columns}
           header={{
             label: t('SidebarItems.staffsmanagement'),
@@ -321,15 +334,17 @@ export default function Page() {
             showPagination: true,
             hasExport: true,
           }}
-          addButton={{
-            label: t('User.addStaff'),
-            icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () =>
-              setIsOpenAddModal({
-                isOpen: true,
-                staffId: undefined,
-              }),
-          }}
+          addButton={
+            hasWritePermission && {
+              label: t('User.addStaff'),
+              icon: <Plus className="mr-2 h-4 w-4" />,
+              onClick: () =>
+                setIsOpenAddModal({
+                  isOpen: true,
+                  staffId: undefined,
+                }),
+            }
+          }
           onRowClick={() => () => {}}
         />
       </div>

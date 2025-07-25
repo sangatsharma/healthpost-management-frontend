@@ -1,4 +1,5 @@
 import { logout } from '@/api/queries';
+import { THealthPost } from '@/types/healthpost.types';
 import { TUser } from '@/types/user.types';
 import { toast } from 'sonner';
 import { create } from 'zustand';
@@ -10,6 +11,8 @@ type TUserStore = {
   logOut: () => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  healthPostInfo: THealthPost | null;
+  setHealthPostInfo: (healthPostInfo: THealthPost) => void;
 };
 
 const getInitialData = (set: {
@@ -26,20 +29,23 @@ const getInitialData = (set: {
   ): void;
 }): TUserStore => ({
   user: null,
+  healthPostInfo: null,
   setUser: (user) => {
     set({ isLoggedIn: !!user, isLoading: false, user });
+  },
+  setHealthPostInfo: (healthPostInfo) => {
+    set({ healthPostInfo });
   },
   isLoggedIn: false,
   logOut: async () => {
     await logout()
       .then(() => {
         set({ user: null, isLoggedIn: false, isLoading: false });
-        toast.success('Logged out successfully!');
         localStorage.removeItem('userInfo');
         document.cookie =
           'portal=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         // Redirect to home page after logout
-        window.location.href = '/';
+        window.location.reload();
       })
       .catch((error) => {
         console.error('Logout failed:', error);

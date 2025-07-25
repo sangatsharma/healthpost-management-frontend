@@ -61,6 +61,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
   const t = useTypedTranslations('Validation');
   const t2 = useTypedTranslations('GeneralPages');
   const tPlaceholder = useTypedTranslations('Placeholder');
+  const tEnumKeys = useTypedTranslations('Enums');
 
   const HealthPostSchema = getHealthPostSchema(t);
 
@@ -195,7 +196,7 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                 <FormWrapper label={t2('HealthPost.status')} isRequired>
                   {' '}
                   <FormSelect
-                    options={mapEnumToOptions(Status)}
+                    options={mapEnumToOptions(Status, tEnumKeys, 'status')}
                     placeholder={tPlaceholder('selectStatus')}
                     {...field}
                     required
@@ -247,7 +248,6 @@ export const AddHealthPostModal: React.FC<TProps> = ({
                   <FileUploader
                     onChange={field.onChange}
                     defaultValue={field.value || []}
-                    allowFile
                     allowImage
                     maxFiles={5}
                     maxSize={10 * 1024 * 1024} // 10MB

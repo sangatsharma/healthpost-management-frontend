@@ -1,4 +1,4 @@
-import { TAny } from '@/types/global';
+import { TAny, TEnumKeys, TTypeFunction } from '@/types/global';
 import { TFullname, TUser } from '@/types/user.types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -8,19 +8,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // This function maps an enum to an array of objects with label and value properties
-export function mapEnumToOptions<T extends Record<string, string | number>>(
+export function mapEnumToOptions<T extends Record<string, string>>(
   enumObj: T,
+  t: TTypeFunction<'Enums'>,
+  translationKeyPrefix: TEnumKeys,
 ): { label: string; value: string }[] {
-  const enumValues = Object.entries(enumObj).filter(
-    ([, value]) => typeof value === 'string' || typeof value === 'number',
-  );
-
-  return enumValues.map(([key, value]) => ({
-    label: key
-      .toLowerCase()
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' '),
+  return Object.entries(enumObj).map(([key, value]) => ({
+    label: t(`${translationKeyPrefix}.${key}` as Parameters<typeof t>[0]),
     value: value.toString(),
   }));
 }
@@ -79,6 +73,8 @@ export const convertToFormData = (
       formData.append(key, value.toISOString());
     } else if (typeof value === 'object' && value !== null) {
       formData.append(key, JSON.stringify(value));
+    } else if (value === undefined) {
+      formData.append(key, 'null');
     } else {
       formData.append(key, value != null ? String(value) : '');
     }
@@ -129,3 +125,17 @@ export const renderFullName = ({
   // Default to an empty string (should never reach here due to earlier checks).
   return '';
 };
+
+export const cleanNepaliDate = (date: string): string => {
+  if (!date) return '';
+  return date.split('T')[0];
+};
+export function replaceWithNepali(text: string) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/\bmorning\b/gi, 'बिहान')
+    .replace(/\bafternoon\b/gi, 'दिउसो')
+    .replace(/\bnight\b/gi, 'बेलुका')
+    .replace(/\bevening\b/gi, 'साँझ');
+}

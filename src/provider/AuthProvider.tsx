@@ -19,6 +19,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { data, isSuccess, isError } = useAuthQuery();
   const router = useRouter();
   useEffect(() => {
+    if (user.isLoggedIn && pathname.includes('/login')) {
+      router.replace(`/${portal?.toLowerCase() || 'hp'}/dashboard`);
+      return;
+    }
     if (typeof window !== 'undefined' && !navigator.onLine) {
       try {
         const stored = localStorage.getItem('userInfo');
@@ -27,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(parsed);
         }
       } catch {
-        router.replace(`/${portal?.toLowerCase()}/login`);
+        router.replace(`/${portal?.toLowerCase() || 'hp'}/login`);
       }
       return;
     }
@@ -41,11 +45,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     if (
-      !pathname.includes('/login') &&
-      ((!user.isLoggedIn && !user.isLoading) || isError)
+      isError ||
+      (!pathname.includes('/login') && !user.isLoggedIn && !user.isLoading)
     ) {
+      router.replace(`/${portal?.toLowerCase() || 'hp'}/login`);
       setIsLoading(false);
-      router.replace(`/${portal?.toLowerCase()}/login`);
     }
   }, [
     JSON.stringify(data),

@@ -149,6 +149,19 @@ export const pageMetadata = {
       ],
       locale,
     }),
+  opd: (locale?: string) =>
+    generateMetadata({
+      title: 'OPD Section',
+      description:
+        'Manage outpatient department operations, patient visits, and medical records',
+      keywords: [
+        'OPD',
+        'outpatient department',
+        'patient visits',
+        'medical records',
+      ],
+      locale,
+    }),
 
   settings: (locale?: string) =>
     generateMetadata({

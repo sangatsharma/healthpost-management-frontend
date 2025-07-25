@@ -2,7 +2,6 @@ import { Permissions } from '@/zustand/permissions';
 import {
   Home,
   Users,
-  Activity,
   FileText,
   Pill,
   UserCheck,
@@ -18,6 +17,7 @@ import {
   TrendingUp,
   HeartPlusIcon,
   Mail,
+  FileInputIcon,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem, TTypeFunction } from '@/types/global';
@@ -36,29 +36,36 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: t('SidebarItems.dashboard'),
-          href: `hp/dashboard`,
+          href: `/hp/dashboard`,
           permission: Permissions.HEALTH_POST_DASHBOARD,
         },
         {
           key: 'patients',
           icon: Users,
-          label: t('SidebarItems.patientsRegistration'),
-          href: `clients`,
+          label: t('SidebarItems.clientsRegistration'),
+          href: `/hp/clients`,
           permission: Permissions.PATIENT_RECORDS,
         },
         {
-          key: 'medical-records',
-          icon: FileText,
-          label: 'Medical Records',
-          href: `hp/medical-records`,
-          permission: Permissions.MEDICINE_DISPENSE,
+          key: 'opd-section',
+          icon: FileInputIcon,
+          label: t('SidebarItems.opdSection'),
+          href: `/hp/opd-section`,
+          permission: Permissions.LAB_RESULTS_UPLOAD,
         },
         {
           key: 'medicalhistory',
           icon: FileText,
           label: t('SidebarItems.medicalhistory'),
           href: `/hp/medicalhistory`,
-          permission: Permissions.ADMIN_MANAGEMENT,
+          permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'laboratory',
+          icon: FileText,
+          label: t('SidebarItems.laboratory'),
+          href: `/hp/laboratory`,
+          permission: Permissions.LAB_RESULTS_UPLOAD,
         },
         {
           key: 'pharmacy',
@@ -88,13 +95,7 @@ export const getMenuItems = ({
             },
           ],
         },
-        {
-          key: 'lab-results',
-          icon: Activity,
-          label: 'Lab Results',
-          href: `hp/lab-results`,
-          permission: Permissions.LAB_RESULTS_UPLOAD,
-        },
+
         {
           key: 'staff',
           icon: UserCheck,
@@ -172,14 +173,14 @@ export const getMenuItems = ({
           key: 'dashboard',
           icon: Home,
           label: t('SidebarItems.dashboard'),
-          href: `dashboard`,
+          href: `/admin/dashboard`,
           permission: Permissions.ADMIN_DASHBOARD,
         },
         {
           key: 'healthpost',
           icon: HeartPlusIcon,
           label: t('SidebarItems.healthpost'),
-          href: `healthpost`,
+          href: `/admin/healthpost`,
           permission: Permissions.HP_MANAGEMENT,
         },
 
@@ -187,14 +188,14 @@ export const getMenuItems = ({
           key: 'staffs',
           icon: Users,
           label: t('SidebarItems.staffsmanagement'),
-          href: `staffs`,
-          permission: Permissions.ADMIN_MANAGEMENT,
+          href: `/admin/staffs`,
+          permission: Permissions.STAFF_MANAGEMENT,
         },
         {
           key: 'email',
           icon: Mail,
           label: t('User.email'),
-          href: 'email',
+          href: '/admin/email',
           permission: Permissions.SYSTEM_CONFIG,
         },
       ];

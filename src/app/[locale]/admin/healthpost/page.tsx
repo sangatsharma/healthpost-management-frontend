@@ -16,6 +16,8 @@ import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { useHealthPostMutation } from '@/api/mutation';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { useQuery } from '@tanstack/react-query';
+import { useHasPermission } from '@/hooks/useHasPermission';
+import { Permissions } from '@/zustand/permissions';
 
 export default function Page() {
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
@@ -36,6 +38,10 @@ export default function Page() {
       toast.success(tToast('healthPostDeleted'));
     },
   });
+
+  const { hasWritePermission } = useHasPermission(
+    Permissions.PRESCRIBE_MEDICATION,
+  );
 
   const ActionOptions = (row: Row<THealthPost>): ActionButtonDataTypes[] => [
     {
@@ -200,6 +206,7 @@ export default function Page() {
           className="mr-10 flex justify-end"
         />
       ),
+      hideColumn: !hasWritePermission,
       cell: ({ row }) => (
         <div className="mr-14 flex justify-end">
           <ActionDropdown data={ActionOptions(row)} />
@@ -210,8 +217,8 @@ export default function Page() {
     },
   ];
 
-  const { data } = useQuery({
-    queryKey: queryKeys.healthPost.healthPosts,
+  const { data, ...rest } = useQuery({
+    queryKey: [queryKeys.healthPost.healthPosts],
     queryFn: async () =>
       fetchHealthPostInfo({
         healthPostId: undefined,
@@ -219,41 +226,46 @@ export default function Page() {
   });
 
   return (
-    <div className="p-4">
-      <DataTable
-        columns={columns}
-        header={{
-          label: t('SidebarItems.healthpost'),
-          className: 'text-2xl font-bold mb-4',
-        }}
-        data={(data?.data as THealthPost[]) || []}
-        utils={{
-          showPagination: true,
-          hasExport: true,
-        }}
-        addButton={{
-          label: t('HealthPost.addHealthPost'),
-          icon: <Plus className="mr-2 h-4 w-4" />,
-          onClick: () =>
-            setIsOpenAddModal({
-              isOpen: true,
-              healthPostId: undefined,
-            }),
-        }}
-        onRowClick={() => () => {}}
-      />
-      {isOpenAddModal.isOpen && (
-        <AddHealthPostModal
-          isOpen={isOpenAddModal.isOpen}
-          healthPostId={isOpenAddModal.healthPostId}
-          toggleModal={() =>
-            setIsOpenAddModal({
-              isOpen: false,
-              healthPostId: undefined,
-            })
+    <>
+      <div className="p-4">
+        <DataTable
+          rest={rest}
+          columns={columns}
+          header={{
+            label: t('SidebarItems.healthpost'),
+            className: 'text-2xl font-bold mb-4',
+          }}
+          data={(data?.data as THealthPost[]) || []}
+          utils={{
+            showPagination: true,
+            hasExport: true,
+          }}
+          addButton={
+            hasWritePermission && {
+              label: t('HealthPost.addHealthPost'),
+              icon: <Plus className="mr-2 h-4 w-4" />,
+              onClick: () =>
+                setIsOpenAddModal({
+                  isOpen: true,
+                  healthPostId: undefined,
+                }),
+            }
           }
+          onRowClick={() => () => {}}
         />
-      )}
-    </div>
+        {isOpenAddModal.isOpen && hasWritePermission && (
+          <AddHealthPostModal
+            isOpen={isOpenAddModal.isOpen}
+            healthPostId={isOpenAddModal.healthPostId}
+            toggleModal={() =>
+              setIsOpenAddModal({
+                isOpen: false,
+                healthPostId: undefined,
+              })
+            }
+          />
+        )}
+      </div>
+    </>
   );
 }

@@ -85,10 +85,17 @@ self.addEventListener('fetch', (event) => {
 
   // Handle different types of requests
   if (request.method === 'GET') {
+    //TODO: if error remove below line in future
+    if (url.pathname.startsWith('/api/')) {
+      event.respondWith(fetch(request));
+      return;
+    }
+
     // CSS and static assets
     if (
       request.url.match(/\.css$/) ||
-      request.url.includes('_next/static/css')
+      request.url.includes('_next/static/css') ||
+      request.url.includes('.js')
     ) {
       event.respondWith(
         caches.match(request).then((cached) => {
@@ -143,7 +150,22 @@ self.addEventListener('fetch', (event) => {
       );
       return;
     }
+
+    // Default: try network first, then cache
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(DYNAMIC_CACHE).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request);
+        }),
+    );
   }
 });
-
-// // Background sync for offline data

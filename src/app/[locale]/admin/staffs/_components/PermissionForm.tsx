@@ -34,7 +34,7 @@ const permissionGroups = [
         key: Permissions.HP_MANAGEMENT,
         label: 'Health Professional Management',
       },
-      { key: Permissions.ADMIN_MANAGEMENT, label: 'Admin Management' },
+      { key: Permissions.STAFF_MANAGEMENT, label: 'Staff Management' },
       { key: Permissions.USER_MANAGE, label: 'User Management' },
     ],
   },

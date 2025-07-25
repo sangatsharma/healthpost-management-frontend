@@ -68,19 +68,19 @@ const COLOR_PALETTE: ColorPalette = {
 
 export function ColorPicker({ editor }: EditorComponentProps) {
   const handleTextColorChange = (color: string): void => {
-    editor.chain().focus().setColor(color).run();
+    editor?.chain().focus().setColor(color).run();
   };
 
   const handleHighlightColorChange = (color: string): void => {
-    editor.chain().focus().toggleHighlight({ color }).run();
+    editor?.chain().focus().toggleHighlight({ color }).run();
   };
 
   const removeTextColor = (): void => {
-    editor.chain().focus().unsetColor().run();
+    editor?.chain().focus().unsetColor().run();
   };
 
   const removeHighlight = (): void => {
-    editor.chain().focus().unsetHighlight().run();
+    editor?.chain().focus().unsetHighlight().run();
   };
 
   return (

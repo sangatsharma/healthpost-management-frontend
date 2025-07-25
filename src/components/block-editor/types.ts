@@ -9,6 +9,7 @@ export interface BlockEditorProps {
   disabled?: boolean;
   imageUploadEndpoint?: string;
   maxImageSize?: number;
+  outerClassName?: string;
 }
 
 export interface BlockEditorRef {
@@ -52,7 +53,8 @@ export interface ColorPalette {
 
 export interface ImageUploadResponse {
   success: boolean;
-  url?: string;
+  message?: string;
+  data?: string[];
   error?: string;
 }
 

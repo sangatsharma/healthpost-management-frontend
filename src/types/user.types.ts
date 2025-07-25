@@ -1,5 +1,6 @@
 import { TClientSchema } from '@/schemas/healthpostPortal/clients.schema';
 import { TPermission } from './global';
+import { TOpdSchema } from '@/schemas/healthpostPortal/opd.schema';
 
 export enum UserRole {
   SUPERADMIN = 'SUPERADMIN',
@@ -16,6 +17,11 @@ export enum UserRole {
 
 export enum UserType {
   PATIENT = 'PATIENT',
+  HP = 'HP',
+  ADMIN = 'ADMIN',
+}
+
+export enum HealthPostUserType {
   HP = 'HP',
   ADMIN = 'ADMIN',
 }
@@ -55,14 +61,14 @@ export enum MarriageStatus {
 }
 
 export enum BloodGroup {
-  A_POSITIVE = 'A+',
-  A_NEGATIVE = 'A-',
-  B_POSITIVE = 'B+',
-  B_NEGATIVE = 'B-',
-  AB_POSITIVE = 'AB+',
-  AB_NEGATIVE = 'AB-',
-  O_POSITIVE = 'O+',
-  O_NEGATIVE = 'O-',
+  A_POSITIVE = 'A_POSITIVE',
+  A_NEGATIVE = 'A_NEGATIVE',
+  B_POSITIVE = 'B_POSITIVE',
+  B_NEGATIVE = 'B_NEGATIVE',
+  AB_POSITIVE = 'AB_POSITIVE',
+  AB_NEGATIVE = 'AB_NEGATIVE',
+  O_POSITIVE = 'O_POSITIVE',
+  O_NEGATIVE = 'O_NEGATIVE',
 }
 
 export enum DisabilityType {
@@ -86,7 +92,9 @@ export enum DisabilityIdentityType {
 export type TLoginReponse = {
   success: boolean;
   message: string;
-  data: TUser;
+  data: {
+    user: TUser;
+  };
 };
 
 export type TUserType = 'PATIENT' | 'HP' | 'ADMIN';
@@ -101,8 +109,9 @@ export type TUser = {
   status: Status;
   permissions: TPermission[];
   healthPostId?: string;
-  gender?: TGender;
+  gender: TGender;
   profileImage?: string[];
+  signature: string[];
   healthPost?: {
     name: string;
   };
@@ -121,4 +130,14 @@ export type TGender = 'MALE' | 'FEMALE' | 'OTHER';
 export type TClient = TClientSchema & {
   createdAt: string;
   id: string;
+  patientCode: string;
+};
+export type TOpd = TOpdSchema & {
+  createdAt: string;
+  id: string;
+  opdNo: string;
+  patient: TClient;
+  healthPost: {
+    name: string;
+  };
 };

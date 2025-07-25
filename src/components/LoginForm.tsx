@@ -20,10 +20,10 @@ import { useMutation } from '@tanstack/react-query';
 import { login, verifyOTP } from '@/api/queries';
 import { toast } from 'sonner';
 import { useUserStore } from '@/zustand/useUserStore';
-import { useRouter } from '@/i18n/navigation';
 import { Mail } from 'lucide-react';
 import Loading from './ui/loading';
 import { getLoginSchema, TLoginSchema } from '@/schemas/auth.schema';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
@@ -88,9 +88,14 @@ export default function LoginPage() {
     mutationFn: verifyOTP,
     retry: false,
     onSuccess: (data) => {
-      if (data) setUser(data.data);
-      toast.success(data?.message);
-      navigate.push(`/${data?.data.accountType.toLowerCase()}/dashboard`);
+      if (data) {
+        const user = data.data.user;
+        setUser(user);
+        const { refreshToken: _refreshToken, ...dataToStore } = user;
+        localStorage.setItem('userInfo', JSON.stringify(dataToStore));
+        toast.success(data?.message);
+        navigate.replace(`/${data?.data.user.accountType.toLowerCase()}`);
+      }
     },
   });
 
@@ -158,8 +163,10 @@ export default function LoginPage() {
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   errors={errors.email}
                   {...register('email')}
+                  hideError={false}
                   placeholder={t('email_placeholder')}
                   className="w-full text-[18px] placeholder:text-[16px]"
+                  allowNepaliTranslation={false}
                 />
               </>
             ) : (

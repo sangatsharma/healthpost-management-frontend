@@ -2,7 +2,9 @@
   "GeneralPages": {
     "actions": "कार्यहरू",
     "reset": "पुनः सेट गर्नुहोस्",
+    "submit": "पेश गर्नुहोस्",
     "images": "तस्बिरहरू",
+    "signature": "हस्ताक्षर",
     "search": "खोज्नुहोस्",
     "select": "छान्नुहोस्",
     "SN": "क्र.संं",
@@ -22,7 +24,9 @@
       "patients": "रोगीहरू",
       "staffsmanagement": "कर्मचारी व्यवस्थापन",
       "medicalhistory": "चिकित्सा इतिहास",
-      "patientsRegistration": "सेवाग्राही दर्ता"
+      "clientsRegistration": "सेवाग्राही",
+      "opdSection": "ओपीडी क्षेत्र",
+      "laboratory": "प्रयोगशाला"
     },
     "HealthPost": {
       "name": "स्वास्थ्य चौकीको नाम",
@@ -145,7 +149,7 @@
     "medications": "औषधिहरू",
     "vitals": "महत्वपूर्ण संकेतहरू",
     "doctor": "चिकित्सक",
-    "healthPost": "स्वास्थ्य पोस्ट",
+    "healthPost": "स्वास्थ्य चौकी",
     "date": "मिति",
     "time": "समय",
     "age": "उमेर",
@@ -196,7 +200,11 @@
     "healthPostUpdated": "स्वास्थ्य चौकी सफलतापूर्वक अपडेट गरियो!",
     "staffDeleted": "कर्मचारी सफलतापूर्वक मेटाइयो!",
     "staffCreated": "कर्मचारी सफलतापूर्वक सिर्जना गरियो!",
-    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!"
+    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!",
+    "opdCreated": "ओपीडी सफलतापूर्वक सिर्जना गरियो!",
+    "clientsCreated": "सेवाग्राही सफलतापूर्वक सिर्जना गरियो!",
+    "clientsUpdated": "सेवाग्राही सफलतापूर्वक अपडेट गरियो!",
+    "clientsDeleted": "सेवाग्राही सफलतापूर्वक मेटाइयो!"
   },
 
   "FileOperations": {
@@ -205,16 +213,19 @@
     "fileName": "फाइलको नाम"
   },
   "ClientRegistration": {
-    "title": "बिरामी दर्ता",
-    "subtitle": "नयाँ बिरामी दर्ता गर्न फारम भर्नुहोस्",
+    "title": "सेवाग्राही दर्ता",
+    "subtitle": "नयाँ सेवाग्राही दर्ता गर्न फारम भर्नुहोस्",
     "registrationComplete": "दर्ता सम्पन्न!",
-    "registrationSuccess": "बिरामी दर्ता सफलतापूर्वक पेश गरिएको छ।",
-    "registerAnother": "अर्को बिरामी दर्ता गर्नुहोस्",
+    "registrationSuccess": "सेवाग्राही दर्ता सफलतापूर्वक पेश गरिएको छ।",
+    "registerAnother": "अर्को सेवाग्राही दर्ता गर्नुहोस्",
     "stepOf": "चरण {current} को {total}",
     "percentComplete": "{percent}% पूरा",
     "previous": "अघिल्लो",
     "next": "अर्को",
     "submitRegistration": "दर्ता पेश गर्नुहोस्",
+    "addNewClient": "नयाँ सेवाग्राही थप्नुहोस्",
+    "healthpostPatients": "स्वास्थ्य चौकीको बिरामीहरू",
+    "allPatients": "सबै बिरामीहरू",
     "personalInfo": {
       "title": "व्यक्तिगत जानकारी",
       "description": "आधारभूत व्यक्तिगत विवरणहरू प्रविष्ट गर्नुहोस्",
@@ -241,7 +252,8 @@
       "district": "जिल्ला",
       "municipality": "नगरपालिका",
       "wardNumber": "वडा नम्बर",
-      "tole": "टोल"
+      "tole": "टोल",
+      "sameAsPerm": "स्थायी ठेगाना जस्तै"
     },
     "familyInfo": {
       "title": "पारिवारिक जानकारी",
@@ -264,7 +276,76 @@
       "disabilityIdentityType": "अपाङ्गता परिचय प्रकार",
       "bank": "बैंकको नाम",
       "bankBranch": "बैंकको शाखा",
-      "bankAccountNumber": "बैंक खाता नम्बर"
+      "bankAccountNumber": "बैंक खाता नम्बर",
+      "isVaccineCompleted": "खोप पूरा भएको छ?",
+      "isMinor": "अवयस्क हो?",
+      "isEligibleForSgc": "SGC को लागि योग्य हो?",
+      "isEligibleForSgcTooltip": "यो सामाजिक अनुदान प्रमाणपत्र (SGC) कार्यक्रमका लागि योग्य ग्राहकहरूका लागि हो।"
+    }
+  },
+  "OpdSection": {
+    "formTitle": "ओपीडी दर्ता फारम",
+    "formSubtitle": "नयाँ ओपीडी बिरामी दर्ता गर्न तलको फारम भर्नुहोस्।",
+    "newOpdReg": "नयाँ ओपीडी दर्ता",
+    "patientName": "बिरामीको नाम",
+    "visitedDate": "भेट गरिएको मिति",
+    "treatmentType": "उपचार प्रकार",
+    "visitType": "भेट प्रकार",
+    "healthPost": "स्वास्थ्य चौकी",
+    "bp": "रक्तचाप",
+    "pulse": "मुटुको धड्कन",
+    "temperature": "तापक्रम",
+    "respiration": "श्वासप्रश्वास",
+    "weight": "तौल",
+    "height": "उचाइ",
+    "mucus": "म्यूकस",
+    "complaintsHistory": "गुनासो/इतिहास",
+    "observedExamination": "अवलोकन / परीक्षण",
+    "diagnosis": "निदान",
+    "treatment": "उपचार",
+    "medicines": "औषधिहरू",
+    "dosage": "सेवन मात्रा",
+    "duration": "अवधि (दिनहरूमा)",
+    "frequency": "आवृत्ति (दैनिक, साप्ताहिक, आदि)",
+    "intakeTime": "खाने समय",
+    "quantity": "औषधिको मात्रा",
+    "intakeRoute": "औषधि सेवन गर्ने तरिका",
+    "followUpRequired": "फलो-अप आवश्यक छ?",
+    "followUpDate": "फलो-अप मिति",
+    "isGenderViolence": "लैंगिक हिंसा हो?",
+    "isPregnant": "गर्भवती हो?",
+    "timing": " खाना पहिले/पछि",
+    "afterMeal": "खाना पछि",
+    "beforeMeal": "खाना पहिले",
+    "anyTime": "कुनै पनि समयमा",
+    "viewTicket": "टिकट हेर्नुहोस्",
+    "printTicket": "टिकट प्रिन्ट गर्नुहोस्",
+    "healthPostTicket": "स्वास्थ्य चौकीको टिकटहरू",
+    "allTickets": "सबै टिकटहरू",
+    "ticketPreview": "टिकट विवरण",
+    "ticketDetails": {
+      "title": "स्वास्थ्य सेवा कार्ड",
+      "patientName": "नाम थर",
+      "patientCode": "सेवाग्राही कोड",
+      "date": "मिति",
+      "opdNo": "ओ.पि.डि न",
+      "nationality": "राष्ट्रियता",
+      "district": "ठेगाना, जिल्ला",
+      "municipality": "म.न.पा./गा.पा.",
+      "wardNo": "वडा नं",
+      "gender": "लिङ्ग",
+      "age": "उमेर",
+      "contactNo": "सम्पर्क नं",
+      "followUp": "पुनः जाँच",
+      "complaintsDiagnosis": "सिकायत र निदान",
+      "complaintsHistory": "सिकायत/इतिहास",
+      "observedExamination": "अवलोकन/परीक्षण",
+      "diagnosis": "निदान",
+      "treatmentAdvice": "उपचार र औषधिहरू",
+      "medicines": "निर्धारित औषधीहरू",
+      "treatment": "उपचार",
+      "examinier": "चिकित्सा परीक्षक",
+      "reminder": "कृपया आफ्नो स्वास्थ्य सेवा कार्ड सुरक्षित राख्नुहोस् र भविष्यका भेटहरूमा यो ल्याउनुहोस्।"
     }
   },
   "Placeholder": {
@@ -282,10 +363,11 @@
     "selectGender": "लिङ्ग छान्नुहोस्",
     "selectStatus": "स्थिति छान्नुहोस्",
     "searchPatients": "बिरामीहरू खोज्नुहोस्",
+    "selectPatient": "बिरामी छान्नुहोस्",
     "bloodGroup": "आफ्नो रक्त समूह छान्नुहोस्",
     "height": "उचाइ सेन्टिमिटरमा प्रविष्ट गर्नुहोस्",
     "weight": "तौल किलोग्राममा प्रविष्ट गर्नुहोस्",
-    "disabilityType": "यदि लागू हुन्छ भने अपाङ्गता प्रकार छान्नुहोस्",
+    "disabilityType": "लागू हुने अपाङ्गता प्रकार छान्नुहोस्",
     "disabilityIdentityType": "अपाङ्गता परिचय प्रकार छान्नुहोस्",
     "bank": "आफ्नो बैंकको नाम प्रविष्ट गर्नुहोस्",
     "bankBranch": "आफ्नो बैंकको शाखाको नाम प्रविष्ट गर्नुहोस्",
@@ -307,9 +389,7 @@
     "uploadImage": "तस्बिर अपलोड गर्न क्लिक गर्नुहोस्",
     "selectFile": "फाइल छान्नुहोस्",
     "enterOTP": "ओटीपी प्रविष्ट गर्नुहोस्",
-    "diagnosis": "निदान प्रविष्ट गर्नुहोस्",
     "symptoms": "लक्षणहरू प्रविष्ट गर्नुहोस्",
-    "treatment": "उपचारको विवरण प्रविष्ट गर्नुहोस्",
     "medications": "औषधिहरू प्रविष्ट गर्नुहोस्",
     "notes": "टिप्पणी प्रविष्ट गर्नुहोस्",
     "bloodPressure": "रक्तचाप प्रविष्ट गर्नुहोस्",
@@ -353,6 +433,180 @@
     "emailBody": "यहाँ आफ्नो सन्देश प्रविष्ट गर्नुहोस्...",
     "searchCountry": "देश खोज्नुहोस्...",
     "searchHere": "यहाँ खोज्नुहोस्",
-    "searchOptions": "विकल्पहरू खोज्नुहोस्..."
+    "searchOptions": "विकल्पहरू खोज्नुहोस्...",
+    "selectVisitType": "भेट प्रकार छान्नुहोस्",
+    "selectTreatmentType": "उपचार प्रकार छान्नुहोस्",
+    "complaintsHistory": "गुनासो/इतिहास प्रविष्ट गर्नुहोस्...",
+    "observedExamination": "अवलोकन / परीक्षण विवरण प्रविष्ट गर्नुहोस्...",
+    "diagnosis": "निदान प्रविष्ट गर्नुहोस्...",
+    "treatment": "उपचार विवरण प्रविष्ट गर्नुहोस्...",
+    "selectMedicines": "औषधिहरू छान्नुहोस्"
+  },
+  "Enums": {
+    "visitType": {
+      "CONSULTATION": "परामर्श",
+      "FOLLOW_UP": "पुन: जाँच",
+      "EMERGENCY": "आपत्कालीन",
+      "ROUTINE_CHECKUP": "नियमित जाँच",
+      "TELEMEDICINE": "टेलिमेडिसिन",
+      "HOME_VISIT": "घर भ्रमण",
+      "GENERAL": "सामान्य",
+      "OTHER": "अन्य"
+    },
+    "treatmentType": {
+      "MEDICATION": "औषधि",
+      "SURGERY": "शल्यक्रिया",
+      "THERAPY": "थेरेपी",
+      "DIAGNOSTIC_TEST": "निदान परीक्षण",
+      "REHABILITATION": "पुनर्स्थापना",
+      "PALLIATIVE_CARE": "शान्ति उपचार",
+      "OTHER": "अन्य"
+    },
+    "userRole": {
+      "SUPERADMIN": "सुपर एडमिन",
+      "ADMIN": "प्रशासक",
+      "PATIENT": "रोगी",
+      "HEALTH_ASSISTANT": "स्वास्थ्य सहायक",
+      "ANM": "ANM (सहायक नर्स मिडवाइफ)",
+      "LAB_TECHNICIAN": "प्रयोगशाला प्राविधिक",
+      "FCHV": "FCHV (महिला स्वास्थ्य स्वयंसेविका)",
+      "INVENTORY_KEEPER": "भण्डारण सहायक",
+      "OFFICE_HELPER": "कार्यालय सहयोगी",
+      "ALL": "सबै"
+    },
+    "userType": {
+      "PATIENT": "रोगी",
+      "HP": "स्वास्थ्य चौकी",
+      "ADMIN": "प्रशासक"
+    },
+    "status": {
+      "ACTIVE": "सक्रिय",
+      "INACTIVE": "निस्क्रिय"
+    },
+    "gender": {
+      "MALE": "पुरुष",
+      "FEMALE": "महिला",
+      "OTHER": "अन्य"
+    },
+    "casteType": {
+      "BRAMAN_CHHETRI": "ब्राह्मण/क्षेत्री",
+      "DALIT": "दलित",
+      "JANAJATI": "जनजाति",
+      "MUSLIM": "मुसलमान",
+      "MADESHI": "मधेसी",
+      "OTHERS": "अन्य"
+    },
+    "nationality": {
+      "NEPALI": "नेपाली",
+      "INDIAN": "भारतीय",
+      "OTHER": "अन्य"
+    },
+    "marriageStatus": {
+      "MARRIED": "विवाहित",
+      "UNMARRIED": "अविवाहित",
+      "DIVORCED": "सम्बन्धविच्छेद",
+      "WIDOWED": "विधवा/विधुर",
+      "SEPARATED": "पृथक",
+      "OTHER": "अन्य"
+    },
+    "disabilityType": {
+      "PHYSICAL": "शारीरिक",
+      "VISUAL": "दृष्टि",
+      "HEARING": "श्रवण",
+      "INTELLECTUAL": "बौद्धिक",
+      "MENTAL": "मानसिक",
+      "MULTIPLE": "बहुविध",
+      "OTHER": "अन्य"
+    },
+    "disabilityIdentityType": {
+      "NATIONAL_CARD": "राष्ट्रिय अपांगता परिचयपत्र",
+      "PROVINCIAL_CARD": "प्रदेश अपांगता परिचयपत्र",
+      "LOCAL_CARD": "स्थानीय अपांगता परिचयपत्र",
+      "HOSPITAL_CERTIFICATE": "अस्पताल प्रमाणपत्र",
+      "OTHER": "अन्य"
+    },
+    "bloodGroup": {
+      "A_POSITIVE": "A+",
+      "A_NEGATIVE": "A-",
+      "B_POSITIVE": "B+",
+      "B_NEGATIVE": "B-",
+      "O_POSITIVE": "O+",
+      "O_NEGATIVE": "O-",
+      "AB_POSITIVE": "AB+",
+      "AB_NEGATIVE": "AB-"
+    },
+    "permissions": {
+      "ALL": "सबै अनुमति",
+      "SYSTEM_CONFIG": "प्रणाली कन्फिगरेसन",
+
+      "PATIENT_DASHBOARD": "रोगी ड्यासबोर्ड",
+      "ADMIN_DASHBOARD": "प्रशासक ड्यासबोर्ड",
+      "HP_MANAGEMENT": "स्वास्थ्य चौकी व्यवस्थापन",
+      "ADMIN_MANAGEMENT": "प्रशासक व्यवस्थापन",
+      "HEALTH_POST_DASHBOARD": "स्वास्थ्य चौकी ड्यासबोर्ड",
+
+      "PATIENT_RECORDS": "रोगी विवरणहरू",
+
+      "PRESCRIBE_MEDICATION": "औषधि सिफारिस गर्नुहोस्",
+      "ORDER_LAB_TESTS": "प्रयोगशाला परीक्षणको आदेश गर्नुहोस्",
+      "VACCINATION_RECORD": "खोप विवरण",
+      "MATERNAL_HEALTH_EDIT": "मातृ स्वास्थ्य सम्पादन",
+
+      "LAB_RESULTS_UPLOAD": "प्रयोगशाला नतिजा अपलोड गर्नुहोस्",
+      "LAB_RESULTS_VERIFY": "प्रयोगशाला नतिजा प्रमाणित गर्नुहोस्",
+
+      "COMMUNITY_REPORTS": "समुदाय प्रतिवेदनहरू",
+      "HOME_VISIT_RECORD": "घर भ्रमण विवरण",
+
+      "INVENTORY_VIEW": "भण्डारण हेर्नुहोस्",
+      "INVENTORY_MANAGE": "भण्डारण व्यवस्थापन गर्नुहोस्",
+      "MEDICINE_DISPENSE": "औषधि वितरण गर्नुहोस्",
+
+      "USER_MANAGE": "प्रयोगकर्ता व्यवस्थापन गर्नुहोस्",
+      "REPORTS_GENERATE": "प्रतिवेदन सिर्जना गर्नुहोस्",
+      "DATA_EXPORT": "डेटा निर्यात गर्नुहोस्"
+    },
+    "action": {
+      "READ": "पढ्नुहोस्",
+      "WRITE": "लेख्नुहोस्"
+    },
+    "intakeRoute": {
+      "PO": "मुखबाट (ओरल)",
+      "IV": "शिराबाट (इन्ट्राभेनस)",
+      "LOCAL": "स्थानिय रूपमा लगाउने",
+      "IM": "मांसपेशीमा (इन्ट्रामस्कुलर)",
+      "PR": "गुद्द मार्गबाट (रेक्टल)",
+      "INHALATION": "साँसमार्फत (इन्हेलेसन)",
+      "INTRAOCULAR": "आँखामा (इन्ट्राअकुलर)",
+      "TRANSDERMAL": "छालामार्फत (ट्रान्सडर्मल)",
+      "INTRATHECAL": "मेरुदण्डमा (इन्ट्राथेकल)",
+      "VAGINAL": "योनिमार्गबाट",
+      "IA": "धमनीमार्फत (इन्ट्राआर्टेरियल)",
+      "SC": "छालामुनि (सबक्युटेनियस)",
+      "SUBLINGUAL": "जिब्रोमुनि (सबलिङ्गुअल)",
+      "INTRANASAL": "नाकमार्फत (इन्ट्रानासल)"
+    },
+    "frequency": {
+      "OD": "दिनमा एकपटक",
+      "BD": "दिनमा दुईपटक",
+      "TDS": "दिनमा तीनपटक",
+      "QID": "दिनमा चारपटक",
+      "HS": "सुत्ने बेलामा",
+      "STAT": "तत्काल / एकपटक मात्र",
+      "ONCE_A_WEEK": "हप्तामा एकपटक",
+      "SOS": "आवश्यकता अनुसार",
+      "null": "निर्धारित छैन"
+    },
+    "intakeTime": {
+      "MORNING": "बिहान",
+      "AFTERNOON": "दिउँसो",
+      "EVENING": "साँझ",
+      "NIGHT": "बेलुका"
+    },
+    "timing": {
+      "BEFORE_FOOD": "खाना भन्दा  पहिले",
+      "AFTER_FOOD": "खाना खाए पछि",
+      "ANY_TIME": "कुनै पनि समयमा"
+    }
   }
 }
