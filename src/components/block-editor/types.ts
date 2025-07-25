@@ -20,7 +20,7 @@ export interface BlockEditorRef {
 }
 
 export interface EditorComponentProps {
-  editor?: Editor;
+  editor: Editor;
 }
 
 export interface ImageUploaderProps extends EditorComponentProps {
