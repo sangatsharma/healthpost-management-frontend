@@ -2,7 +2,6 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 import { SAvatar } from '../ui/avatar';
-import { ImagePreviewer } from './ImagePreviewer';
 
 type AvatarTextProps = {
   src?: string;
@@ -40,14 +39,13 @@ const AvatarText = ({
       )}
     >
       {custom && custom.node && custom.position === 'left' && custom.node}
-      <ImagePreviewer>
-        <SAvatar
-          src={src ?? ''}
-          name={name ?? ''}
-          className={cn(classNames?.avatarClassName)}
-          size={classNames?.avatarSize}
-        />
-      </ImagePreviewer>
+
+      <SAvatar
+        src={src ?? ''}
+        name={name ?? ''}
+        className={cn(classNames?.avatarClassName)}
+        size={classNames?.avatarSize}
+      />
 
       <div className="text-left">
         {custom && custom.node && custom.position === 'title' && custom.node}
@@ -59,7 +57,7 @@ const AvatarText = ({
         </h3>
         {subtitle && (
           <p
-            className="text-aldgray"
+            className="text-gray"
             style={{ fontSize: '12px' }}
             title={subtitle}
           >

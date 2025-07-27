@@ -3,9 +3,13 @@ import { queryKeys } from './queryKeys';
 import {
   mutateClientInfo,
   mutateHealthPostInfo,
+  mutateOpdInfo,
+  mutateReferals,
+  mutateReferalStatus,
   mutateStaffInfo,
 } from './queries';
 import { queryClient } from '@/lib/queryClient';
+import { AxiosError } from 'axios';
 
 export function useHealthPostMutation({
   onSuccess,
@@ -18,7 +22,7 @@ export function useHealthPostMutation({
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.healthPost.healthPosts,
+        queryKey: [queryKeys.healthPost.healthPosts],
       });
 
       onSuccess?.();
@@ -52,12 +56,80 @@ export function useClientMutation({ onSuccess }: { onSuccess?: () => void }) {
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.client.clients,
+        queryKey: [queryKeys.client.clients],
+        exact: false,
+      });
+
+      onSuccess?.();
+    },
+    onError: (error) => {
+      if ((error as AxiosError).code === 'ERR_OFFLINE') {
+        onSuccess?.();
+      }
+    },
+  });
+
+  return { mutateClient, isPending };
+}
+
+export function useOpdMutation({ onSuccess }: { onSuccess?: () => void }) {
+  const { mutate: mutateOpd, isPending } = useMutation({
+    mutationKey: queryKeys.opd.opds,
+    mutationFn: mutateOpdInfo,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.opd.opds, 'healthpost', 'healthpost'],
+      });
+
+      onSuccess?.();
+    },
+    onError: (error) => {
+      if ((error as AxiosError).code === 'ERR_OFFLINE') {
+        onSuccess?.();
+      }
+    },
+  });
+
+  return { mutateOpd, isPending };
+}
+
+export function useOpdReferalMutation({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
+  const { mutate: mutateReferal, isPending } = useMutation({
+    mutationKey: queryKeys.referral,
+    mutationFn: mutateReferals,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.referral,
+      });
+      onSuccess?.();
+    },
+  });
+
+  return { mutateReferal, isPending };
+}
+
+export function useReferalStatusMutation({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
+  const { mutate: mutateStatus, isPending } = useMutation({
+    mutationFn: mutateReferalStatus,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.referral, 'RECEIVED'],
       });
 
       onSuccess?.();
     },
   });
 
-  return { mutateClient, isPending };
+  return { mutateStatus, isPending };
 }

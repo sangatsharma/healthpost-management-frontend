@@ -255,7 +255,14 @@ export function ImagePreviewer({ children, className }: ImagePreviewerProps) {
 
   return (
     <>
-      <div className={className}>{processedChildren}</div>
+      <div
+        className={className}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        {processedChildren}
+      </div>
 
       <Dialog open={isOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="flex h-[80vh] w-full max-w-4xl flex-col items-center justify-center border-0 bg-black/60 p-0 text-white">

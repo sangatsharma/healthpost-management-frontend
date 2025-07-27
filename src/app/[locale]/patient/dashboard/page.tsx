@@ -142,11 +142,11 @@ export default function PatientDashboard() {
           </CardContent>
         </Card>
 
-        {/* Vitals Trend Card */}
+        {/* vitals Trend Card */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Current Vitals
+              Current vitals
             </CardTitle>
             <Activity className="text-muted-foreground h-4 w-4" />
           </CardHeader>
@@ -276,7 +276,7 @@ export default function PatientDashboard() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <Button variant="outline" className="h-20 flex-col bg-transparent">
               <Heart className="mb-2 h-6 w-6" />
-              <span className="text-sm">Log Vitals</span>
+              <span className="text-sm">Log vitals</span>
             </Button>
             <Button variant="outline" className="h-20 flex-col bg-transparent">
               <Pill className="mb-2 h-6 w-6" />

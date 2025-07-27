@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/popover';
 import { Alert, AlertDescription } from '../ui/alert';
 
-const DEFAULT_UPLOAD_ENDPOINT = '/api/upload-image';
+const DEFAULT_UPLOAD_ENDPOINT = 'https://api.healthsync.me/api/common/u';
 const DEFAULT_MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 export function ImageUploader({
@@ -51,7 +51,7 @@ export function ImageUploader({
     file: File,
   ): Promise<ImageUploadResponse> => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('images', file);
 
     try {
       const response = await fetch(uploadEndpoint, {
@@ -64,6 +64,7 @@ export function ImageUploader({
       }
 
       const result: ImageUploadResponse = await response.json();
+      console.log('Upload result:', result);
       return result;
     } catch (error) {
       return {
@@ -111,15 +112,15 @@ export function ImageUploader({
       // Clear progress interval
       clearInterval(progressInterval);
 
-      if (result.success && result.url) {
+      if (result.success && result?.data?.[0]) {
         // Complete progress
         setUploadProgress((prev) => ({ ...prev, progress: 100 }));
 
         // Insert image into editor
         editor
-          .chain()
+          ?.chain()
           .focus()
-          .setImage({ src: result.url, alt: file.name })
+          .setImage({ src: result.data[0], alt: file.name })
           .run();
 
         // Close popover after short delay
@@ -144,7 +145,7 @@ export function ImageUploader({
 
   const handleUrlSubmit = (): void => {
     if (imageUrl.trim()) {
-      editor.chain().focus().setImage({ src: imageUrl.trim() }).run();
+      editor?.chain().focus().setImage({ src: imageUrl.trim() }).run();
       setImageUrl('');
       setIsOpen(false);
     }

@@ -20,4 +20,9 @@ export const queryKeys = {
     clients: ['clients'],
     singleClient: (id: string) => ['clients', id],
   },
+  opd: {
+    opds: ['opds'],
+    singleOpd: (id: string) => ['opds', id],
+  },
+  referral: ['referral'],
 };

@@ -6,7 +6,11 @@ import { FormSelect } from '@/components/reusables/form-select';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { Form, FormField } from '@/components/ui/form';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import { mapEnumToOptions, renderFullName } from '@/lib/utils';
+import {
+  getRequestingParty,
+  mapEnumToOptions,
+  renderFullName,
+} from '@/lib/utils';
 import {
   getOpdSchema,
   TOpdSchema,
@@ -30,17 +34,28 @@ import {
   IntakeRoute,
   IntakeTime,
   MEDICINE_LIST,
+  Timing,
 } from '@/constants/medicine.constant';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FormButtons } from '@/components/reusables/form-dialog';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useOpdMutation } from '@/api/mutation';
+import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
+import { idbPersister } from '@/lib/idbPersister';
+import { queryClient } from '@/lib/queryClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function OpdRegistrationForm() {
+  const searchParams = useSearchParams();
+  const opdId = searchParams.get('opdId');
+  const router = useRouter();
   const t = useTypedTranslations('Validation');
   const tPlace = useTypedTranslations('Placeholder');
   const tOpd = useTypedTranslations('OpdSection');
   const tEnumKeys = useTypedTranslations('Enums');
+  const tToast = useTypedTranslations('Toast');
 
   const OpdSchema = getOpdSchema(t);
   const { healthPostInfo, user } = useUserStore();
@@ -67,14 +82,14 @@ export default function OpdRegistrationForm() {
         height: '',
         mucus: '',
       },
-      prescribtions: [],
+      prescriptions: [],
       healthPostId: healthPostInfo?.id || '',
       complaints: '',
       diagnosis: '',
       observedExamination: '',
       treatment: '',
       medicines: [],
-      examinier: user?.id || '',
+      examinerId: user?.id || '',
       followUpRequired: false,
       visitType: undefined,
       treatementType: undefined,
@@ -87,49 +102,116 @@ export default function OpdRegistrationForm() {
     mode: 'onSubmit',
   });
 
+  const { mutateOpd, isPending } = useOpdMutation({
+    onSuccess: async () => {
+      toast.success(tToast('opdCreated'));
+      form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ['offline-opd-mutations'],
+      });
+      if (opdId) {
+        await idbPersister.removeOfflineMutation(opdId);
+      }
+      router.back();
+    },
+  });
+
   const { handleSubmit, setValue } = form;
-  const selectedMedicinesList = form.watch('medicines') || [];
-  console.log('errors', form.getValues());
+
+  const watchedMedicines = form.watch('medicines');
+  const selectedMedicinesList = useMemo(
+    () => watchedMedicines || [],
+    [watchedMedicines],
+  );
+
   const onSubmit = (data: TOpdSchema) => {
-    console.log('Form submitted with data:', data);
-    // Handle form submission logic here
+    const { medicines, healthPostId: _, ...rest } = data;
+    mutateOpd({
+      method: 'POST',
+      data: {
+        ...rest,
+        medicines: medicines?.map((medicine) => medicine.label) || [],
+        healthPostId: healthPostInfo?.id || '',
+        ...(!navigator.onLine && {
+          name: [...(patientOptions ?? []), ...(offlineData ?? [])].find(
+            (option) => option.value === data.patientId,
+          )?.label,
+        }),
+      },
+    });
   };
 
   const { data: patientOptions, isSuccess: isPatientSuccess } = useQuery({
-    queryKey: queryKeys.client.clients,
+    queryKey: [queryKeys.client.clients, 'all', 'all'],
     queryFn: async () =>
       fetchClientsInfo({
-        healthPostId: healthPostInfo?.id || '',
+        healthPostId: undefined,
       }),
     select: (data) =>
       (data?.data as TClient[]).map((client) => ({
         label: renderFullName({
           params: client,
         }),
-        value: client.id,
+        value: client.id ?? '',
       })),
-    enabled: !!healthPostInfo?.id,
+  });
+
+  const { data: offlineData, isSuccess: offlineSuccess } = useQuery({
+    queryKey: ['offline-clients-mutations'],
+    queryFn: () => idbPersister.getAllOfflineMutations<TClient>(),
+    select: (data) => {
+      return data
+        .filter((d) => getRequestingParty(d.key) === 'CLIENTS')
+        .map((client) => ({
+          label: renderFullName({
+            params: client.data,
+          }),
+          value: client.data.email || '',
+        }));
+    },
+    enabled: !navigator.onLine,
   });
 
   useEffect(() => {
+    async function fetchOpdData() {
+      if (opdId) {
+        const allOpdData =
+          await idbPersister.getAllOfflineMutations<TOpdSchema>();
+        const opdData = allOpdData.find((data) => data.key === opdId);
+        console.log('opdData', opdData);
+        if (opdData) {
+          form.reset({
+            ...opdData.data,
+            medicines: opdData?.data?.prescriptions?.map((d) => {
+              const [id, label] = [d.id, d.name];
+              return { id, label };
+            }),
+          });
+        }
+      }
+    }
+    fetchOpdData();
+  }, [opdId, form]);
+
+  useEffect(() => {
     selectedMedicinesList.forEach((medicine, idx) => {
-      setValue(`prescribtions.${idx}.name`, medicine?.label || '');
-      setValue(`prescribtions.${idx}.id`, medicine.id || '');
+      setValue(`prescriptions.${idx}.name`, medicine?.label || '');
+      setValue(`prescriptions.${idx}.id`, medicine.id || '');
       const [
         dose = '',
-        frequency = '',
-        timing = 'ANY_TIME',
-        intakeRoute = '',
+        frequency = Frequency.OD,
+        timing = Timing.ANY_TIME,
+        intakeRoute = IntakeRoute.PO,
         unit = '',
       ] = medicine.id?.split('||') || [];
-      setValue(`prescribtions.${idx}.dosage`, dose);
-      setValue(`prescribtions.${idx}.frequency`, frequency);
+      setValue(`prescriptions.${idx}.dosage`, dose);
+      setValue(`prescriptions.${idx}.frequency`, frequency as Frequency);
       setValue(
-        `prescribtions.${idx}.timing`,
-        (timing || 'ANY_TIME') as 'BEFORE_FOOD' | 'AFTER_FOOD' | 'ANY_TIME',
+        `prescriptions.${idx}.timing`,
+        (timing || Timing.ANY_TIME) as Timing,
       );
-      setValue(`prescribtions.${idx}.intakeRoute`, intakeRoute);
-      setValue(`prescribtions.${idx}.quantity`, unit);
+      setValue(`prescriptions.${idx}.intakeRoute`, intakeRoute as IntakeRoute);
+      setValue(`prescriptions.${idx}.quantity`, unit);
     });
   }, [selectedMedicinesList, setValue]);
 
@@ -158,7 +240,10 @@ export default function OpdRegistrationForm() {
               render={({ field }) => (
                 <FormWrapper label={tOpd('patientName')} isRequired>
                   <FormSelect
-                    options={(isPatientSuccess && patientOptions) || []}
+                    options={[
+                      ...(isPatientSuccess ? patientOptions : []),
+                      ...(offlineSuccess ? (offlineData ?? []) : []),
+                    ]}
                     placeholder={tPlace('selectPatient')}
                     {...field}
                     variant="searchable"
@@ -193,17 +278,17 @@ export default function OpdRegistrationForm() {
               control={form.control}
               name="treatementType"
               render={({ field }) => (
-                <FormWrapper label={tOpd('visitType')} isRequired>
+                <FormWrapper label={tOpd('treatmentType')} isRequired>
                   <FormSelect
                     options={mapEnumToOptions(
                       TreatementType,
                       tEnumKeys,
                       'treatmentType',
                     )}
-                    placeholder={tPlace('selectVisitType')}
+                    placeholder={tPlace('selectTreatmentType')}
                     {...field}
                     variant="basic"
-                    error={!!form.formState.errors.visitType}
+                    error={!!form.formState.errors.treatementType}
                   />
                 </FormWrapper>
               )}
@@ -237,7 +322,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('bp')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.bp}
                     />
                   </FormWrapper>
@@ -251,7 +336,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('pulse')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.pulse}
                     />
                   </FormWrapper>
@@ -265,7 +350,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('temperature')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.temperature}
                     />
                   </FormWrapper>
@@ -279,7 +364,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('respiration')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.respiration}
                     />
                   </FormWrapper>
@@ -293,7 +378,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('height')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.height}
                     />
                   </FormWrapper>
@@ -307,7 +392,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('weight')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.weight}
                     />
                   </FormWrapper>
@@ -321,7 +406,7 @@ export default function OpdRegistrationForm() {
                     <Input
                       {...field}
                       placeholder={tOpd('mucus')}
-                      className="flex-1"
+                      className="!w-full flex-1"
                       errors={formState.errors.vitals?.mucus}
                     />
                   </FormWrapper>
@@ -335,10 +420,15 @@ export default function OpdRegistrationForm() {
                   name="complaints"
                   render={({ field }) => (
                     <FormWrapper label={tOpd('complaintsHistory')} isRequired>
-                      <BlockEditor
+                      {/* <BlockEditor
                         placeholder={tPlace('complaintsHistory')}
                         outerClassName="h-96"
                         {...field}
+                      /> */}
+                      <Textarea
+                        {...field}
+                        placeholder={tPlace('complaintsHistory')}
+                        className="min-h-40 p-4"
                       />
                     </FormWrapper>
                   )}
@@ -350,10 +440,15 @@ export default function OpdRegistrationForm() {
                   name="observedExamination"
                   render={({ field }) => (
                     <FormWrapper label={tOpd('observedExamination')} isRequired>
-                      <BlockEditor
+                      {/* <BlockEditor
                         placeholder={tPlace('observedExamination')}
                         outerClassName="h-96"
                         {...field}
+                      /> */}
+                      <Textarea
+                        {...field}
+                        placeholder={tPlace('observedExamination')}
+                        className="min-h-40 p-4"
                       />
                     </FormWrapper>
                   )}
@@ -411,7 +506,7 @@ export default function OpdRegistrationForm() {
                     {/* // quantity per intake */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.dosage`}
+                      name={`prescriptions.${idx}.dosage`}
                       render={({ field, formState }) => (
                         <FormWrapper label={tOpd('dosage')} isRequired>
                           <Input
@@ -419,7 +514,7 @@ export default function OpdRegistrationForm() {
                             placeholder={tOpd('dosage')}
                             className="flex-1"
                             errors={
-                              formState.errors.prescribtions?.[idx]?.dosage
+                              formState.errors.prescriptions?.[idx]?.dosage
                             }
                           />
                         </FormWrapper>
@@ -428,7 +523,7 @@ export default function OpdRegistrationForm() {
                     {/* // How long the medicine should be taken (e.g., "5 days") */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.duration`}
+                      name={`prescriptions.${idx}.duration`}
                       render={({ field, formState }) => (
                         <FormWrapper label={tOpd('duration')} isRequired>
                           <Input
@@ -437,7 +532,7 @@ export default function OpdRegistrationForm() {
                             className="flex-1"
                             type="number"
                             errors={
-                              formState.errors.prescribtions?.[idx]?.duration
+                              formState.errors.prescriptions?.[idx]?.duration
                             }
                           />
                         </FormWrapper>
@@ -446,7 +541,7 @@ export default function OpdRegistrationForm() {
                     {/* // How often to take it (e.g., "3 times a day") */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.frequency`}
+                      name={`prescriptions.${idx}.frequency`}
                       render={({ field }) => (
                         <FormWrapper label={tOpd('frequency')} isRequired>
                           <FormSelect
@@ -459,7 +554,7 @@ export default function OpdRegistrationForm() {
                             {...field}
                             variant="basic"
                             error={
-                              !!form.formState.errors.prescribtions?.[idx]
+                              !!form.formState.errors.prescriptions?.[idx]
                                 ?.frequency
                             }
                           />
@@ -469,7 +564,7 @@ export default function OpdRegistrationForm() {
                     {/* // Morning night or day */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.intakeTime`}
+                      name={`prescriptions.${idx}.intakeTime`}
                       render={({ field }) => (
                         <FormWrapper label={tOpd('intakeTime')} isRequired>
                           <SelectMultiple
@@ -501,7 +596,7 @@ export default function OpdRegistrationForm() {
                     {/* // Quantity (e.g., "1 tablet") */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.quantity`}
+                      name={`prescriptions.${idx}.quantity`}
                       render={({ field, formState }) => (
                         <FormWrapper label={tOpd('quantity')} isRequired>
                           <Input
@@ -509,7 +604,7 @@ export default function OpdRegistrationForm() {
                             placeholder={tOpd('quantity')}
                             className="flex-1"
                             errors={
-                              formState.errors.prescribtions?.[idx]?.quantity
+                              formState.errors.prescriptions?.[idx]?.quantity
                             }
                           />
                         </FormWrapper>
@@ -518,7 +613,7 @@ export default function OpdRegistrationForm() {
                     {/* // Route of administration (e.g., "oral", "injection", "topical") */}
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.intakeRoute`}
+                      name={`prescriptions.${idx}.intakeRoute`}
                       render={({ field }) => (
                         <FormWrapper label={tOpd('intakeRoute')} isRequired>
                           <FormSelect
@@ -531,7 +626,7 @@ export default function OpdRegistrationForm() {
                             {...field}
                             variant="basic"
                             error={
-                              !!form.formState.errors.prescribtions?.[idx]
+                              !!form.formState.errors.prescriptions?.[idx]
                                 ?.intakeRoute
                             }
                           />
@@ -540,7 +635,7 @@ export default function OpdRegistrationForm() {
                     />
                     <FormField
                       control={form.control}
-                      name={`prescribtions.${idx}.timing`}
+                      name={`prescriptions.${idx}.timing`}
                       render={({ field }) => (
                         <FormWrapper
                           label={tOpd('timing')}
@@ -738,9 +833,8 @@ export default function OpdRegistrationForm() {
               onClick: () => form.reset(),
             }}
             mutateAction={{
-              // isLoading: isPending,
+              isLoading: isPending,
               onClick: handleSubmit(onSubmit),
-              disabled: !Object.keys(form.formState.dirtyFields).length,
               className: 'rounded-sm',
             }}
           />

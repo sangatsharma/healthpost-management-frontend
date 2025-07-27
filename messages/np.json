@@ -1,11 +1,18 @@
 {
   "GeneralPages": {
     "actions": "कार्यहरू",
+    "offline": "अफलाइन",
+    "refresh": "रिफ्रेस",
+    "sync": "समिकरण गर्नुहोस्",
     "reset": "पुनः सेट गर्नुहोस्",
     "submit": "पेश गर्नुहोस्",
     "images": "तस्बिरहरू",
+    "signature": "हस्ताक्षर",
     "search": "खोज्नुहोस्",
     "select": "छान्नुहोस्",
+    "welcome": "स्वागत छ, {name}!",
+    "healthPostManagementSystem": "स्वास्थ्य चौकी व्यवस्थापन प्रणाली",
+    "selectTab": "कृपया सुरु गर्न साइडबारबाट कुनै विकल्प चयन गर्नुहोस्।",
     "SN": "क्र.संं",
     "NotFound": {
       "title": "पृष्ठ फेला परेन",
@@ -20,11 +27,17 @@
     "SidebarItems": {
       "dashboard": "ड्यासबोर्ड",
       "healthpost": "स्वास्थ्य चौकीहरू",
-      "patients": "रोगीहरू",
+      "patients": "सेवाग्राहीहरू",
       "staffsmanagement": "कर्मचारी व्यवस्थापन",
       "medicalhistory": "चिकित्सा इतिहास",
-      "clientsRegistration": "सेवाग्राही दर्ता",
-      "opdSection": "ओपीडी क्षेत्र"
+      "clientsRegistration": "सेवाग्राही",
+      "opdSection": "ओपीडी क्षेत्र",
+      "laboratory": "प्रयोगशाला",
+      "profile": "प्रोफाइल",
+      "settings": "सेटिङहरू",
+      "reports": "रिपोर्टहरू",
+      "logout": "लगआउट",
+      "referrals": "सिफारिसहरू"
     },
     "HealthPost": {
       "name": "स्वास्थ्य चौकीको नाम",
@@ -198,7 +211,13 @@
     "healthPostUpdated": "स्वास्थ्य चौकी सफलतापूर्वक अपडेट गरियो!",
     "staffDeleted": "कर्मचारी सफलतापूर्वक मेटाइयो!",
     "staffCreated": "कर्मचारी सफलतापूर्वक सिर्जना गरियो!",
-    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!"
+    "staffUpdated": "कर्मचारी सफलतापूर्वक अपडेट गरियो!",
+    "opdCreated": "ओपीडी सफलतापूर्वक सिर्जना गरियो!",
+    "clientsCreated": "सेवाग्राही सफलतापूर्वक सिर्जना गरियो!",
+    "clientsUpdated": "सेवाग्राही सफलतापूर्वक अपडेट गरियो!",
+    "clientsDeleted": "सेवाग्राही सफलतापूर्वक मेटाइयो!",
+    "dataRefreshed": "डेटा सफलतापूर्वक रिफ्रेस गरियो!",
+    "statusUpdated": "स्थिति सफलतापूर्वक अपडेट गरियो!"
   },
 
   "FileOperations": {
@@ -218,6 +237,8 @@
     "next": "अर्को",
     "submitRegistration": "दर्ता पेश गर्नुहोस्",
     "addNewClient": "नयाँ सेवाग्राही थप्नुहोस्",
+    "healthpostPatients": "स्वास्थ्य चौकीको बिरामीहरू",
+    "allPatients": "सबै बिरामीहरू",
     "personalInfo": {
       "title": "व्यक्तिगत जानकारी",
       "description": "आधारभूत व्यक्तिगत विवरणहरू प्रविष्ट गर्नुहोस्",
@@ -276,11 +297,13 @@
     }
   },
   "OpdSection": {
+    "opd": "ओपीडी",
     "formTitle": "ओपीडी दर्ता फारम",
     "formSubtitle": "नयाँ ओपीडी बिरामी दर्ता गर्न तलको फारम भर्नुहोस्।",
     "newOpdReg": "नयाँ ओपीडी दर्ता",
     "patientName": "बिरामीको नाम",
     "visitedDate": "भेट गरिएको मिति",
+    "treatmentType": "उपचार प्रकार",
     "visitType": "भेट प्रकार",
     "healthPost": "स्वास्थ्य चौकी",
     "bp": "रक्तचाप",
@@ -308,7 +331,161 @@
     "timing": " खाना पहिले/पछि",
     "afterMeal": "खाना पछि",
     "beforeMeal": "खाना पहिले",
-    "anyTime": "कुनै पनि समयमा"
+    "anyTime": "कुनै पनि समयमा",
+    "viewTicket": "टिकट हेर्नुहोस्",
+    "printTicket": "टिकट प्रिन्ट गर्नुहोस्",
+    "healthPostTicket": "स्वास्थ्य चौकीको टिकटहरू",
+    "allTickets": "सबै टिकटहरू",
+    "reportType": "रिपोर्ट प्रकार",
+    "ticketPreview": "टिकट विवरण",
+    "refer": "बिरामीलाई सिफारिस गर्नुहोस्",
+    "ticketDetails": {
+      "title": "स्वास्थ्य सेवा कार्ड",
+      "patientName": "नाम थर",
+      "patientCode": "सेवाग्राही कोड",
+      "date": "मिति",
+      "opdNo": "ओ.पि.डि न",
+      "nationality": "राष्ट्रियता",
+      "district": "ठेगाना, जिल्ला",
+      "municipality": "म.न.पा./गा.पा.",
+      "wardNo": "वडा नं",
+      "gender": "लिङ्ग",
+      "age": "उमेर",
+      "contactNo": "सम्पर्क नं",
+      "followUp": "पुनः जाँच",
+      "complaintsDiagnosis": "सिकायत र निदान",
+      "complaintsHistory": "सिकायत/इतिहास",
+      "observedExamination": "अवलोकन/परीक्षण",
+      "diagnosis": "निदान",
+      "treatmentAdvice": "उपचार र औषधिहरू",
+      "medicines": "निर्धारित औषधीहरू",
+      "treatment": "उपचार",
+      "examinier": "चिकित्सा परीक्षक",
+      "reminder": "कृपया आफ्नो स्वास्थ्य सेवा कार्ड सुरक्षित राख्नुहोस् र भविष्यका भेटहरूमा यो ल्याउनुहोस्।"
+    }
+  },
+  "Referral": {
+    "referPatient": "{name} लाई सिफारिस गर्नुहोस्",
+    "confirmReferal": "के तपाईं यो बिरामीलाई {healthPost} मा सिफारिस गर्न चाहनुहुन्छ?",
+    "refer": "सिफारिस गर्नुहोस्",
+    "referSuccess": "बिरामी सफलतापूर्वक सिफारिस गरियो!",
+    "receivedReferals": "प्राप्त सिफारिस",
+    "sentReferals": "पठाइएको सिफारिस",
+    "status": "सिफारिसको स्थिति",
+    "referredBy": "सिफारिस गर्ने",
+    "referralDate": "सिफारिस मिति",
+    "referredHealthPost": "सिफारिस गरिएको स्वास्थ्य चौकी",
+    "referralReason": "सिफारिसको कारण",
+    "referredPatient": "सिफारिस गरिएको बिरामी",
+    "ticketDetails": {
+      "title": "परेषण/स्थानान्तरण कार्ड",
+      "referralRequest": "परेषण/स्थानान्तरण अनुरोध",
+      "requestDetails": {
+        "afterDesignation": " ले हाम्रो संस्थाबाट सेवा लिँदै आउनुभएको छ । थप उपचार/सेवाको आवश्यकता भएकाले उहाँलाई तपाईंको संस्था श्री ",
+        "afterHealthPost": " मा प्रेषण गरिएको छ। बिरामीको हालको ओ.पि.डि. विवरण तथा चिकित्सा जानकारी यस प्रेषणसँग संलग्न गरिएको छ।"
+      },
+      "requestFooter": "कृपया प्रेषण गरिएको बिरामीलाई आवश्यक उपचार तथा सेवा प्रदान गरिदिनुहुन अनुरोध छ।",
+      "markasCompleted": "प्रेषण पूरा भएको",
+      "markasPending": "प्रेषण पर्खाइमा छ",
+      "markasRejected": "प्रेषण अस्वीकृत भएको",
+      "markAsApproved": "प्रेषण स्वीकृत भएको"
+    }
+  },
+  "PatientProfile": {
+    "title": "सेवाग्राही प्रोफाइल",
+    "backButton": "पछाडि फर्कनुहोस्",
+    "patientCode": "सेवाग्राही कोड",
+    "userAvatar": "प्रयोगकर्ताको अवतार",
+    "minor": "नाबालक",
+    "adult": "वयस्क",
+    "tabs": {
+      "personal": "व्यक्तिगत",
+      "medical": "चिकित्सा",
+      "address": "ठेगाना",
+      "family": "परिवार"
+    },
+    "sections": {
+      "personalInformation": "व्यक्तिगत जानकारी",
+      "medicalInformation": "चिकित्सासम्बन्धी जानकारी",
+      "permanentAddress": "स्थायी ठेगाना",
+      "temporaryAddress": "अस्थायी ठेगाना",
+      "familyInformation": "परिवार सम्बन्धी जानकारी",
+      "bankingInformation": "बैंक जानकारी",
+      "administrativeDetails": "प्रशासनिक विवरण",
+      "medicalSummary": "चिकित्सासारांश",
+      "contactInformation": "सम्पर्क जानकारी",
+      "bankingAndFamily": "बैंक तथा परिवार",
+      "recordInformation": "रेकर्ड जानकारी"
+    },
+    "fields": {
+      "dateOfBirthBS": "जन्म मिति (वि.सं.)",
+      "dateOfBirthAD": "जन्म मिति (ई.सं.)",
+      "age": "उमेर",
+      "years": "वर्ष",
+      "email": "इमेल",
+      "phone": "फोन",
+      "nationality": "राष्ट्रियता",
+      "citizenshipNumber": "नागरिकता नम्बर",
+      "nationalId": "राष्ट्रिय परिचयपत्र",
+      "casteType": "जात प्रकार",
+      "role": "भूमिका",
+      "accountType": "खाता प्रकार",
+      "bloodGroup": "रक्त समूह",
+      "height": "उचाइ",
+      "weight": "तौल",
+      "disabilityType": "अपाङ्गता प्रकार",
+      "disabilityIdentityType": "अपाङ्गता परिचय प्रकार",
+      "vaccinationStatus": "खोप स्थिति",
+      "emergencyContact": "आपतकालीन सम्पर्क",
+      "nshiNumber": "NSHI नम्बर",
+      "sgcEligibility": "SGC योग्यताको स्थिति",
+      "district": "जिल्ला",
+      "municipality": "नगरपालिका/गाउँपालिका",
+      "wardNo": "वडा नं.",
+      "tole": "टोल",
+      "fatherName": "बुवाको नाम",
+      "motherName": "आमाको नाम",
+      "guardianName": "अभिभावकको नाम",
+      "spouseName": "जीवनसाथीको नाम",
+      "bank": "बैंक",
+      "bankBranch": "बैंक शाखा",
+      "patientCodeShort": "सेवाग्राही कोड",
+      "citizenship": "नागरिकता",
+      "minorStatus": "नाबालक स्थिति",
+      "disability": "अपाङ्गता",
+      "permanentAddressShort": "स्थायी ठेगाना",
+      "father": "बुबा",
+      "mother": "आमा",
+      "branch": "शाखा",
+      "created": "सिर्जना गरिएको",
+      "lastUpdated": "अन्तिम अपडेट",
+      "reportStatus": "रिपोर्ट स्थिति"
+    },
+    "status": {
+      "completed": "पूरा भएको",
+      "incomplete": "अधूरो",
+      "eligible": "योग्य",
+      "notEligible": "अयोग्य",
+      "locked": "लक गरिएको",
+      "unlocked": "अनलक गरिएको",
+      "reportLocked": "रिपोर्ट लक गरिएको"
+    },
+    "actions": {
+      "viewReports": "रिपोर्ट हेर्नुहोस्",
+      "updateRecord": "रेकर्ड अपडेट गर्नुहोस्"
+    },
+    "quickStats": {
+      "age": "उमेर",
+      "bloodGroup": "रक्त समूह",
+      "vaccination": "खोप",
+      "sgcEligible": "SGC योग्य",
+      "yes": "हो",
+      "no": "होइन"
+    },
+    "placeholders": {
+      "notProvided": "प्रदान गरिएको छैन",
+      "notSpecified": "निर्दिष्ट गरिएको छैन"
+    }
   },
   "Placeholder": {
     "enterFileName": "फाइलको नाम प्रविष्ट गर्नुहोस्",
@@ -397,6 +574,7 @@
     "searchHere": "यहाँ खोज्नुहोस्",
     "searchOptions": "विकल्पहरू खोज्नुहोस्...",
     "selectVisitType": "भेट प्रकार छान्नुहोस्",
+    "selectTreatmentType": "उपचार प्रकार छान्नुहोस्",
     "complaintsHistory": "गुनासो/इतिहास प्रविष्ट गर्नुहोस्...",
     "observedExamination": "अवलोकन / परीक्षण विवरण प्रविष्ट गर्नुहोस्...",
     "diagnosis": "निदान प्रविष्ट गर्नुहोस्...",
@@ -426,7 +604,7 @@
     "userRole": {
       "SUPERADMIN": "सुपर एडमिन",
       "ADMIN": "प्रशासक",
-      "PATIENT": "रोगी",
+      "PATIENT": "सेवाग्राही",
       "HEALTH_ASSISTANT": "स्वास्थ्य सहायक",
       "ANM": "ANM (सहायक नर्स मिडवाइफ)",
       "LAB_TECHNICIAN": "प्रयोगशाला प्राविधिक",
@@ -436,7 +614,7 @@
       "ALL": "सबै"
     },
     "userType": {
-      "PATIENT": "रोगी",
+      "PATIENT": "सेवाग्राही",
       "HP": "स्वास्थ्य चौकी",
       "ADMIN": "प्रशासक"
     },
@@ -500,13 +678,13 @@
       "ALL": "सबै अनुमति",
       "SYSTEM_CONFIG": "प्रणाली कन्फिगरेसन",
 
-      "PATIENT_DASHBOARD": "रोगी ड्यासबोर्ड",
+      "PATIENT_DASHBOARD": "सेवाग्राही ड्यासबोर्ड",
       "ADMIN_DASHBOARD": "प्रशासक ड्यासबोर्ड",
       "HP_MANAGEMENT": "स्वास्थ्य चौकी व्यवस्थापन",
       "ADMIN_MANAGEMENT": "प्रशासक व्यवस्थापन",
       "HEALTH_POST_DASHBOARD": "स्वास्थ्य चौकी ड्यासबोर्ड",
 
-      "PATIENT_RECORDS": "रोगी विवरणहरू",
+      "PATIENT_RECORDS": "सेवाग्राही विवरणहरू",
 
       "PRESCRIBE_MEDICATION": "औषधि सिफारिस गर्नुहोस्",
       "ORDER_LAB_TESTS": "प्रयोगशाला परीक्षणको आदेश गर्नुहोस्",
@@ -555,7 +733,7 @@
       "HS": "सुत्ने बेलामा",
       "STAT": "तत्काल / एकपटक मात्र",
       "ONCE_A_WEEK": "हप्तामा एकपटक",
-      "SOS": "आवश्यकताअनुसार",
+      "SOS": "आवश्यकता अनुसार",
       "null": "निर्धारित छैन"
     },
     "intakeTime": {
@@ -563,6 +741,17 @@
       "AFTERNOON": "दिउँसो",
       "EVENING": "साँझ",
       "NIGHT": "बेलुका"
+    },
+    "timing": {
+      "BEFORE_FOOD": "खाना भन्दा  पहिले",
+      "AFTER_FOOD": "खाना खाए पछि",
+      "ANY_TIME": "कुनै पनि समयमा"
+    },
+    "referralStatus": {
+      "PENDING": "पेंडिंग",
+      "COMPLETED": "पूर्ण",
+      "REJECTED": "अस्वीकृत",
+      "APPROVED": "स्वीकृत"
     }
   }
 }

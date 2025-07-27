@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 type FileUploaderProps = {
   name?: string;
   onChange?: (files: (File | string)[]) => void;
-  defaultValue?: (File | string)[];
+  defaultValue?: (File | string)[] | null | File;
   maxSize?: number;
   allowImage?: boolean;
   allowFile?: boolean;
@@ -66,23 +66,33 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   uploaderType = 'dropzone',
   className,
 }) => {
-  const [files, setFiles] = useState<(string | File)[]>([]);
-  const [previews, setPreviews] = useState<(string | File)[]>([]);
+  const [files, setFiles] = useState<(string | File)[] | null>([]);
+  const [previews, setPreviews] = useState<(string | File)[] | null>([]);
   const [filePreviewsMap, setFilePreviewsMap] = useState<
     Record<string, string>
   >({});
 
   // Load previews for defaultValue on mount
   useEffect(() => {
-    setFiles(defaultValue);
-    setPreviews(defaultValue);
+    const normalized =
+      defaultValue == null
+        ? []
+        : Array.isArray(defaultValue)
+          ? defaultValue
+          : [defaultValue];
+    setFiles(normalized);
+    setPreviews(normalized);
+
+    if (!Array.isArray(defaultValue) && defaultValue) {
+      onChange?.(normalized);
+    }
   }, [defaultValue]);
 
   // Simplify the filePreviewsMap useEffect
   useEffect(() => {
     const newFilePreviewsMap: Record<string, string> = {};
 
-    previews.forEach((item) => {
+    previews?.forEach((item) => {
       if (item instanceof File) {
         const key = item.name + item.size + item.lastModified;
         newFilePreviewsMap[key] = URL.createObjectURL(item);
@@ -125,10 +135,13 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   const onDrop = (acceptedFiles: File[]) => {
-    const newFiles = [...files, ...acceptedFiles].slice(0, maxFiles);
+    const newFiles = [...(files ?? []), ...acceptedFiles].slice(0, maxFiles);
     setFiles(newFiles);
 
-    const newPreviews = [...previews, ...acceptedFiles].slice(0, maxFiles);
+    const newPreviews = [...(previews ?? []), ...acceptedFiles].slice(
+      0,
+      maxFiles,
+    );
     setPreviews(newPreviews);
 
     onChange?.(newFiles);
@@ -142,9 +155,9 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   const removeItemAtIndex = (index: number) => {
-    const updatedPreviews = [...previews];
+    const updatedPreviews = [...(previews ?? [])];
     const removed = updatedPreviews.splice(index, 1)[0];
-    const updatedFiles = files.filter((f) => f !== removed);
+    const updatedFiles = (files ?? []).filter((f) => f !== removed);
     setPreviews(updatedFiles);
 
     setFiles(updatedFiles);
@@ -247,9 +260,10 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
 
             {/* Display Text */}
             <div className="flex-1 truncate text-sm">
-              {files.length > 0 ? (
+              {(files ?? []).length > 0 ? (
                 <span className="text-foreground">
-                  {files.length} file{files.length > 1 ? 's' : ''} selected
+                  {(files ?? []).length} file
+                  {(files ?? []).length > 1 ? 's' : ''} selected
                 </span>
               ) : (
                 <span className="text-muted-foreground">
@@ -264,7 +278,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         </div>
 
         {/* File List */}
-        {previews.length > 0 && (
+        {previews && previews.length > 0 && (
           <div className="space-y-2">
             {previews.map((item, index) => renderFileItem(item, index))}
           </div>
@@ -288,7 +302,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         className,
       )}
     >
-      {previews.length > 0 ? (
+      {previews && previews.length > 0 ? (
         <div className="flex flex-wrap gap-4">
           {previews.map((item, idx) => {
             if (typeof item === 'string') {
@@ -390,6 +404,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         name={name}
         type="file"
         multiple={maxFiles > 1}
+        allowNepaliTranslation={false}
       />
 
       <p className="text-center text-sm text-gray-600">
@@ -398,7 +413,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
           : `Click or drag up to ${maxFiles} file(s) (max ${Math.round(maxSize / 1024 / 1024)}MB each)`}
       </p>
 
-      {files.length > 0 && (
+      {files && files.length > 0 && (
         <div className="mt-2 text-center text-sm text-gray-500">
           Selected file(s):{' '}
           {files
@@ -407,6 +422,19 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             )
             .join(', ')}
         </div>
+      )}
+      {(files || [])?.length > 0 && (
+        <Button
+          variant={'destructive'}
+          onClick={(e) => {
+            setPreviews([]);
+            setFiles([]);
+            onChange?.([]);
+            e.stopPropagation();
+          }}
+        >
+          clear all
+        </Button>
       )}
     </div>
   );

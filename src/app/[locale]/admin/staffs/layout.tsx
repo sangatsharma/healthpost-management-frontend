@@ -13,7 +13,7 @@ export default function StaffLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ProtectedRoute requiredPermission={Permissions.ADMIN_MANAGEMENT}>
+    <ProtectedRoute requiredPermission={Permissions.STAFF_MANAGEMENT}>
       {children}
     </ProtectedRoute>
   );

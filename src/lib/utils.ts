@@ -63,6 +63,10 @@ export const convertToFormData = (
 
       continue;
     }
+    if (!value) {
+      formData.append(key, 'null');
+      continue;
+    }
 
     // Handle other types
     if (Array.isArray(value)) {
@@ -73,6 +77,8 @@ export const convertToFormData = (
       formData.append(key, value.toISOString());
     } else if (typeof value === 'object' && value !== null) {
       formData.append(key, JSON.stringify(value));
+    } else if (value === undefined) {
+      formData.append(key, 'null');
     } else {
       formData.append(key, value != null ? String(value) : '');
     }
@@ -123,3 +129,66 @@ export const renderFullName = ({
   // Default to an empty string (should never reach here due to earlier checks).
   return '';
 };
+
+export const cleanNepaliDate = (date?: string): string => {
+  if (!date) return '';
+  return date.split('T')[0];
+};
+export function replaceWithNepali(text: string) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/\bmorning\b/gi, 'बिहान')
+    .replace(/\bafternoon\b/gi, 'दिउसो')
+    .replace(/\bnight\b/gi, 'बेलुका')
+    .replace(/\bevening\b/gi, 'साँझ');
+}
+
+export function getRequestingParty(url: string): 'OPD' | 'CLIENTS' {
+  const value = url.split('||')[0];
+  const isOpd = value.toLowerCase().includes('opd');
+  return isOpd ? 'OPD' : 'CLIENTS';
+}
+
+export async function serializeFormData(
+  formData: FormData,
+): Promise<Record<string, TAny>> {
+  const result: Record<string, TAny> = {};
+
+  for (const [key, value] of formData.entries()) {
+    if (value instanceof File) {
+      // Read file as base64 or binary string
+      const base64 = await fileToBase64(value);
+      result[key] = {
+        name: value.name,
+        type: value.type,
+        size: value.size,
+        base64, // you can reconstruct the File from this later
+      };
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file); // You can also use readAsArrayBuffer
+  });
+}
+export function base64ToFile(base64: string, name: string, type: string): File {
+  const byteString = atob(base64.split(',')[1]);
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new File([ab], name, { type });
+}

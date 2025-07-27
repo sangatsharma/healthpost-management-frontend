@@ -41,7 +41,7 @@ export default function HealthPostSidebar() {
     }
   }
   return (
-    <>
+    <div className="flex flex-col">
       {/* Mobile Header */}
       <MobileHeader
         currentUser={user!}
@@ -78,6 +78,6 @@ export default function HealthPostSidebar() {
           />
         </div>
       </TooltipProvider>
-    </>
+    </div>
   );
 }

@@ -2,42 +2,16 @@ import { TMenuItem } from '@/types/global';
 import { TUser } from '@/types/user.types';
 
 export enum Permissions {
-  // System-wide permissions
   ALL = 'ALL',
-  SYSTEM_CONFIG = 'SYSTEM_CONFIG',
-
-  // Dashboard access
-  PATIENT_DASHBOARD = 'PATIENT_DASHBOARD',
   ADMIN_DASHBOARD = 'ADMIN_DASHBOARD',
   HP_MANAGEMENT = 'HP_MANAGEMENT',
-  ADMIN_MANAGEMENT = 'ADMIN_MANAGEMENT',
-
-  HEALTH_POST_DASHBOARD = 'HEALTH_POST_DASHBOARD',
-  // Patient management
+  STAFF_MANAGEMENT = 'STAFF_MANAGEMENT',
   PATIENT_RECORDS = 'PATIENT_RECORDS',
-
-  // Clinical workflows
   PRESCRIBE_MEDICATION = 'PRESCRIBE_MEDICATION',
+  OPD_REFERRALS = 'OPD_REFERRALS',
   ORDER_LAB_TESTS = 'ORDER_LAB_TESTS',
-  VACCINATION_RECORD = 'VACCINATION_RECORD',
-  MATERNAL_HEALTH_EDIT = 'MATERNAL_HEALTH_EDIT',
-
-  // Laboratory
   LAB_RESULTS_UPLOAD = 'LAB_RESULTS_UPLOAD',
   LAB_RESULTS_VERIFY = 'LAB_RESULTS_VERIFY',
-
-  // Community health
-  COMMUNITY_REPORTS = 'COMMUNITY_REPORTS',
-  HOME_VISIT_RECORD = 'HOME_VISIT_RECORD',
-
-  // Inventory
-  INVENTORY_VIEW = 'INVENTORY_VIEW',
-  INVENTORY_MANAGE = 'INVENTORY_MANAGE',
-  MEDICINE_DISPENSE = 'MEDICINE_DISPENSE',
-
-  // Administrative
-  USER_MANAGE = 'USER_MANAGE',
-  REPORTS_GENERATE = 'REPORTS_GENERATE',
   DATA_EXPORT = 'DATA_EXPORT',
 }
 
@@ -83,7 +57,11 @@ export const filterMenuItems = (
       }
 
       // For regular menu items, check permission
-      if (item.permission && !checkPermission(user, item.permission)) {
+      if (
+        item.permission &&
+        !checkPermission(user, item.permission) &&
+        user.accountType !== 'PATIENT'
+      ) {
         return null;
       }
 

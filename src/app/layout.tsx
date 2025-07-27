@@ -75,11 +75,9 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '48x48 32x32 16x16', type: 'image/x-icon' },
       { url: '/images/hp.png', sizes: '192x192', type: 'image/png' },
       { url: '/images/hp.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
     apple: [{ url: '/images/hp.png', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/manifest.json',

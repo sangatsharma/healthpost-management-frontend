@@ -12,7 +12,13 @@ import FormWrapper from '@/components/reusables/form-wrapper';
 import { PhoneInput } from '@/components/ui/phone-input';
 
 import { FileUploader } from '@/components/reusables/image-uploader';
-import { Gender, Status, TUser, UserRole, UserType } from '@/types/user.types';
+import {
+  Gender,
+  HealthPostUserType,
+  Status,
+  TUser,
+  UserRole,
+} from '@/types/user.types';
 import { convertToFormData, mapEnumToOptions } from '@/lib/utils';
 import { PermissionSelector } from './PermissionForm';
 import { FormSelect } from '@/components/reusables/form-select';
@@ -58,6 +64,7 @@ export const AddAdminModal: React.FC<TProps> = ({
     status: singleData?.status || '',
     role: singleData?.role || '',
     healthPostId: singleData?.healthPostId || '',
+    signature: singleData?.signature || [],
   } as TStaffSchema;
 
   const { data: healthpostsOptions, isSuccess: isHealthPostOptionsSuccess } =
@@ -88,7 +95,7 @@ export const AddAdminModal: React.FC<TProps> = ({
   const form = useForm<TStaffSchema>({
     resolver: zodResolver(staffSchema),
     defaultValues: {
-      accountType: UserType.HP,
+      accountType: HealthPostUserType.HP,
       email: '',
       firstName: '',
       middleName: '',
@@ -98,6 +105,7 @@ export const AddAdminModal: React.FC<TProps> = ({
       gender: undefined,
       status: undefined,
       profileImage: [],
+      signature: [],
     },
     values:
       staffId && !isLoading && isSuccess && singleData ? formValues : undefined,
@@ -110,15 +118,19 @@ export const AddAdminModal: React.FC<TProps> = ({
   } = form;
 
   const onSubmit = (data: TStaffSchema): void => {
-    const { permissions, ...dataToSend } = data;
+    const { permissions, healthPostId, ...dataToSend } = data;
     mutateStaff({
       staffId: staffId!,
       data: convertToFormData(
         {
           ...dataToSend,
           permissions: JSON.stringify(permissions),
+          healthPostId:
+            dataToSend.accountType === HealthPostUserType.HP
+              ? healthPostId
+              : undefined,
         },
-        ['profileImage'],
+        ['profileImage', 'signature'],
         staffId ? dirtyFields : undefined,
       ),
       method: staffId ? 'PUT' : 'POST',
@@ -287,7 +299,7 @@ export const AddAdminModal: React.FC<TProps> = ({
                   <FormWrapper label={t2('User.accountType')} isRequired>
                     <FormSelect
                       options={mapEnumToOptions(
-                        UserType,
+                        HealthPostUserType,
                         tEnumKeys,
                         'userType',
                       )}
@@ -319,23 +331,47 @@ export const AddAdminModal: React.FC<TProps> = ({
               />
             </div>
             <div className="col-span-2 flex w-full flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="profileImage"
-                render={({ field }) => (
-                  <FormWrapper label={t2('images')}>
-                    <FileUploader
-                      defaultValue={field.value || []}
-                      allowFile={false}
-                      allowImage
-                      maxFiles={2}
-                      maxSize={2 * 1024 * 1024}
-                      uploaderType="dropzone"
-                      {...field}
-                    />
-                  </FormWrapper>
-                )}
-              />
+              <div className="flex gap-3">
+                <FormField
+                  control={form.control}
+                  name="profileImage"
+                  render={({ field }) => (
+                    <FormWrapper label={t2('images')} className="w-1/2">
+                      <FileUploader
+                        defaultValue={field.value || []}
+                        allowFile={false}
+                        allowImage
+                        maxFiles={2}
+                        maxSize={2 * 1024 * 1024}
+                        uploaderType="dropzone"
+                        {...field}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="signature"
+                  render={({ field }) => (
+                    <FormWrapper
+                      label={t2('signature')}
+                      isRequired
+                      className="w-1/2"
+                    >
+                      <FileUploader
+                        defaultValue={field.value || []}
+                        allowFile={false}
+                        allowImage
+                        maxFiles={2}
+                        maxSize={2 * 1024 * 1024}
+                        uploaderType="dropzone"
+                        {...field}
+                      />
+                    </FormWrapper>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="permissions"

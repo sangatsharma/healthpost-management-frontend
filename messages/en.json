@@ -1,11 +1,18 @@
 {
   "GeneralPages": {
     "actions": "Actions",
+    "offline": "Offline",
+    "refresh": "Refresh",
+    "sync": "SYNC",
     "reset": "Reset",
     "submit": "Submit",
     "images": "Images",
+    "signature": "Signature",
     "search": "Search",
     "select": "Select",
+    "welcome": "Welcome, {name}!",
+    "healthPostManagementSystem": "Health Post Management System",
+    "selectTab": "Please select any option from the sidebar to get started.",
     "SN": "S.N",
     "NotFound": {
       "title": "Page Not Found",
@@ -23,8 +30,14 @@
       "patients": "Patients",
       "staffsmanagement": "Staffs Management",
       "medicalhistory": "Medical History",
-      "clientsRegistration": "Clients Registration",
-      "opdSection": "OPD Section"
+      "clientsRegistration": "Clients",
+      "opdSection": "OPD Section",
+      "laboratory": "Laboratory",
+      "profile": "Profile",
+      "settings": "Settings",
+      "reports": "Reports",
+      "logout": "Logout",
+      "referrals": "Referals"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -200,7 +213,13 @@
     "healthPostUpdated": "Health Post updated successfully!",
     "staffDeleted": "Staff deleted successfully!",
     "staffCreated": "Staff created successfully!",
-    "staffUpdated": "Staff updated successfully!"
+    "staffUpdated": "Staff updated successfully!",
+    "opdCreated": "New OPD created successfully!",
+    "clientsCreated": "New client created successfully!",
+    "clientsUpdated": "Client updated successfully!",
+    "clientsDeleted": "Client deleted successfully!",
+    "dataRefreshed": "Data refreshed successfully!",
+    "statusUpdated": "Status updated successfully!"
   },
 
   "FileOperations": {
@@ -221,6 +240,8 @@
     "next": "Next",
     "submitRegistration": "Submit Registration",
     "addNewClient": "Add New Client",
+    "healthpostPatients": "HealthPost Patients",
+    "allPatients": "All Patients",
     "personalInfo": {
       "title": "Personal Information",
       "description": "Enter basic personal details",
@@ -279,12 +300,14 @@
     }
   },
   "OpdSection": {
+    "opd": "OPD",
     "formTitle": "OPD Registration Form",
     "formSubtitle": "Please fill out the form below to register a new OPD patient.",
     "newOpdReg": "New OPD Registration",
     "patientName": "Patient Name",
     "visitedDate": "Date of Visit",
     "visitType": "Visit Type",
+    "treatmentType": "Treatment Type",
     "healthPost": "Health Post",
     "bp": "Blood Pressure",
     "pulse": "Pulse Rate",
@@ -311,7 +334,161 @@
     "timing": "Before/After Meal",
     "afterMeal": "After Meal",
     "beforeMeal": "Before Meal",
-    "anyTime": "Any Time"
+    "anyTime": "Any Time",
+    "viewTicket": "View Ticket",
+    "printTicket": "Print Ticket",
+    "healthPostTicket": "Health Post Ticket",
+    "allTickets": "All Tickets",
+    "reportType": "Report Type",
+    "ticketPreview": "Ticket Preview",
+    "refer": "Refer to another health post",
+    "ticketDetails": {
+      "title": "Health Service Card",
+      "patientName": "Patient Name",
+      "patientCode": "Patient Code",
+      "date": "Date",
+      "opdNo": "OPD No",
+      "nationality": "Nationality",
+      "district": "District",
+      "municipality": "Municipality",
+      "wardNo": "Ward No",
+      "gender": "Gender",
+      "age": "Age",
+      "contactNo": "Contact No",
+      "followUp": "Follow-up",
+      "complaintsDiagnosis": "Complaints/Diagnosis",
+      "complaintsHistory": "Complaints/History",
+      "observedExamination": "Observed Examination",
+      "diagnosis": "Diagnosis",
+      "treatmentAdvice": "Treatment and Medicines",
+      "medicines": "Prescribed Medicines",
+      "treatment": "Treatment",
+      "examinier": "Examiner",
+      "reminder": "Please bring this card for follow-up visits and future consultations."
+    }
+  },
+  "Referral": {
+    "referPatient": "Refer {name} to {healthPost}",
+    "confirmReferal": "Are you sure you want to refer this patient to {healthPost}?",
+    "refer": "Refer",
+    "referSuccess": "Patient referred successfully!",
+    "receivedReferals": "Received Referals",
+    "sentReferals": "Sent Referals",
+    "status": "Referral Status",
+    "referredBy": "Referred By",
+    "referralDate": "Referral Date",
+    "referredHealthPost": "Referred Health Post",
+    "referralReason": "Referral Reason",
+    "referredPatient": "Referred Patient",
+    "ticketDetails": {
+      "title": "Referral/Transfer Card",
+      "referralRequest": "Referral Request",
+      "requestDetails": {
+        "afterDesignation": ", who has been receiving services from our institution, requires further treatment/services. Therefore, they are being referred to your institution ",
+        "afterHealthPost": " for the necessary support. The patient's current OPD details and medical information are included with this referral."
+      },
+      "requestFooter": "Please provide the necessary treatment and services to the referred patient.",
+      "markasCompleted": "Mark as Completed",
+      "markasPending": "Mark as Pending",
+      "markasRejected": "Mark as Rejected",
+      "markAsApproved": "Mark as Approved"
+    }
+  },
+  "PatientProfile": {
+    "title": "Patient Profile",
+    "backButton": "Back",
+    "patientCode": "Patient Code",
+    "userAvatar": "user avatar",
+    "minor": "Minor",
+    "adult": "Adult",
+    "tabs": {
+      "personal": "Personal",
+      "medical": "Medical",
+      "address": "Address",
+      "family": "Family"
+    },
+    "sections": {
+      "personalInformation": "Personal Information",
+      "medicalInformation": "Medical Information",
+      "permanentAddress": "Permanent Address",
+      "temporaryAddress": "Temporary Address",
+      "familyInformation": "Family Information",
+      "bankingInformation": "Banking Information",
+      "administrativeDetails": "Administrative Details",
+      "medicalSummary": "Medical Summary",
+      "contactInformation": "Contact Information",
+      "bankingAndFamily": "Banking & Family",
+      "recordInformation": "Record Information"
+    },
+    "fields": {
+      "dateOfBirthBS": "Date of Birth (BS)",
+      "dateOfBirthAD": "Date of Birth (AD)",
+      "age": "Age",
+      "years": "years",
+      "email": "Email",
+      "phone": "Phone",
+      "nationality": "Nationality",
+      "citizenshipNumber": "Citizenship Number",
+      "nationalId": "National ID",
+      "casteType": "Caste Type",
+      "role": "Role",
+      "accountType": "Account Type",
+      "bloodGroup": "Blood Group",
+      "height": "Height",
+      "weight": "Weight",
+      "disabilityType": "Disability Type",
+      "disabilityIdentityType": "Disability Identity Type",
+      "vaccinationStatus": "Vaccination Status",
+      "emergencyContact": "Emergency Contact",
+      "nshiNumber": "NSHI Number",
+      "sgcEligibility": "SGC Eligibility",
+      "district": "District",
+      "municipality": "Municipality",
+      "wardNo": "Ward No.",
+      "tole": "Tole",
+      "fatherName": "Father's Name",
+      "motherName": "Mother's Name",
+      "guardianName": "Guardian's Name",
+      "spouseName": "Spouse's Name",
+      "bank": "Bank",
+      "bankBranch": "Bank Branch",
+      "patientCodeShort": "Patient Code",
+      "citizenship": "Citizenship",
+      "minorStatus": "Minor Status",
+      "disability": "Disability",
+      "permanentAddressShort": "Permanent Address",
+      "father": "Father",
+      "mother": "Mother",
+      "branch": "Branch",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "reportStatus": "Report Status"
+    },
+    "status": {
+      "completed": "Completed",
+      "incomplete": "Incomplete",
+      "eligible": "Eligible",
+      "notEligible": "Not Eligible",
+      "locked": "Locked",
+      "unlocked": "Unlocked",
+      "reportLocked": "Report Locked"
+    },
+    "actions": {
+      "viewReports": "View Reports",
+      "updateRecord": "Update Record"
+    },
+    "quickStats": {
+      "age": "Age",
+      "bloodGroup": "Blood Group",
+      "vaccination": "Vaccination",
+      "sgcEligible": "SGC Eligible",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "placeholders": {
+      "notProvided": "Not provided",
+      "notSpecified": "Not specified"
+    }
   },
   "Placeholder": {
     "enterFileName": "Enter file name",
@@ -399,6 +576,7 @@
     "searchHere": "Search here",
     "searchOptions": "Search options...",
     "selectVisitType": "Select visit type",
+    "selectTreatmentType": "Select treatment type",
     "complaintsHistory": "Enter complaints or history...",
     "observedExamination": "Enter observed examination details...",
     "diagnosis": "Enter diagnosis...",
@@ -565,6 +743,17 @@
       "AFTERNOON": "Afternoon",
       "EVENING": "Evening",
       "NIGHT": "Night"
+    },
+    "timing": {
+      "BEFORE_FOOD": "Before Meal",
+      "AFTER_FOOD": "After Meal",
+      "ANY_TIME": "Any Time"
+    },
+    "referralStatus": {
+      "PENDING": "Pending",
+      "COMPLETED": "Completed",
+      "REJECTED": "Rejected",
+      "APPROVED": "Approved"
     }
   }
 }

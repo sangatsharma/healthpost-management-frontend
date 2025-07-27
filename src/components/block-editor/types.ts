@@ -53,7 +53,8 @@ export interface ColorPalette {
 
 export interface ImageUploadResponse {
   success: boolean;
-  url?: string;
+  message?: string;
+  data?: string[];
   error?: string;
 }
 

@@ -2,6 +2,7 @@ import type React from 'react';
 import { type ReactElement, ReactNode, isValidElement } from 'react';
 import Image from 'next/image';
 import { Avatar, SAvatar } from '@/components/ui/avatar';
+import AvatarText from '@/components/reusables/AvatarText';
 
 export interface ImageInfo {
   src: string;
@@ -56,7 +57,9 @@ export function isImageElement(element: unknown): element is ImageElement {
 export function isAvatarElement(element: unknown): element is AvatarElement {
   return (
     isValidElement(element) &&
-    (element.type === Avatar ||
+    (element.type === AvatarText ||
+      element.type === SAvatar ||
+      element.type === Avatar ||
       (typeof element.type === 'function' && element.type.name === 'Avatar'))
   );
 }

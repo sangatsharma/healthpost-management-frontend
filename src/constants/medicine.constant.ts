@@ -7789,3 +7789,8 @@ export enum IntakeTime {
   'EVENING' = 'EVENING',
   'NIGHT' = 'NIGHT',
 }
+export enum Timing {
+  'BEFORE_FOOD' = 'BEFORE_FOOD',
+  'AFTER_FOOD' = 'AFTER_FOOD',
+  'ANY_TIME' = 'ANY_TIME',
+}

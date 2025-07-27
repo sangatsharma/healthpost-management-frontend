@@ -11,18 +11,14 @@ import { Button } from '@/components/ui/button';
 const permissionGroups = [
   {
     category: 'SYSTEM',
-    permissions: [
-      { key: Permissions.ALL, label: 'All Permissions' },
-      { key: Permissions.SYSTEM_CONFIG, label: 'System Configuration' },
-    ],
+    permissions: [{ key: Permissions.ALL, label: 'All Permissions' }],
   },
   {
     category: 'DASHBOARD ACCESS',
     permissions: [
-      { key: Permissions.PATIENT_DASHBOARD, label: 'Patient Dashboard' },
       { key: Permissions.ADMIN_DASHBOARD, label: 'Admin Dashboard' },
       {
-        key: Permissions.HEALTH_POST_DASHBOARD,
+        key: Permissions.ADMIN_DASHBOARD,
         label: 'Health Post Dashboard',
       },
     ],
@@ -32,10 +28,9 @@ const permissionGroups = [
     permissions: [
       {
         key: Permissions.HP_MANAGEMENT,
-        label: 'Health Professional Management',
+        label: 'Health Post Management',
       },
-      { key: Permissions.ADMIN_MANAGEMENT, label: 'Admin Management' },
-      { key: Permissions.USER_MANAGE, label: 'User Management' },
+      { key: Permissions.STAFF_MANAGEMENT, label: 'Staff Management' },
     ],
   },
   {
@@ -49,8 +44,6 @@ const permissionGroups = [
     permissions: [
       { key: Permissions.PRESCRIBE_MEDICATION, label: 'Prescribe Medication' },
       { key: Permissions.ORDER_LAB_TESTS, label: 'Order Lab Tests' },
-      { key: Permissions.VACCINATION_RECORD, label: 'Vaccination Records' },
-      { key: Permissions.MATERNAL_HEALTH_EDIT, label: 'Maternal Health' },
     ],
   },
   {
@@ -63,27 +56,10 @@ const permissionGroups = [
       },
     ],
   },
-  {
-    category: 'COMMUNITY HEALTH',
-    permissions: [
-      { key: Permissions.COMMUNITY_REPORTS, label: 'Community Reports' },
-      { key: Permissions.HOME_VISIT_RECORD, label: 'Home Visit Records' },
-    ],
-  },
-  {
-    category: 'INVENTORY',
-    permissions: [
-      { key: Permissions.INVENTORY_VIEW, label: 'Inventory View' },
-      { key: Permissions.INVENTORY_MANAGE, label: 'Inventory Management' },
-      { key: Permissions.MEDICINE_DISPENSE, label: 'Medicine Dispensing' },
-    ],
-  },
+
   {
     category: 'REPORTS & DATA',
-    permissions: [
-      { key: Permissions.REPORTS_GENERATE, label: 'Generate Reports' },
-      { key: Permissions.DATA_EXPORT, label: 'Data Export' },
-    ],
+    permissions: [{ key: Permissions.DATA_EXPORT, label: 'Data Export' }],
   },
 ];
 

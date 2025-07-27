@@ -1,7 +1,5 @@
 'use client';
-
-import React from 'react';
-
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,16 +25,29 @@ import AddressInfoForm from './AddressInfoForm';
 import FamilyInfoForm from './FamilyInfoForm';
 import HealthAndBankingInfo from './HealthAndBankingInfo';
 import FormDialog from '@/components/reusables/form-dialog';
-import { UserRole, UserType } from '@/types/user.types';
+import { TClient, UserRole, UserType } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
 import { useClientMutation } from '@/api/mutation';
 import { convertToFormData } from '@/lib/utils';
+import { fetchClientsInfo } from '@/api/queries';
+import { queryKeys } from '@/api/queryKeys';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { idbPersister } from '@/lib/idbPersister';
+import { queryClient } from '@/lib/queryClient';
+import { BSToAD } from 'bikram-sambat-js';
 
 export default function ClientRegistrationModal({
   isOpen,
   handleExit,
+  clientId,
+  defaultValues,
 }: {
+  defaultValues?: TClient & {
+    key?: string;
+  };
   isOpen: boolean;
+  clientId?: string;
   handleExit: () => void;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -44,16 +55,80 @@ export default function ClientRegistrationModal({
 
   const t = useTypedTranslations('Validation');
   const ct = useTypedTranslations('ClientRegistration');
+  const tToast = useTypedTranslations('Toast');
   const clientSchema = getClientSchema(t);
   const steps = getClientFormSteps(ct);
   const user = useUserStore((state) => state.user);
 
   const { mutateClient, isPending } = useClientMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      toast.success(tToast(clientId ? 'clientsUpdated' : 'clientsCreated'));
       setIsSubmitted(true);
-      handleExit();
+      if (defaultValues) {
+        await idbPersister.removeOfflineMutation(defaultValues?.key);
+        queryClient.invalidateQueries({
+          queryKey: ['offline-clients-mutations'],
+        });
+      }
     },
   });
+
+  const { data, isLoading, isSuccess, isError, refetch } = useQuery({
+    queryKey: queryKeys.client.singleClient(clientId || ''),
+    queryFn: () =>
+      fetchClientsInfo({
+        clientId: clientId || '',
+      }),
+    enabled: !!clientId,
+  });
+
+  const singleData = data?.data as TClientSchema;
+  const formValues = {
+    firstName: singleData?.firstName || '',
+    middleName: singleData?.middleName || '',
+    lastName: singleData?.lastName || '',
+    dobBs: singleData?.dobBs || '',
+    dobAd: singleData?.dobAd || '',
+    phoneNumber: singleData?.phoneNumber || '',
+    citizenshipNumber: singleData?.citizenshipNumber || '',
+    casteType: singleData?.casteType || undefined,
+    districtId: singleData?.districtId || '',
+    palityId: singleData?.palityId || '',
+    wardNo: singleData?.wardNo || '',
+    tole: singleData?.tole || '',
+    tDistrictId: singleData?.tDistrictId || '',
+    tPalityId: singleData?.tPalityId || '',
+    tWardNo: singleData?.tWardNo || '',
+    tTole: singleData?.tTole || '',
+    fatherName: singleData?.fatherName || '',
+    motherName: singleData?.motherName || '',
+    bank: singleData?.bank || '',
+    bankBranch: singleData?.bankBranch || '',
+    bankAccountNumber: singleData?.bankAccountNumber || '',
+    guardianName: singleData?.guardianName || '',
+    spouseName: singleData?.spouseName || '',
+    disabilityIdentityType: singleData?.disabilityIdentityType || undefined,
+    disabilityType: singleData?.disabilityType || undefined,
+    maritalStatus: singleData?.maritalStatus || undefined,
+    email: singleData?.email || '',
+    height: singleData?.height || '',
+    isEligibleForSgc: singleData?.isEligibleForSgc || false,
+    isVaccineCompleted: singleData?.isVaccineCompleted || false,
+    isMinor: singleData?.isMinor || false,
+    lockReport: singleData?.lockReport || false,
+    profileImage: singleData?.profileImage || [],
+    nationalId: singleData?.nationalId || '',
+    nshiNumber: singleData?.nshiNumber || '',
+    weight: singleData?.weight || '',
+    status: singleData?.status || undefined,
+    role: singleData?.role || UserRole.PATIENT,
+    accountType: singleData?.accountType || UserType.PATIENT,
+    gender: singleData?.gender || undefined,
+    nationality: singleData?.nationality || undefined,
+    bloodGroup: singleData?.bloodGroup || undefined,
+    healthPostId: singleData?.healthPostId || user?.healthPostId || '',
+    emergencyContact: singleData?.emergencyContact || '',
+  };
 
   const form = useForm<TClientSchema>({
     resolver: zodResolver(clientSchema),
@@ -61,7 +136,7 @@ export default function ClientRegistrationModal({
       firstName: '',
       middleName: '',
       lastName: '',
-      dobBs: '',
+      dobBs: '२०५६-०४-०२',
       dobAd: '2002-01-01',
       phoneNumber: '',
       citizenshipNumber: '',
@@ -95,15 +170,21 @@ export default function ClientRegistrationModal({
       isMinor: false,
       lockReport: false,
       profileImage: [],
-
       email: '',
       emergencyContact: '',
     },
+    values:
+      clientId && !isLoading && isSuccess && singleData
+        ? formValues
+        : undefined,
     mode: 'onChange',
   });
   const { dirtyFields } = form.formState;
 
-  const nextStep = async () => {
+  const nextStep = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
     const currentStepFields = steps[currentStep - 1].fields;
     const isValid = await form.trigger(currentStepFields);
 
@@ -119,13 +200,46 @@ export default function ClientRegistrationModal({
   };
   const onSubmit = (data: TClientSchema) => {
     mutateClient({
-      method: 'POST',
-      data: convertToFormData(data, ['profileImage']),
+      method: clientId ? 'PUT' : 'POST',
+      data: convertToFormData(
+        {
+          ...data,
+          patientId: clientId || null,
+          dobAd: BSToAD(data.dobBs),
+        },
+        ['profileImage'],
+        clientId
+          ? {
+              patientId: clientId,
+              ...dirtyFields,
+            }
+          : undefined,
+      ),
       healthPostId: user?.healthPostId || '',
     });
   };
 
   const progress = (currentStep / steps.length) * 100;
+
+  useEffect(() => {
+    if (defaultValues) {
+      const normalized = {
+        ...defaultValues,
+        phoneNumber: defaultValues.phoneNumber
+          ? `+${defaultValues.phoneNumber}`
+          : '',
+        emergencyContact: defaultValues.emergencyContact
+          ? `+${defaultValues.emergencyContact}`
+          : '',
+        healthPostId: user?.healthPostId,
+        height: `${defaultValues.height}`,
+        weight: `${defaultValues.weight}`,
+        citizenshipNumber: `${defaultValues.citizenshipNumber}`,
+        nationalId: `${defaultValues.nationalId}`,
+      };
+      form.reset(normalized);
+    }
+  }, [JSON.stringify(defaultValues), form]);
 
   return (
     <FormDialog
@@ -133,6 +247,9 @@ export default function ClientRegistrationModal({
       toggleModal={handleExit}
       className="sm:max-w-lg md:max-w-fit"
       isFormDirty={Object.keys(dirtyFields).length > 0 && !isSubmitted}
+      refetch={refetch}
+      isError={isError}
+      isLoading={isLoading}
     >
       {isSubmitted ? (
         <div className="flex items-center justify-center">
@@ -146,9 +263,9 @@ export default function ClientRegistrationModal({
                 <p className="text-gray-600">{ct('registrationSuccess')}</p>
                 <Button
                   onClick={() => {
+                    form.reset();
                     setIsSubmitted(false);
                     setCurrentStep(1);
-                    form.reset();
                   }}
                   className="mt-4"
                 >
@@ -262,7 +379,7 @@ export default function ClientRegistrationModal({
                     {currentStep < steps.length ? (
                       <Button
                         type="button"
-                        onClick={nextStep}
+                        onClick={(e) => nextStep(e)}
                         className="flex items-center gap-2"
                       >
                         {ct('next')}
@@ -272,7 +389,7 @@ export default function ClientRegistrationModal({
                       <Button
                         type="submit"
                         isLoading={isPending}
-                        disabled={!form.formState.isValid}
+                        // disabled={!form.formState.isValid}
                         className="flex items-center gap-2"
                       >
                         {ct('submitRegistration')}

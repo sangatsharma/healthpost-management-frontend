@@ -58,6 +58,7 @@ export function ImageResizeControls({ editor }: ImageResizeControlsProps) {
                 value={width}
                 onChange={(e) => setWidth(e.target.value)}
                 className="mt-1"
+                allowNepaliTranslation={false}
               />
             </div>
             <div>
@@ -68,6 +69,7 @@ export function ImageResizeControls({ editor }: ImageResizeControlsProps) {
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
                 className="mt-1"
+                allowNepaliTranslation={false}
               />
             </div>
           </div>
