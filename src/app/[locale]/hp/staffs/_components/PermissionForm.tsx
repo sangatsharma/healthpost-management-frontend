@@ -18,7 +18,7 @@ const permissionGroups = [
     permissions: [
       { key: Permissions.ADMIN_DASHBOARD, label: 'Admin Dashboard' },
       {
-        key: Permissions.ADMIN_DASHBOARD,
+        key: Permissions.ALL,
         label: 'Health Post Dashboard',
       },
     ],

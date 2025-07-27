@@ -121,7 +121,9 @@ export const renderFullName = ({
     const { firstName = '', middleName = '', lastName = '' } = params;
     const fullName = [firstName, middleName, lastName]
       .filter(Boolean)
-      .join(' ');
+      .join(' ')
+      .replace('null', '')
+      .trim();
 
     return fullName || '';
   }

@@ -6,6 +6,7 @@ import FormDialog from '@/components/reusables/form-dialog';
 import { FormSelect } from '@/components/reusables/form-select';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { Form, FormField } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { renderFullName } from '@/lib/utils';
 import { TReferalSchema } from '@/schemas/healthpostPortal/referral.schema';
@@ -36,6 +37,7 @@ export const ReferalModal = ({
       referredHealthPostId: '',
       patientId: opd.patientId,
       opdId: opd.id,
+      referralReason: '',
     },
   });
   const {
@@ -83,6 +85,10 @@ export const ReferalModal = ({
         name: renderFullName({
           params: opd.patient,
         }),
+        healthPost: selectedHp
+          ? healthpostsOptions?.find((hp) => hp.value === selectedHp)?.label ||
+            ''
+          : '',
       })}
       className="sm:max-w-lg md:max-w-fit"
       isFormDirty={Object.keys(dirtyFields).length > 0}
@@ -112,7 +118,7 @@ export const ReferalModal = ({
     >
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="px-2">
+          <div className="flex w-full min-w-2xl flex-col gap-4 px-2">
             <FormField
               control={form.control}
               name="referredHealthPostId"
@@ -128,6 +134,23 @@ export const ReferalModal = ({
                     {...field}
                     variant="searchable"
                     error={!!form.formState.errors.referredHealthPostId}
+                  />
+                </FormWrapper>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="referralReason"
+              render={({ field }) => (
+                <FormWrapper
+                  label={tPlaceholder('reasonsForReferral')}
+                  isRequired
+                >
+                  <Textarea
+                    {...field}
+                    placeholder={tPlaceholder('reasonsForReferral')}
+                    className="min-h-40 p-4"
                   />
                 </FormWrapper>
               )}

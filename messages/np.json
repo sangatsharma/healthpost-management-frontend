@@ -365,7 +365,7 @@
     }
   },
   "Referral": {
-    "referPatient": "{name} लाई सिफारिस गर्नुहोस्",
+    "referPatient": "{name} लाई {healthPost} मा सिफारिस गर्नुहोस्",
     "confirmReferal": "के तपाईं यो बिरामीलाई {healthPost} मा सिफारिस गर्न चाहनुहुन्छ?",
     "refer": "सिफारिस गर्नुहोस्",
     "referSuccess": "बिरामी सफलतापूर्वक सिफारिस गरियो!",
@@ -488,6 +488,7 @@
     }
   },
   "Placeholder": {
+    "reasonsForReferral": "सिफारिसका कारणहरू",
     "enterFileName": "फाइलको नाम प्रविष्ट गर्नुहोस्",
     "fileType": "फाइल प्रकार",
     "fileName": "फाइलको नाम",

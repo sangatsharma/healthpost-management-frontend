@@ -390,7 +390,7 @@ export const ReferralHealthCard = ({
                 </span>
                 {tr('ticketDetails.requestDetails.afterHealthPost')}
               </p>
-              <p>{tr('ticketDetails.requestFooter')} </p>
+              <p className="italic">{tr('ticketDetails.requestFooter')} </p>
             </fieldset>
 
             {/* Footer Section */}
