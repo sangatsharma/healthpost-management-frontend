@@ -2,6 +2,7 @@ import axios, { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import { idbPersister } from '@/lib/idbPersister';
 import { fetchRefreshToken } from '@/hooks/useAuthQuery';
+import { serializeFormData } from '@/lib/utils';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,16 +21,28 @@ api.interceptors.request.use(async (config) => {
     config.method &&
     ['post', 'put', 'delete', 'patch'].includes(config.method)
   ) {
+    let data;
+    if (config.data instanceof FormData) {
+      data = await serializeFormData(config.data);
+    } else {
+      data = config.data || {};
+    }
+    console.log('data', data);
     // Save to IndexedDB for later sync
     await idbPersister.saveOfflineMutation(config.url, {
       method: config.method,
-      data: Object.fromEntries((config.data as FormData).entries()),
+      data: {
+        ...data,
+        createdAt: Date.now(),
+      },
+      headers: config.headers,
+      timestamp: Date.now(),
     });
 
     // Reject the request to trigger the response error handler
     return Promise.reject(
       new axios.AxiosError(
-        'Offline: request saved for later sync',
+        'Offline: Request saved for later sync',
         'ERR_OFFLINE',
         config,
       ),
@@ -48,6 +61,14 @@ api.interceptors.response.use(
 
 const errorHandler = (error: unknown) => {
   if (isAxiosError(error)) {
+    if (error.code === 'ERR_OFFLINE') {
+      toast.success(error.message, {
+        duration: 500,
+        id: error.message,
+      });
+      return;
+    }
+
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -93,6 +114,6 @@ const errorHandler = (error: unknown) => {
       toast.error(error.message || 'Request setup error');
     }
   } else {
-    toast.error('An unknown error occurred');
+    throw new Error('An unknown error occurred');
   }
 };

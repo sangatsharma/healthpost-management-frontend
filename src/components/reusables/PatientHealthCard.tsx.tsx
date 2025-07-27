@@ -161,7 +161,7 @@ export const PatientHealthCard = React.forwardRef<
               )}
               {renderGridRow(
                 t('ticketDetails.municipality'),
-                data.patient.tPalityId || 'N/A',
+                data.patient.palityId || 'N/A',
               )}
               {renderGridRow(
                 t('ticketDetails.wardNo'),
@@ -342,7 +342,7 @@ export const PatientHealthCard = React.forwardRef<
                   />
                   <p className="border-t-1 border-dashed border-gray-500 pt-3">
                     {renderFullName({
-                      params: staffInfo.fullName,
+                      params: staffInfo?.fullName,
                     })}
                   </p>
                   <p className="my-1">{t('ticketDetails.examinier')}</p>

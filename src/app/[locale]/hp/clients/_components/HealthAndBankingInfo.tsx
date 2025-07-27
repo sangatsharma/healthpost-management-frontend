@@ -24,6 +24,7 @@ export default function HealthAndBankingInfo() {
   const t = useTypedTranslations('ClientRegistration');
   const p = useTypedTranslations('Placeholder');
   const tEnumKeys = useTypedTranslations('Enums');
+
   return (
     <div className="space-y-6">
       <div>
@@ -75,13 +76,15 @@ export default function HealthAndBankingInfo() {
             render={({ field }) => (
               <FormWrapper label={t('healthInfo.disabilityType')}>
                 <FormSelect
+                  {...field}
+                  value={field.value || ''}
+                  onChange={field.onChange}
                   options={mapEnumToOptions(
                     DisabilityType,
                     tEnumKeys,
                     'disabilityType',
                   )}
                   placeholder={p('disabilityType')}
-                  {...field}
                   variant="searchable"
                   required={false}
                   error={!!form.formState.errors.disabilityType}
@@ -96,13 +99,15 @@ export default function HealthAndBankingInfo() {
             render={({ field }) => (
               <FormWrapper label={t('healthInfo.disabilityIdentityType')}>
                 <FormSelect
+                  {...field}
+                  value={field.value}
+                  onChange={field.onChange}
                   options={mapEnumToOptions(
                     DisabilityIdentityType,
                     tEnumKeys,
                     'disabilityIdentityType',
                   )}
                   placeholder={p('disabilityIdentityType')}
-                  {...field}
                   variant="searchable"
                   required={false}
                   error={!!form.formState.errors.disabilityIdentityType}

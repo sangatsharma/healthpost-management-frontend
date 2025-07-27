@@ -10,7 +10,6 @@ interface OfflineIndicatorProps {
 
 export default function OfflineIndicator({ className }: OfflineIndicatorProps) {
   const [isOnline, setIsOnline] = useState(true);
-  const [showDetails, setShowDetails] = useState(false);
   const [pendingSync, setPendingSync] = useState(false);
 
   useEffect(() => {
@@ -35,36 +34,14 @@ export default function OfflineIndicator({ className }: OfflineIndicatorProps) {
       setPendingSync(false);
     };
 
-    // Listen for service worker messages about sync completion
-    const handleSWMessage = (event: MessageEvent) => {
-      if (event.data.type === 'SYNC_COMPLETE') {
-        setPendingSync(false);
-      }
-    };
-
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', handleSWMessage);
-    }
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.removeEventListener('message', handleSWMessage);
-      }
     };
   }, []);
-
-  const handleForceSync = () => {
-    if (navigator.serviceWorker.controller) {
-      setPendingSync(true);
-      navigator.serviceWorker.controller.postMessage({ type: 'FORCE_SYNC' });
-    }
-  };
 
   // Don't show anything if online and no pending sync
   if (isOnline && !pendingSync) {
@@ -94,32 +71,22 @@ export default function OfflineIndicator({ className }: OfflineIndicatorProps) {
       </div>
 
       {!isOnline && (
-        <>
+        <div className="group relative">
           <button
-            onClick={() => setShowDetails(!showDetails)}
             className="rounded p-1 transition-colors hover:bg-red-600"
             aria-label="Toggle offline details"
           >
             <AlertCircle className="h-4 w-4" />
           </button>
 
-          {showDetails && (
-            <div className="absolute top-full right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white p-3 text-gray-700 shadow-lg">
-              <h4 className="mb-2 text-sm font-semibold">Offline Mode</h4>
-              <p className="mb-2 text-xs">
-                You&apos;re currently offline. Your changes will be saved
-                locally and synced when you reconnect.
-              </p>
-              <button
-                onClick={handleForceSync}
-                className="flex w-full items-center justify-center gap-2 rounded bg-blue-500 px-2 py-1 text-xs text-white transition-colors hover:bg-blue-600"
-              >
-                <RefreshCw className="h-3 w-3" />
-                Try Sync Now
-              </button>
-            </div>
-          )}
-        </>
+          <div className="absolute top-full right-0 mt-2 hidden w-64 flex-col rounded-lg border border-gray-200 bg-white p-3 text-gray-700 shadow-lg group-hover:flex">
+            <h4 className="mb-2 text-sm font-semibold">Offline Mode</h4>
+            <p className="mb-2 text-xs">
+              You&apos;re currently offline. Your changes will be saved locally
+              and synced when you reconnect.
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

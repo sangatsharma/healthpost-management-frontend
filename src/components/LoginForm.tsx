@@ -94,7 +94,7 @@ export default function LoginPage() {
         const { refreshToken: _refreshToken, ...dataToStore } = user;
         localStorage.setItem('userInfo', JSON.stringify(dataToStore));
         toast.success(data?.message);
-        navigate.replace(`/${data?.data.user.accountType.toLowerCase()}`);
+        navigate.push(`/${data?.data.user.accountType.toLowerCase()}`);
       }
     },
   });
@@ -112,7 +112,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user.isLoggedIn || user.user) {
-      const dashboardPath = `/${user.user?.accountType?.toLowerCase()}/dashboard`;
+      const dashboardPath = `/${user.user?.accountType?.toLowerCase()}`;
       navigate.replace(dashboardPath);
     }
   }, [user, portal, navigate]);

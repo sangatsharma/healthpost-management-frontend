@@ -98,7 +98,7 @@ export function FormSelect<
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className={(cn('w-full p-0'), popoverClassName)}>
+        <PopoverContent className={cn('w-full p-0', popoverClassName)}>
           <Command
             className="max-h-64"
             filter={(commandValue, search) => {

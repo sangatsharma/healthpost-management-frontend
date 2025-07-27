@@ -7,6 +7,7 @@ import {
   mutateStaffInfo,
 } from './queries';
 import { queryClient } from '@/lib/queryClient';
+import { AxiosError } from 'axios';
 
 export function useHealthPostMutation({
   onSuccess,
@@ -59,6 +60,11 @@ export function useClientMutation({ onSuccess }: { onSuccess?: () => void }) {
 
       onSuccess?.();
     },
+    onError: (error) => {
+      if ((error as AxiosError).code === 'ERR_OFFLINE') {
+        onSuccess?.();
+      }
+    },
   });
 
   return { mutateClient, isPending };
@@ -71,10 +77,15 @@ export function useOpdMutation({ onSuccess }: { onSuccess?: () => void }) {
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.opd.opds,
+        queryKey: [queryKeys.opd.opds, 'healthpost', 'healthpost'],
       });
 
       onSuccess?.();
+    },
+    onError: (error) => {
+      if ((error as AxiosError).code === 'ERR_OFFLINE') {
+        onSuccess?.();
+      }
     },
   });
 

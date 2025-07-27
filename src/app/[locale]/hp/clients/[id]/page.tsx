@@ -1,3 +1,5 @@
+import { PatientProfile } from '@/components/reusables/PatientProfile';
+
 interface PatientProfilePageProps {
   params: Promise<{
     id: string;
@@ -11,7 +13,7 @@ export default async function PatientProfilePage({
 
   return (
     <div>
-      <p>This is the Patient Profile Page with ID: {id}</p>
+      <PatientProfile patientId={id} view="healthpost" />
     </div>
   );
 }

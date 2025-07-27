@@ -4,16 +4,16 @@ import { ProtectedRoute } from '@/components/ProtectedRoutes';
 import { Permissions } from '@/zustand/permissions';
 
 export function generateMetadata(): Metadata {
-  return pageMetadata.healthpost();
+  return pageMetadata.staffs();
 }
 
-export default function HealthpostLayout({
+export default function StaffLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <ProtectedRoute requiredPermission={Permissions.HP_MANAGEMENT}>
+    <ProtectedRoute requiredPermission={Permissions.STAFF_MANAGEMENT}>
       {children}
     </ProtectedRoute>
   );

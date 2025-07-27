@@ -9,9 +9,6 @@ import {
   Package,
   Clipboard,
   ShoppingCart,
-  UserPlus,
-  UserCog,
-  Clock,
   BarChart3,
   DollarSign,
   TrendingUp,
@@ -53,12 +50,20 @@ export const getMenuItems = ({
           href: `/hp/opd-section`,
           permission: Permissions.LAB_RESULTS_UPLOAD,
         },
+
         {
           key: 'medicalhistory',
           icon: FileText,
           label: t('SidebarItems.medicalhistory'),
           href: `/hp/medicalhistory`,
           permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'staff',
+          icon: UserCheck,
+          label: t('SidebarItems.staffsmanagement'),
+          href: `/hp/staffs`,
+          permission: Permissions.LAB_RESULTS_UPLOAD,
         },
         {
           key: 'laboratory',
@@ -96,41 +101,6 @@ export const getMenuItems = ({
           ],
         },
 
-        {
-          key: 'staff',
-          icon: UserCheck,
-          label: 'Staff Management',
-          submenu: [
-            {
-              key: 'doctors',
-              icon: UserPlus,
-              label: 'Doctors',
-              href: `hp/staff/doctors`,
-              permission: Permissions.USER_MANAGE,
-            },
-            {
-              key: 'nurses',
-              icon: UserCog,
-              label: 'Nurses',
-              href: '/staff/nurses',
-              permission: Permissions.USER_MANAGE,
-            },
-            {
-              key: 'admin-staff',
-              icon: Users,
-              label: 'Admin Staff',
-              href: '/staff/admin',
-              permission: Permissions.USER_MANAGE,
-            },
-            {
-              key: 'schedules',
-              icon: Clock,
-              label: 'Schedules',
-              href: '/staff/schedules',
-              permission: Permissions.USER_MANAGE,
-            },
-          ],
-        },
         {
           key: 'reports',
           icon: BarChart3,

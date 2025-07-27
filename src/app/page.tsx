@@ -97,12 +97,6 @@ export default function Home() {
             </Link>
           </div>
         </main>
-
-        <footer className="text-muted-foreground row-start-3 flex flex-wrap items-center justify-center gap-[24px] text-sm">
-          <span>© 2025 HealthPost Management System</span>
-          <span>•</span>
-          <span>Nepal Healthcare Solutions</span>
-        </footer>
       </div>
     </>
   );

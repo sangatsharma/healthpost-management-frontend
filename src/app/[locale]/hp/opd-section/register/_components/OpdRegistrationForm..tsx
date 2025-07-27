@@ -6,7 +6,11 @@ import { FormSelect } from '@/components/reusables/form-select';
 import FormWrapper from '@/components/reusables/form-wrapper';
 import { Form, FormField } from '@/components/ui/form';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import { mapEnumToOptions, renderFullName } from '@/lib/utils';
+import {
+  getRequestingParty,
+  mapEnumToOptions,
+  renderFullName,
+} from '@/lib/utils';
 import {
   getOpdSchema,
   TOpdSchema,
@@ -38,8 +42,15 @@ import { FormButtons } from '@/components/reusables/form-dialog';
 import { useEffect, useMemo } from 'react';
 import { useOpdMutation } from '@/api/mutation';
 import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
+import { idbPersister } from '@/lib/idbPersister';
+import { queryClient } from '@/lib/queryClient';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function OpdRegistrationForm() {
+  const searchParams = useSearchParams();
+  const opdId = searchParams.get('opdId');
+  const router = useRouter();
   const t = useTypedTranslations('Validation');
   const tPlace = useTypedTranslations('Placeholder');
   const tOpd = useTypedTranslations('OpdSection');
@@ -92,17 +103,25 @@ export default function OpdRegistrationForm() {
   });
 
   const { mutateOpd, isPending } = useOpdMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(tToast('opdCreated'));
       form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ['offline-opd-mutations'],
+      });
+      if (opdId) {
+        await idbPersister.removeOfflineMutation(opdId);
+      }
+      router.back();
     },
   });
 
   const { handleSubmit, setValue } = form;
 
+  const watchedMedicines = form.watch('medicines');
   const selectedMedicinesList = useMemo(
-    () => form.watch('medicines') || [],
-    [form.watch('medicines'), form],
+    () => watchedMedicines || [],
+    [watchedMedicines],
   );
 
   const onSubmit = (data: TOpdSchema) => {
@@ -113,25 +132,66 @@ export default function OpdRegistrationForm() {
         ...rest,
         medicines: medicines?.map((medicine) => medicine.label) || [],
         healthPostId: healthPostInfo?.id || '',
+        ...(!navigator.onLine && {
+          name: [...(patientOptions ?? []), ...(offlineData ?? [])].find(
+            (option) => option.value === data.patientId,
+          )?.label,
+        }),
       },
     });
   };
 
   const { data: patientOptions, isSuccess: isPatientSuccess } = useQuery({
-    queryKey: queryKeys.client.clients,
+    queryKey: [queryKeys.client.clients, 'all', 'all'],
     queryFn: async () =>
       fetchClientsInfo({
-        healthPostId: healthPostInfo?.id || '',
+        healthPostId: undefined,
       }),
     select: (data) =>
       (data?.data as TClient[]).map((client) => ({
         label: renderFullName({
           params: client,
         }),
-        value: client.id,
+        value: client.id ?? '',
       })),
-    enabled: !!healthPostInfo?.id,
   });
+
+  const { data: offlineData, isSuccess: offlineSuccess } = useQuery({
+    queryKey: ['offline-clients-mutations'],
+    queryFn: () => idbPersister.getAllOfflineMutations<TClient>(),
+    select: (data) => {
+      return data
+        .filter((d) => getRequestingParty(d.key) === 'CLIENTS')
+        .map((client) => ({
+          label: renderFullName({
+            params: client.data,
+          }),
+          value: client.data.email || '',
+        }));
+    },
+    enabled: !navigator.onLine,
+  });
+
+  useEffect(() => {
+    async function fetchOpdData() {
+      if (opdId) {
+        const allOpdData =
+          await idbPersister.getAllOfflineMutations<TOpdSchema>();
+        const opdData = allOpdData.find((data) => data.key === opdId);
+        console.log('opdData', opdData);
+        if (opdData) {
+          form.reset({
+            ...opdData.data,
+            medicines: opdData?.data?.prescriptions?.map((d) => {
+              const [id, label] = [d.id, d.name];
+              return { id, label };
+            }),
+          });
+        }
+      }
+    }
+    fetchOpdData();
+  }, [opdId, form]);
 
   useEffect(() => {
     selectedMedicinesList.forEach((medicine, idx) => {
@@ -180,7 +240,10 @@ export default function OpdRegistrationForm() {
               render={({ field }) => (
                 <FormWrapper label={tOpd('patientName')} isRequired>
                   <FormSelect
-                    options={(isPatientSuccess && patientOptions) || []}
+                    options={[
+                      ...(isPatientSuccess ? patientOptions : []),
+                      ...(offlineSuccess ? (offlineData ?? []) : []),
+                    ]}
                     placeholder={tPlace('selectPatient')}
                     {...field}
                     variant="searchable"
@@ -357,10 +420,15 @@ export default function OpdRegistrationForm() {
                   name="complaints"
                   render={({ field }) => (
                     <FormWrapper label={tOpd('complaintsHistory')} isRequired>
-                      <BlockEditor
+                      {/* <BlockEditor
                         placeholder={tPlace('complaintsHistory')}
                         outerClassName="h-96"
                         {...field}
+                      /> */}
+                      <Textarea
+                        {...field}
+                        placeholder={tPlace('complaintsHistory')}
+                        className="min-h-40 p-4"
                       />
                     </FormWrapper>
                   )}
@@ -372,10 +440,15 @@ export default function OpdRegistrationForm() {
                   name="observedExamination"
                   render={({ field }) => (
                     <FormWrapper label={tOpd('observedExamination')} isRequired>
-                      <BlockEditor
+                      {/* <BlockEditor
                         placeholder={tPlace('observedExamination')}
                         outerClassName="h-96"
                         {...field}
+                      /> */}
+                      <Textarea
+                        {...field}
+                        placeholder={tPlace('observedExamination')}
+                        className="min-h-40 p-4"
                       />
                     </FormWrapper>
                   )}
@@ -762,7 +835,6 @@ export default function OpdRegistrationForm() {
             mutateAction={{
               isLoading: isPending,
               onClick: handleSubmit(onSubmit),
-              disabled: !Object.keys(form.formState.dirtyFields).length,
               className: 'rounded-sm',
             }}
           />

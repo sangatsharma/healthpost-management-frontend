@@ -4,21 +4,32 @@ const DYNAMIC_CACHE = 'dynamic-v1';
 // Static assets to cache immediately
 const staticAssets = [
   // Routes
+  '/manifest.json',
   '/',
   '/en',
   '/np',
+  '/en/admin',
+  '/np/admin',
+  '/en/hp',
+  '/np/hp',
+  '/en/patient',
+  '/np/patient',
   '/en/admin/dashboard',
   '/np/admin/dashboard',
   '/en/admin/staffs',
   '/np/admin/staffs',
   '/en/admin/healthpost',
   '/np/admin/healthpost',
-  '/en/admin/login',
-  '/np/admin/login',
   '/en/admin/email',
   '/np/admin/email',
-
-  '/manifest.json',
+  '/np/hp/clients',
+  '/en/hp/clients',
+  '/en/hp/staffs',
+  '/np/hp/staffs',
+  '/np/hp/opd-section',
+  '/en/hp/opd-section',
+  '/np/hp/opd-section/register',
+  '/en/hp/opd-section/register',
 
   // Images
   '/images/cancelEdit.png',

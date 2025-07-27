@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +25,7 @@ import AddressInfoForm from './AddressInfoForm';
 import FamilyInfoForm from './FamilyInfoForm';
 import HealthAndBankingInfo from './HealthAndBankingInfo';
 import FormDialog from '@/components/reusables/form-dialog';
-import { UserRole, UserType } from '@/types/user.types';
+import { TClient, UserRole, UserType } from '@/types/user.types';
 import { useUserStore } from '@/zustand/useUserStore';
 import { useClientMutation } from '@/api/mutation';
 import { convertToFormData } from '@/lib/utils';
@@ -33,12 +33,19 @@ import { fetchClientsInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { idbPersister } from '@/lib/idbPersister';
+import { queryClient } from '@/lib/queryClient';
+import { BSToAD } from 'bikram-sambat-js';
 
 export default function ClientRegistrationModal({
   isOpen,
   handleExit,
   clientId,
+  defaultValues,
 }: {
+  defaultValues?: TClient & {
+    key?: string;
+  };
   isOpen: boolean;
   clientId?: string;
   handleExit: () => void;
@@ -54,10 +61,15 @@ export default function ClientRegistrationModal({
   const user = useUserStore((state) => state.user);
 
   const { mutateClient, isPending } = useClientMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(tToast(clientId ? 'clientsUpdated' : 'clientsCreated'));
       setIsSubmitted(true);
-      handleExit();
+      if (defaultValues) {
+        await idbPersister.removeOfflineMutation(defaultValues?.key);
+        queryClient.invalidateQueries({
+          queryKey: ['offline-clients-mutations'],
+        });
+      }
     },
   });
 
@@ -105,7 +117,7 @@ export default function ClientRegistrationModal({
     isMinor: singleData?.isMinor || false,
     lockReport: singleData?.lockReport || false,
     profileImage: singleData?.profileImage || [],
-    nationalId: singleData?.nshiNumber || '',
+    nationalId: singleData?.nationalId || '',
     nshiNumber: singleData?.nshiNumber || '',
     weight: singleData?.weight || '',
     status: singleData?.status || undefined,
@@ -124,7 +136,7 @@ export default function ClientRegistrationModal({
       firstName: '',
       middleName: '',
       lastName: '',
-      dobBs: '',
+      dobBs: '२०५६-०४-०२',
       dobAd: '2002-01-01',
       phoneNumber: '',
       citizenshipNumber: '',
@@ -158,7 +170,6 @@ export default function ClientRegistrationModal({
       isMinor: false,
       lockReport: false,
       profileImage: [],
-
       email: '',
       emergencyContact: '',
     },
@@ -170,7 +181,10 @@ export default function ClientRegistrationModal({
   });
   const { dirtyFields } = form.formState;
 
-  const nextStep = async () => {
+  const nextStep = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
     const currentStepFields = steps[currentStep - 1].fields;
     const isValid = await form.trigger(currentStepFields);
 
@@ -186,13 +200,46 @@ export default function ClientRegistrationModal({
   };
   const onSubmit = (data: TClientSchema) => {
     mutateClient({
-      method: 'POST',
-      data: convertToFormData(data, ['profileImage']),
+      method: clientId ? 'PUT' : 'POST',
+      data: convertToFormData(
+        {
+          ...data,
+          patientId: clientId || null,
+          dobAd: BSToAD(data.dobBs),
+        },
+        ['profileImage'],
+        clientId
+          ? {
+              patientId: clientId,
+              ...dirtyFields,
+            }
+          : undefined,
+      ),
       healthPostId: user?.healthPostId || '',
     });
   };
 
   const progress = (currentStep / steps.length) * 100;
+
+  useEffect(() => {
+    if (defaultValues) {
+      const normalized = {
+        ...defaultValues,
+        phoneNumber: defaultValues.phoneNumber
+          ? `+${defaultValues.phoneNumber}`
+          : '',
+        emergencyContact: defaultValues.emergencyContact
+          ? `+${defaultValues.emergencyContact}`
+          : '',
+        healthPostId: user?.healthPostId,
+        height: `${defaultValues.height}`,
+        weight: `${defaultValues.weight}`,
+        citizenshipNumber: `${defaultValues.citizenshipNumber}`,
+        nationalId: `${defaultValues.nationalId}`,
+      };
+      form.reset(normalized);
+    }
+  }, [JSON.stringify(defaultValues), form]);
 
   return (
     <FormDialog
@@ -216,9 +263,9 @@ export default function ClientRegistrationModal({
                 <p className="text-gray-600">{ct('registrationSuccess')}</p>
                 <Button
                   onClick={() => {
+                    form.reset();
                     setIsSubmitted(false);
                     setCurrentStep(1);
-                    form.reset();
                   }}
                   className="mt-4"
                 >
@@ -332,7 +379,7 @@ export default function ClientRegistrationModal({
                     {currentStep < steps.length ? (
                       <Button
                         type="button"
-                        onClick={nextStep}
+                        onClick={(e) => nextStep(e)}
                         className="flex items-center gap-2"
                       >
                         {ct('next')}
@@ -342,7 +389,7 @@ export default function ClientRegistrationModal({
                       <Button
                         type="submit"
                         isLoading={isPending}
-                        disabled={!form.formState.isValid}
+                        // disabled={!form.formState.isValid}
                         className="flex items-center gap-2"
                       >
                         {ct('submitRegistration')}

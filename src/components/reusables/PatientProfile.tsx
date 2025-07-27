@@ -1,11 +1,14 @@
 'use client';
 
+import { fetchClientsInfo } from '@/api/queries';
+import { queryKeys } from '@/api/queryKeys';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TClient } from '@/types/user.types';
+import { useRouter } from '@/i18n/navigation';
+import { useQuery } from '@tanstack/react-query';
 import {
   User,
   Phone,
@@ -25,19 +28,30 @@ import {
   Banknote,
   ArrowLeft,
 } from 'lucide-react';
+import FetchWrapper from './fetch-wrapper';
+import { TClient } from '@/types/user.types';
+import { cleanNepaliDate } from '@/lib/utils';
+import { ImagePreviewer } from './ImagePreviewer';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 interface PatientProfilePageProps {
-  data: TClient;
   view: 'patient' | 'healthpost';
-  onBack: () => void;
+  patientId: string;
 }
 
-export function PatientProfilePage({
-  data,
-  view,
-  onBack,
-}: PatientProfilePageProps) {
-  const getStatusColor = (status: string) => {
+export function PatientProfile({ view, patientId }: PatientProfilePageProps) {
+  const router = useRouter();
+  const t = useTypedTranslations('PatientProfile');
+  const { data, ...rest } = useQuery({
+    queryKey: [queryKeys.client.singleClient(patientId)],
+    select: (data) => data?.data as TClient,
+    queryFn: () =>
+      fetchClientsInfo({
+        clientId: patientId,
+      }),
+  });
+
+  const getStatusColor = (status?: string) => {
     switch (status) {
       case 'ACTIVE':
         return 'bg-gradient-to-r from-emerald-500 to-green-500 text-white dark:from-emerald-600 dark:to-green-600';
@@ -59,19 +73,20 @@ export function PatientProfilePage({
         <CardContent className="pt-8 pb-8">
           <div className="flex flex-col items-center gap-8 md:flex-row md:items-start">
             <div className="relative">
-              {/* <Avatar className="h-32 w-32 border-4 border-white shadow-lg dark:border-slate-700">
-                <AvatarImage
-                  src={
-                    data.profileImage?.[0] ||
-                    '/placeholder.svg?height=128&width=128'
-                  }
-                  alt="Profile"
-                />
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-2xl text-white dark:from-blue-600 dark:to-purple-600">
-                  {data?.firstName.charAt(0)}
-                  {data?.lastName.charAt(0)}
-                </AvatarFallback>
-              </Avatar> */}
+              <ImagePreviewer>
+                <Avatar className="h-32 w-32 border-4 border-white shadow-lg dark:border-slate-700">
+                  <AvatarImage
+                    src={
+                      data?.profileImage?.[0] ||
+                      'https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-Transparent-Clip-Art-PNG.png'
+                    }
+                    alt="Profile"
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-2xl text-white dark:from-blue-600 dark:to-purple-600">
+                    {t('userAvatar')}
+                  </AvatarFallback>
+                </Avatar>
+              </ImagePreviewer>
               <div className="absolute -right-2 -bottom-2 rounded-full bg-green-500 p-2 dark:bg-green-600">
                 <Shield className="h-4 w-4 text-white" />
               </div>
@@ -79,27 +94,27 @@ export function PatientProfilePage({
             <div className="flex-1 space-y-4 text-center md:text-left">
               <div>
                 <h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-400 dark:to-purple-400">
-                  {data.firstName} {data.middleName} {data.lastName}
+                  {data?.firstName} {data?.middleName} {data?.lastName}
                 </h1>
                 <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-                  Patient Code: {data.patientCode}
+                  {t('patientCode')}: {data?.patientCode}
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                 <Badge
-                  className={`${getStatusColor(data.status)} px-4 py-2 text-sm font-medium`}
+                  className={`${getStatusColor(data?.status)} px-4 py-2 text-sm font-medium`}
                 >
-                  {data.status}
+                  {data?.status}
                 </Badge>
                 <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm text-white dark:from-blue-600 dark:to-cyan-600">
-                  {data.gender}
+                  {data?.gender}
                 </Badge>
                 <Badge className={`${getBloodGroupColor()} px-4 py-2 text-sm`}>
-                  {data.bloodGroup.replace('_', ' ')}
+                  {data?.bloodGroup.replace('_', ' ')}
                 </Badge>
-                {data.isMinor && (
+                {data?.isMinor && (
                   <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 px-4 py-2 text-sm text-white dark:from-yellow-600 dark:to-orange-600">
-                    Minor
+                    {t('minor')}
                   </Badge>
                 )}
               </div>
@@ -114,25 +129,25 @@ export function PatientProfilePage({
             value="personal"
             className="text-base font-medium data-[state=active]:bg-white data-[state=active]:shadow-md dark:data-[state=active]:bg-slate-800"
           >
-            Personal
+            {t('tabs.personal')}
           </TabsTrigger>
           <TabsTrigger
             value="medical"
             className="text-base font-medium data-[state=active]:bg-white data-[state=active]:shadow-md dark:data-[state=active]:bg-slate-800"
           >
-            Medical
+            {t('tabs.medical')}
           </TabsTrigger>
           <TabsTrigger
             value="address"
             className="text-base font-medium data-[state=active]:bg-white data-[state=active]:shadow-md dark:data-[state=active]:bg-slate-800"
           >
-            Address
+            {t('tabs.address')}
           </TabsTrigger>
           <TabsTrigger
             value="family"
             className="text-base font-medium data-[state=active]:bg-white data-[state=active]:shadow-md dark:data-[state=active]:bg-slate-800"
           >
-            Family
+            {t('tabs.family')}
           </TabsTrigger>
         </TabsList>
 
@@ -143,123 +158,123 @@ export function PatientProfilePage({
                 <div className="rounded-lg bg-gradient-to-r from-orange-500 to-yellow-500 p-2 dark:from-orange-600 dark:to-yellow-600">
                   <User className="h-6 w-6 text-white" />
                 </div>
-                Personal Information
+                {t('sections.personalInformation')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Date of Birth (BS)
+                    {t('fields.dateOfBirthBS')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Calendar className="h-5 w-5 text-orange-500 dark:text-orange-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.dobBs}
+                      {data?.dobBs}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Date of Birth (AD)
+                    {t('fields.dateOfBirthAD')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Calendar className="h-5 w-5 text-orange-500 dark:text-orange-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.dobAd}
+                      {data?.dobAd}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Age
+                    {t('fields.age')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Clock className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {10} years
+                      {10} {t('fields.years')}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Email
+                    {t('fields.email')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Mail className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                     <span className="text-lg font-medium break-all dark:text-gray-200">
-                      {data.email}
+                      {data?.email}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Phone
+                    {t('fields.phone')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Phone className="h-5 w-5 text-green-500 dark:text-green-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.phoneNumber}
+                      {data?.phoneNumber}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Nationality
+                    {t('fields.nationality')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.nationality}
+                      {data?.nationality}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Citizenship Number
+                    {t('fields.citizenshipNumber')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.citizenshipNumber}
+                      {data?.citizenshipNumber}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    National ID
+                    {t('fields.nationalId')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.nationalId}
+                      {data?.nationalId}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Caste Type
+                    {t('fields.casteType')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.casteType}
+                      {data?.casteType}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Role
+                    {t('fields.role')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2 text-white dark:from-purple-600 dark:to-indigo-600">
-                      {data.role}
+                      {data?.role}
                     </Badge>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Account Type
+                    {t('fields.accountType')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.accountType}
+                      {data?.accountType}
                     </span>
                   </div>
                 </div>
@@ -275,113 +290,117 @@ export function PatientProfilePage({
                 <div className="rounded-lg bg-gradient-to-r from-red-500 to-pink-500 p-2 dark:from-red-600 dark:to-pink-600">
                   <Heart className="h-6 w-6 text-white" />
                 </div>
-                Medical Information
+                {t('sections.medicalInformation')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Blood Group
+                    {t('fields.bloodGroup')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Activity className="h-5 w-5 text-red-500 dark:text-red-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.bloodGroup.replace('_', ' ')}
+                      {data?.bloodGroup.replace('_', ' ')}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Height
+                    {t('fields.height')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.height}
+                      {data?.height}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Weight
+                    {t('fields.weight')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.weight}
+                      {data?.weight}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Disability Type
+                    {t('fields.disabilityType')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Eye className="h-5 w-5 text-purple-500 dark:text-purple-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.disabilityType}
+                      {data?.disabilityType}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Disability Identity Type
+                    {t('fields.disabilityIdentityType')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.disabilityIdentityType}
+                      {data?.disabilityIdentityType}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Vaccination Status
+                    {t('fields.vaccinationStatus')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Badge
                       className={
-                        data.isVaccineCompleted
+                        data?.isVaccineCompleted
                           ? 'bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 text-white dark:from-green-600 dark:to-emerald-600'
                           : 'bg-gradient-to-r from-red-500 to-pink-500 px-4 py-2 text-white dark:from-red-600 dark:to-pink-600'
                       }
                     >
-                      {data.isVaccineCompleted ? 'Completed' : 'Incomplete'}
+                      {data?.isVaccineCompleted
+                        ? t('status.completed')
+                        : t('status.incomplete')}
                     </Badge>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Emergency Contact
+                    {t('fields.emergencyContact')}
                   </label>
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Phone className="h-5 w-5 text-orange-500 dark:text-orange-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.emergencyContact}
+                      {data?.emergencyContact}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    NSHI Number
+                    {t('fields.nshiNumber')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.nshiNumber || 'Not provided'}
+                      {data?.nshiNumber || t('placeholders.notProvided')}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    SGC Eligibility
+                    {t('fields.sgcEligibility')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Badge
                       className={
-                        data.isEligibleForSgc
+                        data?.isEligibleForSgc
                           ? 'bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-2 text-white dark:from-blue-600 dark:to-indigo-600'
                           : 'bg-gradient-to-r from-gray-400 to-gray-500 px-4 py-2 text-white dark:from-gray-500 dark:to-gray-600'
                       }
                     >
-                      {data.isEligibleForSgc ? 'Eligible' : 'Not Eligible'}
+                      {data?.isEligibleForSgc
+                        ? t('status.eligible')
+                        : t('status.notEligible')}
                     </Badge>
                   </div>
                 </div>
@@ -398,48 +417,48 @@ export function PatientProfilePage({
                   <div className="rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 p-2 dark:from-green-600 dark:to-emerald-600">
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
-                  Permanent Address
+                  {t('sections.permanentAddress')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      District
+                      {t('fields.district')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.districtId}
+                        {data?.districtId}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Municipality
+                      {t('fields.municipality')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.palityId}
+                        {data?.palityId}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Ward No.
+                      {t('fields.wardNo')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.wardNo}
+                        {data?.wardNo}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Tole
+                      {t('fields.tole')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.tole}
+                        {data?.tole}
                       </span>
                     </div>
                   </div>
@@ -453,48 +472,48 @@ export function PatientProfilePage({
                   <div className="rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 p-2 dark:from-blue-600 dark:to-cyan-600">
                     <Home className="h-6 w-6 text-white" />
                   </div>
-                  Temporary Address
+                  {t('sections.temporaryAddress')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      District
+                      {t('fields.district')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.tDistrictId}
+                        {data?.tDistrictId}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Municipality
+                      {t('fields.municipality')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.tPalityId}
+                        {data?.tPalityId}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Ward No.
+                      {t('fields.wardNo')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.tWardNo}
+                        {data?.tWardNo}
                       </span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                      Tole
+                      {t('fields.tole')}
                     </label>
                     <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                       <span className="text-lg font-medium dark:text-gray-200">
-                        {data.tTole}
+                        {data?.tTole}
                       </span>
                     </div>
                   </div>
@@ -511,48 +530,48 @@ export function PatientProfilePage({
                 <div className="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 p-2 dark:from-purple-600 dark:to-indigo-600">
                   <Users className="h-6 w-6 text-white" />
                 </div>
-                Family Information
+                {t('sections.familyInformation')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Father&apos;s Name
+                    {t('fields.fatherName')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.fatherName}
+                      {data?.fatherName}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Mother&apos;s Name
+                    {t('fields.motherName')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.motherName}
+                      {data?.motherName}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Guardian&apos;s Name
+                    {t('fields.guardianName')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.guardianName || 'Not specified'}
+                      {data?.guardianName || t('placeholders.notSpecified')}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Spouse&apos;s Name
+                    {t('fields.spouseName')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.spouseName || 'Not specified'}
+                      {data?.spouseName || t('placeholders.notSpecified')}
                     </span>
                   </div>
                 </div>
@@ -566,28 +585,28 @@ export function PatientProfilePage({
                 <div className="rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 p-2 dark:from-yellow-600 dark:to-orange-600">
                   <Banknote className="h-6 w-6 text-white" />
                 </div>
-                Banking Information
+                {t('sections.bankingInformation')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Bank
+                    {t('fields.bank')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.bank}
+                      {data?.bank}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <label className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                    Bank Branch
+                    {t('fields.bankBranch')}
                   </label>
                   <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {data.bankBranch}
+                      {data?.bankBranch}
                     </span>
                   </div>
                 </div>
@@ -601,41 +620,42 @@ export function PatientProfilePage({
 
   const HealthPostView = () => (
     <div className="mx-auto max-w-6xl space-y-6">
-      {/* Compact Header */}
-      <Card className="border-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50 shadow-lg dark:border dark:border-slate-800 dark:from-indigo-950 dark:via-slate-900 dark:to-blue-950">
+      <Card className="border-0 shadow-lg dark:border dark:border-slate-800 dark:from-indigo-950 dark:via-slate-900 dark:to-blue-950">
         <CardContent className="pt-6 pb-6">
           <div className="flex items-center gap-6">
             <div className="relative">
-              <Avatar className="h-20 w-20 border-4 border-white shadow-lg dark:border-slate-700">
-                <AvatarImage
-                  src={
-                    data.profileImage?.[0] ||
-                    '/placeholder.svg?height=80&width=80'
-                  }
-                  alt="Profile"
-                />
-                <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-blue-500 text-xl text-white dark:from-indigo-600 dark:to-blue-600">
-                  user
-                </AvatarFallback>
-              </Avatar>
+              <ImagePreviewer>
+                <Avatar className="h-32 w-32 border-4 border-white shadow-lg dark:border-slate-700">
+                  <AvatarImage
+                    src={
+                      data?.profileImage?.[0] ||
+                      'https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-Transparent-Clip-Art-PNG.png'
+                    }
+                    alt="Profile"
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-2xl text-white dark:from-blue-600 dark:to-purple-600">
+                    {t('userAvatar')}
+                  </AvatarFallback>
+                </Avatar>
+              </ImagePreviewer>
               <div className="absolute -right-1 -bottom-1 rounded-full bg-green-500 p-1 dark:bg-green-600">
                 <Shield className="h-3 w-3 text-white" />
               </div>
             </div>
             <div className="flex-1">
               <h1 className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl font-bold text-transparent dark:from-indigo-400 dark:to-blue-400">
-                {data.firstName} {data.middleName} {data.lastName}
+                {data?.firstName} {data?.middleName} {data?.lastName}
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-300">
-                ID: {data.patientCode}
+                ID: {data?.patientCode}
               </p>
               <div className="mt-2 flex gap-3">
-                <Badge className={`${getStatusColor(data.status)} px-3 py-1`}>
-                  {data.status}
+                <Badge className={`${getStatusColor(data?.status)} px-3 py-1`}>
+                  {data?.status}
                 </Badge>
-                {data.lockReport && (
+                {data?.lockReport && (
                   <Badge className="bg-gradient-to-r from-red-500 to-pink-500 px-3 py-1 text-white dark:from-red-600 dark:to-pink-600">
-                    Report Locked
+                    {t('status.reportLocked')}
                   </Badge>
                 )}
               </div>
@@ -643,11 +663,11 @@ export function PatientProfilePage({
             <div className="flex gap-4">
               <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 px-6 py-3 text-white hover:from-blue-600 hover:to-indigo-600 dark:from-blue-600 dark:to-indigo-600">
                 <FileText className="mr-2 h-4 w-4" />
-                View Reports
+                {t('actions.viewReports')}
               </Button>
               <Button className="bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-3 text-white hover:from-green-600 hover:to-emerald-600 dark:from-green-600 dark:to-emerald-600">
                 <Shield className="mr-2 h-4 w-4" />
-                Update Record
+                {t('actions.updateRecord')}
               </Button>
             </div>
           </div>
@@ -661,9 +681,11 @@ export function PatientProfilePage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-orange-100 dark:text-orange-200">
-                  Age
+                  {t('quickStats.age')}
                 </p>
-                <p className="text-3xl font-bold">{10} years</p>
+                <p className="text-3xl font-bold">
+                  {10} {t('fields.years')}
+                </p>
               </div>
               <Calendar className="h-10 w-10 text-orange-200 dark:text-orange-300" />
             </div>
@@ -674,10 +696,10 @@ export function PatientProfilePage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-red-100 dark:text-red-200">
-                  Blood Group
+                  {t('quickStats.bloodGroup')}
                 </p>
                 <p className="text-3xl font-bold">
-                  {data.bloodGroup.replace('_', ' ')}
+                  {data?.bloodGroup.replace('_', ' ')}
                 </p>
               </div>
               <Activity className="h-10 w-10 text-red-200 dark:text-red-300" />
@@ -689,10 +711,10 @@ export function PatientProfilePage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-100 dark:text-green-200">
-                  Vaccination
+                  {t('quickStats.vaccination')}
                 </p>
                 <p className="text-3xl font-bold">
-                  {data.isVaccineCompleted ? '✓' : '✗'}
+                  {data?.isVaccineCompleted ? '✓' : '✗'}
                 </p>
               </div>
               <Shield className="h-10 w-10 text-green-200 dark:text-green-300" />
@@ -704,10 +726,12 @@ export function PatientProfilePage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-100 dark:text-blue-200">
-                  SGC Eligible
+                  {t('quickStats.sgcEligible')}
                 </p>
                 <p className="text-3xl font-bold">
-                  {data.isEligibleForSgc ? 'Yes' : 'No'}
+                  {data?.isEligibleForSgc
+                    ? t('quickStats.yes')
+                    : t('quickStats.no')}
                 </p>
               </div>
               <CreditCard className="h-10 w-10 text-blue-200 dark:text-blue-300" />
@@ -725,74 +749,74 @@ export function PatientProfilePage({
               <div className="rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 p-2 dark:from-purple-600 dark:to-indigo-600">
                 <Building2 className="h-5 w-5 text-white" />
               </div>
-              Administrative Details
+              {t('sections.administrativeDetails')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Patient Code
+                  {t('fields.patientCodeShort')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.patientCode}
+                    {data?.patientCode}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Account Type
+                  {t('fields.accountType')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.accountType}
+                    {data?.accountType}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Caste Type
+                  {t('fields.casteType')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.casteType}
+                    {data?.casteType}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Citizenship
+                  {t('fields.citizenship')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.citizenshipNumber}
+                    {data?.citizenshipNumber}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  National ID
+                  {t('fields.nationalId')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.nationalId}
+                    {data?.nationalId}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Minor Status
+                  {t('fields.minorStatus')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <Badge
                     className={
-                      data.isMinor
+                      data?.isMinor
                         ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white dark:from-yellow-600 dark:to-orange-600'
                         : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white dark:from-gray-500 dark:to-gray-600'
                     }
                   >
-                    {data.isMinor ? 'Minor' : 'Adult'}
+                    {data?.isMinor ? t('minor') : t('adult')}
                   </Badge>
                 </div>
               </div>
@@ -807,68 +831,68 @@ export function PatientProfilePage({
               <div className="rounded-lg bg-gradient-to-r from-red-500 to-pink-500 p-2 dark:from-red-600 dark:to-pink-600">
                 <Heart className="h-5 w-5 text-white" />
               </div>
-              Medical Summary
+              {t('sections.medicalSummary')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Blood Group
+                  {t('fields.bloodGroup')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.bloodGroup.replace('_', ' ')}
+                    {data?.bloodGroup.replace('_', ' ')}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Height
+                  {t('fields.height')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.height}
+                    {data?.height}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Weight
+                  {t('fields.weight')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.weight}
+                    {data?.weight}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Disability
+                  {t('fields.disability')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.disabilityType}
+                    {data?.disabilityType}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Emergency Contact
+                  {t('fields.emergencyContact')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.emergencyContact}
+                    {data?.emergencyContact}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  NSHI Number
+                  {t('fields.nshiNumber')}
                 </span>
                 <div className="rounded-lg bg-white p-3 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.nshiNumber || 'Not provided'}
+                    {data?.nshiNumber || t('placeholders.notProvided')}
                   </p>
                 </div>
               </div>
@@ -883,38 +907,38 @@ export function PatientProfilePage({
               <div className="rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 p-2 dark:from-green-600 dark:to-emerald-600">
                 <Phone className="h-5 w-5 text-white" />
               </div>
-              Contact Information
+              {t('sections.contactInformation')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-4">
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Email
+                  {t('fields.email')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium break-all dark:text-gray-200">
-                    {data.email}
+                    {data?.email}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Phone
+                  {t('fields.phone')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.phoneNumber}
+                    {data?.phoneNumber}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Permanent Address
+                  {t('fields.permanentAddressShort')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.tole}, Ward {data.wardNo}, {data.palityId}
+                    {data?.tole}, Ward {data?.wardNo}, {data?.palityId}
                   </p>
                 </div>
               </div>
@@ -929,46 +953,46 @@ export function PatientProfilePage({
               <div className="rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 p-2 dark:from-blue-600 dark:to-cyan-600">
                 <CreditCard className="h-5 w-5 text-white" />
               </div>
-              Banking & Family
+              {t('sections.bankingAndFamily')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-4">
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Bank
+                  {t('fields.bank')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
-                  <p className="font-medium dark:text-gray-200">{data.bank}</p>
+                  <p className="font-medium dark:text-gray-200">{data?.bank}</p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Branch
+                  {t('fields.branch')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.bankBranch}
+                    {data?.bankBranch}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Father
+                  {t('fields.father')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.fatherName}
+                    {data?.fatherName}
                   </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                  Mother
+                  {t('fields.mother')}
                 </span>
                 <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                   <p className="font-medium dark:text-gray-200">
-                    {data.motherName}
+                    {data?.motherName}
                   </p>
                 </div>
               </div>
@@ -984,44 +1008,44 @@ export function PatientProfilePage({
             <div className="rounded-lg bg-gradient-to-r from-gray-600 to-slate-600 p-2 dark:from-gray-500 dark:to-slate-500">
               <FileText className="h-5 w-5 text-white" />
             </div>
-            Record Information
+            {t('sections.recordInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="space-y-2">
               <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                Created
+                {t('fields.created')}
               </span>
               <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                 <p className="font-medium dark:text-gray-200">
-                  {new Date(data.createdAt).toLocaleDateString()}
+                  {cleanNepaliDate(data?.createdAt)}
                 </p>
               </div>
             </div>
             <div className="space-y-2">
               <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                Last Updated
+                {t('fields.lastUpdated')}
               </span>
               <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                 <p className="font-medium dark:text-gray-200">
-                  {new Date(data?.createdAt).toLocaleDateString()}
+                  {cleanNepaliDate(data?.updatedAt)}
                 </p>
               </div>
             </div>
             <div className="space-y-2">
               <span className="text-sm font-semibold tracking-wide text-gray-600 uppercase dark:text-gray-300">
-                Report Status
+                {t('fields.reportStatus')}
               </span>
               <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                 <Badge
                   className={
-                    data.lockReport
+                    data?.lockReport
                       ? 'bg-gradient-to-r from-red-500 to-pink-500 px-3 py-1 text-white dark:from-red-600 dark:to-pink-600'
                       : 'bg-gradient-to-r from-green-500 to-emerald-500 px-3 py-1 text-white dark:from-green-600 dark:to-emerald-600'
                   }
                 >
-                  {data.lockReport ? 'Locked' : 'Unlocked'}
+                  {data?.lockReport ? t('status.locked') : t('status.unlocked')}
                 </Badge>
               </div>
             </div>
@@ -1032,31 +1056,39 @@ export function PatientProfilePage({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
-      <div className="sticky top-0 z-10 border-b border-white/20 bg-white/80 backdrop-blur-sm dark:border-slate-800/20 dark:bg-slate-900/80">
-        <div className="mx-auto max-w-7xl p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onBack}
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Button>
-              <h1 className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-3xl font-bold text-transparent dark:from-indigo-400 dark:to-purple-400">
-                Patient Profile
-              </h1>
+    <FetchWrapper {...rest}>
+      <div className="min-h-screen">
+        <div className="sticky top-0 z-10 border-b border-white/20 bg-white/80 backdrop-blur-sm dark:border-slate-800/20 dark:bg-slate-900/80">
+          <div className="mx-auto max-w-7xl p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4 pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    if (view === 'healthpost') {
+                      router.replace('/hp/clients');
+                    } else {
+                      window.history.back();
+                    }
+                  }}
+                  className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {t('backButton')}
+                </Button>
+                <h1 className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text pt-2 text-3xl font-bold text-transparent dark:from-indigo-400 dark:to-purple-400">
+                  {t('title')}
+                </h1>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="p-8">
-        {view === 'patient' ? <PatientView /> : <HealthPostView />}
+        <div className="p-4">
+          {view === 'patient' ? <PatientView /> : <HealthPostView />}
+        </div>
       </div>
-    </div>
+    </FetchWrapper>
   );
 }

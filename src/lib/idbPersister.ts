@@ -1,5 +1,7 @@
 import { PersistedClient } from '@tanstack/query-persist-client-core';
 import { openDB, type IDBPDatabase } from 'idb';
+import { base64ToFile } from './utils';
+import { TAny } from '@/types/global';
 
 const DB_NAME = 'react-query-persist';
 const STORE_NAME = 'queries';
@@ -64,32 +66,101 @@ export const idbPersister = {
       await db.put(
         'offline-mutations',
         JSON.stringify(mutationData),
-        route + '-' + Date.now(),
+        route + '||' + Date.now(),
       );
     } catch (error) {
       console.error('Failed to save offline mutation:', error);
     }
   },
 
-  async getAllOfflineMutations() {
+  // async getAllOfflineMutations<T>() {
+  //   try {
+  //     const db = await getDB();
+  //     if (!db.objectStoreNames.contains('offline-mutations')) return [];
+  //     const keys = await db.getAllKeys('offline-mutations');
+  //     const mutations = await Promise.all(
+  //       keys.map(async (key) => {
+  //         const data = await db.get('offline-mutations', key);
+
+  //         return data ? { key, ...JSON.parse(data) } : null;
+  //       }),
+  //     );
+  //     return mutations.filter(Boolean) as {
+  //       key: string;
+  //       method: 'post' | 'delete' | 'put';
+  //       data: T;
+  //       timestamp: Date;
+  //     }[];
+  //   } catch (error) {
+  //     console.error('Failed to get offline mutations:', error);
+  //     return [];
+  //   }
+  // },
+
+  async getAllOfflineMutations<T>() {
     try {
       const db = await getDB();
       if (!db.objectStoreNames.contains('offline-mutations')) return [];
+
       const keys = await db.getAllKeys('offline-mutations');
+
       const mutations = await Promise.all(
         keys.map(async (key) => {
-          const data = await db.get('offline-mutations', key);
-          return data ? { key, ...JSON.parse(data) } : null;
+          const rawString = await db.get('offline-mutations', key);
+          if (!rawString) return null;
+
+          // Parse if stored as JSON string
+          const raw =
+            typeof rawString === 'string' ? JSON.parse(rawString) : rawString;
+
+          const { data, ...rest } = raw;
+          if (!data || typeof data !== 'object') return null;
+
+          const parsedData: Record<string, TAny> = {};
+
+          for (const [k, v] of Object.entries(data)) {
+            // Handle base64 image object
+            if (
+              typeof v === 'object' &&
+              v !== null &&
+              'base64' in v &&
+              'name' in v &&
+              'type' in v
+            ) {
+              parsedData[k] = base64ToFile(
+                v.base64 as string,
+                v.name as string,
+                v.type as string,
+              );
+            } else {
+              parsedData[k] = parseValue(v);
+            }
+          }
+
+          return {
+            key,
+            ...rest,
+            data: parsedData,
+          };
         }),
       );
-      return mutations.filter(Boolean);
+
+      return mutations.filter(Boolean) as {
+        key: string;
+        method: 'post' | 'put' | 'delete';
+        data: T;
+        timestamp: number;
+        headers: TAny;
+      }[];
     } catch (error) {
       console.error('Failed to get offline mutations:', error);
       return [];
     }
   },
-
-  async removeOfflineMutation(key: string) {
+  async removeOfflineMutation(key?: string) {
+    if (!key) {
+      return;
+    }
     try {
       const db = await getDB();
       if (!db.objectStoreNames.contains('offline-mutations')) return;
@@ -99,3 +170,21 @@ export const idbPersister = {
     }
   },
 };
+
+function parseValue(value: TAny) {
+  if (value === 'null') return undefined;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+
+  // Try parsing numbers (but don't convert things like "0123abc")
+  if (
+    typeof value === 'string' &&
+    !isNaN(value as TAny) &&
+    value.trim() !== ''
+  ) {
+    const num = Number(value);
+    if (!isNaN(num)) return num;
+  }
+
+  return value;
+}

@@ -1,12 +1,18 @@
 {
   "GeneralPages": {
     "actions": "Actions",
+    "offline": "Offline",
+    "refresh": "Refresh",
+    "sync": "SYNC",
     "reset": "Reset",
     "submit": "Submit",
     "images": "Images",
     "signature": "Signature",
     "search": "Search",
     "select": "Select",
+    "welcome": "Welcome, {name}!",
+    "healthPostManagementSystem": "Health Post Management System",
+    "selectTab": "Please select any option from the sidebar to get started.",
     "SN": "S.N",
     "NotFound": {
       "title": "Page Not Found",
@@ -206,7 +212,8 @@
     "opdCreated": "New OPD created successfully!",
     "clientsCreated": "New client created successfully!",
     "clientsUpdated": "Client updated successfully!",
-    "clientsDeleted": "Client deleted successfully!"
+    "clientsDeleted": "Client deleted successfully!",
+    "dataRefreshed": "Data refreshed successfully!"
   },
 
   "FileOperations": {
@@ -349,6 +356,102 @@
       "treatment": "Treatment",
       "examinier": "Examiner",
       "reminder": "Please bring this card for follow-up visits and future consultations."
+    }
+  },
+  "PatientProfile": {
+    "title": "Patient Profile",
+    "backButton": "Back",
+    "patientCode": "Patient Code",
+    "userAvatar": "user avatar",
+    "minor": "Minor",
+    "adult": "Adult",
+    "tabs": {
+      "personal": "Personal",
+      "medical": "Medical",
+      "address": "Address",
+      "family": "Family"
+    },
+    "sections": {
+      "personalInformation": "Personal Information",
+      "medicalInformation": "Medical Information",
+      "permanentAddress": "Permanent Address",
+      "temporaryAddress": "Temporary Address",
+      "familyInformation": "Family Information",
+      "bankingInformation": "Banking Information",
+      "administrativeDetails": "Administrative Details",
+      "medicalSummary": "Medical Summary",
+      "contactInformation": "Contact Information",
+      "bankingAndFamily": "Banking & Family",
+      "recordInformation": "Record Information"
+    },
+    "fields": {
+      "dateOfBirthBS": "Date of Birth (BS)",
+      "dateOfBirthAD": "Date of Birth (AD)",
+      "age": "Age",
+      "years": "years",
+      "email": "Email",
+      "phone": "Phone",
+      "nationality": "Nationality",
+      "citizenshipNumber": "Citizenship Number",
+      "nationalId": "National ID",
+      "casteType": "Caste Type",
+      "role": "Role",
+      "accountType": "Account Type",
+      "bloodGroup": "Blood Group",
+      "height": "Height",
+      "weight": "Weight",
+      "disabilityType": "Disability Type",
+      "disabilityIdentityType": "Disability Identity Type",
+      "vaccinationStatus": "Vaccination Status",
+      "emergencyContact": "Emergency Contact",
+      "nshiNumber": "NSHI Number",
+      "sgcEligibility": "SGC Eligibility",
+      "district": "District",
+      "municipality": "Municipality",
+      "wardNo": "Ward No.",
+      "tole": "Tole",
+      "fatherName": "Father's Name",
+      "motherName": "Mother's Name",
+      "guardianName": "Guardian's Name",
+      "spouseName": "Spouse's Name",
+      "bank": "Bank",
+      "bankBranch": "Bank Branch",
+      "patientCodeShort": "Patient Code",
+      "citizenship": "Citizenship",
+      "minorStatus": "Minor Status",
+      "disability": "Disability",
+      "permanentAddressShort": "Permanent Address",
+      "father": "Father",
+      "mother": "Mother",
+      "branch": "Branch",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "reportStatus": "Report Status"
+    },
+    "status": {
+      "completed": "Completed",
+      "incomplete": "Incomplete",
+      "eligible": "Eligible",
+      "notEligible": "Not Eligible",
+      "locked": "Locked",
+      "unlocked": "Unlocked",
+      "reportLocked": "Report Locked"
+    },
+    "actions": {
+      "viewReports": "View Reports",
+      "updateRecord": "Update Record"
+    },
+    "quickStats": {
+      "age": "Age",
+      "bloodGroup": "Blood Group",
+      "vaccination": "Vaccination",
+      "sgcEligible": "SGC Eligible",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "placeholders": {
+      "notProvided": "Not provided",
+      "notSpecified": "Not specified"
     }
   },
   "Placeholder": {
