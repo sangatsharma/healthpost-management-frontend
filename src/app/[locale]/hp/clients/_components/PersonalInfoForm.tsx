@@ -156,7 +156,6 @@ export default function PersonalInfoForm() {
                 valueLocale: 'en',
                 closeOnSelect: true,
               }}
-              todayIfEmpty
               minYear={1950}
               {...field}
             />

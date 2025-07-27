@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import { useUserStore } from '@/zustand/useUserStore';
 import { HealthPostProvider } from '@/provider/HealthPostProvider';
+import OfflineIndicator from './OfflineIndicator';
 
 export const devnagari = Noto_Sans_Devanagari({
   subsets: ['latin'],
@@ -60,6 +61,7 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
               >
                 <GlobalAlertDialog />
                 <HealthPostSidebar />
+                <OfflineIndicator />
                 <div className="h-screen w-full overflow-scroll">
                   {children}
                 </div>

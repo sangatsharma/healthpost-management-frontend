@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(parsed);
         }
       } catch {
-        router.replace(`/${portal?.toLowerCase() || 'hp'}/login`);
+        router.replace(`/${(portal || 'hp').toLowerCase()}/login`);
       }
       return;
     }
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isError ||
       (!pathname.includes('/login') && !user.isLoggedIn && !user.isLoading)
     ) {
-      router.replace(`/${portal?.toLowerCase() || 'hp'}/login`);
+      router.replace(`/${(portal || 'hp').toLowerCase()}/login`);
       setIsLoading(false);
     }
   }, [

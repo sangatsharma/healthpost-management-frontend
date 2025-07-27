@@ -5,10 +5,14 @@ import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Row } from '@tanstack/react-table';
-import { Eye, Plus } from 'lucide-react';
+import { Eye, Plus, RefreshCcw, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import { cleanNepaliDate, renderFullName } from '@/lib/utils';
+import {
+  cleanNepaliDate,
+  getRequestingParty,
+  renderFullName,
+} from '@/lib/utils';
 import { fetchOpds } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { TOpd } from '@/types/user.types';
@@ -20,24 +24,30 @@ import { useRouter } from '@/i18n/navigation';
 import { TicketSheet } from './_components/ticketSheet';
 import { useHasPermission } from '@/hooks/useHasPermission';
 import { Permissions } from '@/zustand/permissions';
+import { idbPersister } from '@/lib/idbPersister';
+import { useGlobalAlert } from '@/hooks/useGlobalAlert';
+import { toast } from 'sonner';
+import { queryClient } from '@/lib/queryClient';
 export default function Page() {
-  const [selectedTab, setSelectedTab] = useState<'healthpost' | 'all'>(
-    'healthpost',
-  );
+  const [selectedTab, setSelectedTab] = useState<
+    'healthpost' | 'all' | 'offline'
+  >('healthpost');
   const [sheet, setSheet] = useState({
     open: false,
     data: null as TOpd | null,
   });
   const t = useTypedTranslations('GeneralPages');
   const topd = useTypedTranslations('OpdSection');
+  const tToast = useTypedTranslations('Toast');
+  const tAlert = useTypedTranslations('AlertDialog');
   const tEnum = useTypedTranslations('Enums');
-  const { user } = useUserStore();
+  const { user, healthPostInfo } = useUserStore();
 
   const navigate = useRouter();
   const { hasWritePermission } = useHasPermission(
     Permissions.PRESCRIBE_MEDICATION,
   );
-
+  const { showDeleteConfirmDialog } = useGlobalAlert();
   const ActionOptions = (row: Row<TOpd>): ActionButtonDataTypes[] => [
     {
       name: topd('viewTicket'),
@@ -49,6 +59,40 @@ export default function Page() {
         });
       },
     },
+    ...(selectedTab === 'offline'
+      ? [
+          {
+            name: t('sync'),
+            icon: RefreshCcw,
+            onClick: () => {
+              navigate.push({
+                pathname: '/hp/opd-section/register',
+                query: { opdId: row.original.id },
+              });
+            },
+          },
+
+          {
+            name: tAlert('action.delete'),
+            isTrash: true,
+            icon: Trash,
+
+            onClick: () =>
+              showDeleteConfirmDialog({
+                onConfirm: async () => {
+                  if (selectedTab === 'offline') {
+                    await idbPersister.removeOfflineMutation(row.original.id);
+                    queryClient.invalidateQueries({
+                      queryKey: ['offline-opd-mutations'],
+                    });
+                    toast.success(tToast('clientsDeleted'));
+                  }
+                },
+                itemName: row.original.patient.firstName,
+              }),
+          },
+        ]
+      : []),
   ];
 
   const columns: ExtendedColumnDef<TOpd>[] = [
@@ -110,7 +154,7 @@ export default function Page() {
       accessorKey: 'patient.patientCode',
       header: () => topd('ticketDetails.patientCode'),
       cell: ({ row }) => (
-        <span className="">{row.original.patient.patientCode}</span>
+        <span>{row.original.patient?.patientCode || '-'}</span>
       ),
     },
     {
@@ -172,7 +216,11 @@ export default function Page() {
       accessorKey: 'followUpDate',
       header: () => topd('followUpDate'),
       cell: ({ row }) => (
-        <span>{cleanNepaliDate(row.getValue('followUpDate'))}</span>
+        <span>
+          {row.original.followUpDate
+            ? cleanNepaliDate(row.getValue('followUpDate'))
+            : '-'}
+        </span>
       ),
     },
     {
@@ -189,7 +237,6 @@ export default function Page() {
           <ActionDropdown data={ActionOptions(row)} />
         </div>
       ),
-      enableSorting: false,
       enableHiding: false,
     },
   ];
@@ -203,19 +250,49 @@ export default function Page() {
         : 'all',
     ],
     queryFn: () => fetchOpds({}),
+    enabled: selectedTab !== 'offline',
+  });
+
+  const { data: offlineData, ...offlineRest } = useQuery({
+    queryKey: ['offline-opd-mutations'],
+    queryFn: () =>
+      idbPersister.getAllOfflineMutations<
+        TOpd & {
+          name: string;
+        }
+      >(),
+    enabled: selectedTab === 'offline',
+    select: (data) => {
+      return data
+        .filter((d) => getRequestingParty(d.key) === 'OPD')
+        .map((d) => ({
+          ...d.data,
+          id: d.key,
+          patient: {
+            ...d.data.patient,
+            patientCode: '-',
+            firstName: d.data.name,
+            lastName: '',
+            middleName: '',
+          },
+          healthPost: {
+            name: healthPostInfo?.name || '',
+          },
+        }));
+    },
   });
 
   return (
     <>
       <div className="p-4">
         <DataTable
-          rest={rest}
+          rest={selectedTab === 'offline' ? offlineRest : rest}
           Tabs={
             <Tabs
               defaultValue="HealthPost"
-              className="w-full max-w-md cursor-pointer"
+              className="w-full max-w-fit cursor-pointer"
             >
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="flkex w-full justify-start gap-2">
                 <TabsTrigger
                   value="HealthPost"
                   onClick={() => setSelectedTab('healthpost')}
@@ -224,6 +301,12 @@ export default function Page() {
                 </TabsTrigger>
                 <TabsTrigger value="All" onClick={() => setSelectedTab('all')}>
                   {topd('allTickets')}
+                </TabsTrigger>
+                <TabsTrigger
+                  value="offline"
+                  onClick={() => setSelectedTab('offline')}
+                >
+                  {t('offline')}
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -234,11 +317,13 @@ export default function Page() {
             className: 'text-2xl font-bold mb-4',
           }}
           data={
-            selectedTab === 'healthpost'
-              ? (data?.data as TOpd[])?.filter(
-                  (item) => item.healthPostId === user?.healthPostId,
-                ) || []
-              : (data?.data as TOpd[]) || []
+            selectedTab === 'offline'
+              ? offlineData || []
+              : selectedTab === 'healthpost'
+                ? (data?.data as TOpd[])?.filter(
+                    (item) => item.healthPostId === user?.healthPostId,
+                  ) || []
+                : (data?.data as TOpd[]) || []
           }
           utils={{
             showPagination: true,

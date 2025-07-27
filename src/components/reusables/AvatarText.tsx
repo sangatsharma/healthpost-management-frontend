@@ -57,7 +57,7 @@ const AvatarText = ({
         </h3>
         {subtitle && (
           <p
-            className="text-aldgray"
+            className="text-gray"
             style={{ fontSize: '12px' }}
             title={subtitle}
           >

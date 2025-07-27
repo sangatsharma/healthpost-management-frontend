@@ -21,10 +21,10 @@ export function middleware(request: NextRequest) {
   console.log('cookie', request.cookies.get('portal')?.value);
   const portal = request.cookies.get('portal')?.value || 'admin';
   console.log(`Portal: ${portal}, Locale: ${locale}`);
-  if (pathname === `/${locale}`) {
-    const newPathname = `/${locale}/${portal}/dashboard`;
-    return NextResponse.redirect(new URL(newPathname, request.url));
-  }
+  // if (pathname === `/${locale}`) {
+  //   const newPathname = `/${locale}/${portal}`;
+  //   return NextResponse.redirect(new URL(newPathname, request.url));
+  // }
 
   // Just forward request to intlMiddleware (does i18n routing, etc.)
   return intlMiddleware(request);

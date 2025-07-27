@@ -129,11 +129,13 @@ export type TGender = 'MALE' | 'FEMALE' | 'OTHER';
 
 export type TClient = TClientSchema & {
   createdAt: string;
+  updatedAt: string;
   id: string;
   patientCode: string;
 };
 export type TOpd = TOpdSchema & {
   createdAt: string;
+  updatedAt: string;
   id: string;
   opdNo: string;
   patient: TClient;

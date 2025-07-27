@@ -152,9 +152,10 @@ export const getAddressInfoSchema = (t: TTypeFunction<'Validation'>) => {
     tWardNo: z.coerce
       .string()
       .trim()
+      .optional()
       .refine(
         (value) => {
-          if (!value) return true;
+          if (!value || value === '') return true;
           const wardNumber = parseInt(value, 10);
           return !isNaN(wardNumber) && wardNumber && wardNumber >= 1;
         },
@@ -181,7 +182,7 @@ export const getFamilyInfoSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       minLength: 2,
       maxLength: 100,
-    }).refine((value) => value?.includes(''), {
+    }).refine((value) => value?.includes(' '), {
       message: t('fullName'),
     }),
     motherName: basicValidator({
@@ -190,7 +191,7 @@ export const getFamilyInfoSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       minLength: 2,
       maxLength: 100,
-    }).refine((value) => value?.includes(''), {
+    }).refine((value) => value?.includes(' '), {
       message: t('fullName'),
     }),
     guardianName: basicValidator({
@@ -199,7 +200,7 @@ export const getFamilyInfoSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       minLength: 2,
       maxLength: 100,
-    }).refine((value) => value?.includes(''), {
+    }).refine((value) => !value || value?.includes(' '), {
       message: t('fullName'),
     }),
     spouseName: basicValidator({
@@ -208,7 +209,7 @@ export const getFamilyInfoSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       minLength: 2,
       maxLength: 100,
-    }).refine((value) => value?.includes(''), {
+    }).refine((value) => !value || value?.includes(' '), {
       message: t('fullName'),
     }),
     maritalStatus: z.nativeEnum(MarriageStatus, {

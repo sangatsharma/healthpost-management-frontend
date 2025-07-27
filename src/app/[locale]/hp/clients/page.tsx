@@ -5,15 +5,15 @@ import { ActionDropdown } from '@/components/reusables/custom-action-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ActionButtonDataTypes, ExtendedColumnDef } from '@/types/global';
 import { Row } from '@tanstack/react-table';
-import { Delete, Edit, Plus } from 'lucide-react';
+import { Delete, Edit, Plus, RefreshCcw } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
-import { renderFullName } from '@/lib/utils';
+import { getRequestingParty, renderFullName } from '@/lib/utils';
 import { fetchClientsInfo } from '@/api/queries';
 import { queryKeys } from '@/api/queryKeys';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
-import { useStaffMutation } from '@/api/mutation';
+import { useClientMutation } from '@/api/mutation';
 import ClientRegistrationModal from './_components/AddClientModal';
 import AvatarText from '@/components/reusables/AvatarText';
 import { TClient } from '@/types/user.types';
@@ -25,18 +25,27 @@ import { BSToAD } from 'bikram-sambat-js';
 import { differenceInYears } from 'date-fns';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useHasPermission } from '@/hooks/useHasPermission';
+import { useRouter } from 'next/navigation';
+import { idbPersister } from '@/lib/idbPersister';
+import { queryClient } from '@/lib/queryClient';
 
 export default function Page() {
+  const router = useRouter();
   const [isOpenAddModal, setIsOpenAddModal] = useState<{
     isOpen: boolean;
     client?: TClient;
+    defaultValues?: TClient & {
+      key?: string;
+    };
   }>({
     isOpen: false,
     client: undefined,
+    defaultValues: undefined,
   });
-  const [selectedTab, setSelectedTab] = useState<'healthpost' | 'all'>(
-    'healthpost',
-  );
+
+  const [selectedTab, setSelectedTab] = useState<
+    'healthpost' | 'all' | 'offline'
+  >('healthpost');
   const t = useTypedTranslations('GeneralPages');
   const tAlert = useTypedTranslations('AlertDialog');
   const tMed = useTypedTranslations('MedicalHistory');
@@ -45,20 +54,27 @@ export default function Page() {
   const tToast = useTypedTranslations('Toast');
   const { hasWritePermission } = useHasPermission(Permissions.PATIENT_RECORDS);
   const { showDeleteConfirmDialog } = useGlobalAlert();
-  const { mutateStaff } = useStaffMutation({
+  const { mutateClient } = useClientMutation({
     onSuccess: () => {
       toast.success(tToast('clientsDeleted'));
     },
   });
 
-  const ActionOptions = (row: Row<TClient>): ActionButtonDataTypes[] => [
+  const ActionOptions = (
+    row: Row<
+      TClient & {
+        key?: string;
+      }
+    >,
+  ): ActionButtonDataTypes[] => [
     {
-      name: t('User.editClient'),
-      icon: Edit,
+      name: selectedTab === 'healthpost' ? t('User.editClient') : t('sync'),
+      icon: selectedTab === 'healthpost' ? Edit : RefreshCcw,
       onClick: () => {
         setIsOpenAddModal({
           isOpen: true,
-          client: row.original,
+          client: row.original.id ? row.original : undefined,
+          defaultValues: row.original.id ? undefined : row.original,
         });
       },
     },
@@ -69,10 +85,20 @@ export default function Page() {
 
       onClick: () =>
         showDeleteConfirmDialog({
-          onConfirm() {
-            mutateStaff({
-              staffId: row.original.id,
+          onConfirm: async () => {
+            if (selectedTab === 'offline') {
+              await idbPersister.removeOfflineMutation(row.original.key);
+              queryClient.invalidateQueries({
+                queryKey: ['offline-clients-mutations'],
+              });
+              toast.success(tToast('clientsDeleted'));
+              return;
+            }
+
+            mutateClient({
+              clientId: row.original.id,
               method: 'DELETE',
+              healthPostId: useUserStore.getState().user?.healthPostId || '',
             });
           },
           itemName: renderFullName({
@@ -148,8 +174,12 @@ export default function Page() {
             })}
             subtitle={`${tMed('age')}: ${
               differenceDate
-            } ${tMed('years')} ${tMed('gender')}: ${tEnum(`gender.${row.original.gender}`)}`}
-            src={(row.original?.profileImage?.[0] as string) || ''}
+            } ${tMed('years')} | ${tMed('gender')}: ${tEnum(`gender.${row.original.gender}`)} | ${ct('healthInfo.bloodGroup')}: ${tEnum(`bloodGroup.${row.original.bloodGroup}`)} `}
+            src={
+              typeof row.original?.profileImage?.[0] === 'string'
+                ? row.original?.profileImage?.[0]
+                : ''
+            }
             classNames={{
               titleClassName: 'text-lg font-semibold',
             }}
@@ -230,7 +260,7 @@ export default function Page() {
           className="mr-10 flex justify-end"
         />
       ),
-      hideColumn: !hasWritePermission,
+      hideColumn: !hasWritePermission || selectedTab === 'all',
       cell: ({ row }) => (
         <div className="mr-14 flex justify-end">
           <ActionDropdown data={ActionOptions(row)} />
@@ -256,19 +286,30 @@ export default function Page() {
             ? useUserStore.getState().user?.healthPostId || ''
             : undefined,
       }),
+    enabled: selectedTab !== 'offline',
   });
 
+  const { data: offlineData, ...offlineRest } = useQuery({
+    queryKey: ['offline-clients-mutations'],
+    queryFn: () => idbPersister.getAllOfflineMutations<TClient>(),
+    enabled: selectedTab === 'offline',
+    select: (data) => {
+      return data
+        .filter((d) => getRequestingParty(d.key) === 'CLIENTS')
+        .map((d) => ({ ...d.data, key: d.key }));
+    },
+  });
   return (
     <ProtectedRoute requiredPermission={Permissions.PATIENT_RECORDS}>
       <div className="p-4">
         <DataTable
-          rest={rest}
+          rest={selectedTab === 'offline' ? offlineRest : rest}
           Tabs={
             <Tabs
               defaultValue="HealthPost"
-              className="min-w-fit cursor-pointer"
+              className="max-w-fit cursor-pointer"
             >
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="flex w-full justify-start gap-2">
                 <TabsTrigger
                   value="HealthPost"
                   className="px-3"
@@ -279,6 +320,12 @@ export default function Page() {
                 <TabsTrigger value="All" onClick={() => setSelectedTab('all')}>
                   {ct('allPatients')}
                 </TabsTrigger>
+                <TabsTrigger
+                  value="offline"
+                  onClick={() => setSelectedTab('offline')}
+                >
+                  {t('offline')}
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           }
@@ -287,33 +334,42 @@ export default function Page() {
             label: t('SidebarItems.clientsRegistration'),
             className: 'text-2xl font-bold mb-4',
           }}
-          data={(data?.data as TClient[]) || []}
+          data={
+            selectedTab === 'offline'
+              ? offlineData || []
+              : (data?.data as TClient[]) || []
+          }
           utils={{
             showPagination: true,
             hasExport: true,
           }}
-          addButton={
-            hasWritePermission && {
-              label: ct('addNewClient'),
-              icon: <Plus className="mr-2 h-4 w-4" />,
-              onClick: () =>
-                setIsOpenAddModal({
-                  isOpen: true,
-                  client: undefined,
-                }),
+          addButton={{
+            label: ct('addNewClient'),
+            icon: <Plus className="mr-2 h-4 w-4" />,
+            onClick: () =>
+              setIsOpenAddModal({
+                isOpen: true,
+                client: undefined,
+                defaultValues: undefined,
+              }),
+          }}
+          onRowClick={(row) => {
+            if (selectedTab !== 'offline') {
+              router.push(`/hp/clients/${row.original.id}`);
             }
-          }
-          onRowClick={() => () => {}}
+          }}
         />
       </div>
       {isOpenAddModal.isOpen && (
         <ClientRegistrationModal
           clientId={isOpenAddModal?.client?.id}
           isOpen={isOpenAddModal.isOpen}
+          defaultValues={isOpenAddModal.defaultValues}
           handleExit={() =>
             setIsOpenAddModal((prev) => ({
               client: undefined,
               isOpen: !prev.isOpen,
+              defaultValues: undefined,
             }))
           }
         />

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { HealthPostStructuredData } from '@/components/StructuredData';
 
 export default function Home() {
@@ -75,7 +76,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <a
+            <Link
               className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 items-center justify-center gap-2 rounded-lg border border-solid border-transparent px-6 text-base font-medium transition-colors"
               href="/admin/dashboard"
               rel="noopener noreferrer"
@@ -86,23 +87,16 @@ export default function Home() {
                 width={20}
                 height={20}
               />
-              Go to Dashboard
-            </a>
-            <a
+              <span>Go to Dashboard</span>
+            </Link>
+            <Link
               className="border-border hover:bg-accent hover:text-accent-foreground flex h-12 w-full items-center justify-center rounded-lg border border-solid px-6 text-base font-medium transition-colors sm:w-auto"
               href="/patients"
-              rel="noopener noreferrer"
             >
               Manage Patients
-            </a>
+            </Link>
           </div>
         </main>
-
-        <footer className="text-muted-foreground row-start-3 flex flex-wrap items-center justify-center gap-[24px] text-sm">
-          <span>© 2025 HealthPost Management System</span>
-          <span>•</span>
-          <span>Nepal Healthcare Solutions</span>
-        </footer>
       </div>
     </>
   );

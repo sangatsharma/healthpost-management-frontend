@@ -93,6 +93,22 @@ export const fetchStaffInfo = async ({ staffId }: { staffId?: string }) => {
   }
 };
 
+export const fetchHealthPostStaffInfo = async ({
+  healthPostId,
+}: {
+  healthPostId: string;
+}) => {
+  if (!healthPostId) {
+    throw new Error('Health Post ID is required');
+  }
+  const res = await api.get<TResponse<TUser[] | TUser>>(
+    `/healthpost/${healthPostId}/staff`,
+  );
+  if (res.data) {
+    return res.data;
+  }
+};
+
 export const mutateStaffInfo = async ({
   staffId,
   data,
@@ -156,7 +172,7 @@ export const mutateClientInfo = async ({
   if (method === 'POST') {
     res = await api.post<TStaffSchema>(url, data);
   } else if (method === 'PUT') {
-    res = await api.put<TStaffSchema>(`${url}/${clientId}`, data);
+    res = await api.put<TStaffSchema>(`${url}`, data);
   } else if (method === 'DELETE') {
     res = await api.delete<TStaffSchema>(`${url}/${clientId}`);
   } else {
