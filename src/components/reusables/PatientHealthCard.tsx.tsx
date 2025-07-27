@@ -20,6 +20,7 @@ import FetchWrapper from './fetch-wrapper';
 import Loading from '../ui/loading';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { useLocale } from 'use-intl';
+import QRCode from 'react-qr-code';
 
 export const PatientHealthCard = React.forwardRef<
   HTMLDivElement,
@@ -98,7 +99,7 @@ export const PatientHealthCard = React.forwardRef<
         id={data.htmlElementId}
         ref={ref}
       >
-        <div className="w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
+        <div className="w-full max-w-4xl overflow-hidden rounded-lg bg-white pt-3 shadow-lg">
           <div className="flex w-full items-center justify-between p-1 px-4">
             <Image
               src={
@@ -122,13 +123,23 @@ export const PatientHealthCard = React.forwardRef<
                 <p>Email: {healthPostInfo?.email}</p>
               </div>
             </div>
-            <Image
+            {/* <Image
               src="https://play-lh.googleusercontent.com/Byl6BHzEv7tWDGa5QUgztneq8C8TGYelu8ywVMTTRUH2e9keboyLqL4YhmzaU3vjgA=w240-h480-rw"
               alt="Medical Center Logo"
               width={72}
               height={72}
               className="h-28 w-28 object-fill"
-            />
+            /> */}
+            <div className="border-[8px] !border-[#009788] p-1">
+              <QRCode
+                value={`https://www.healthsync.me/${locale}/report?reportId=${data.id}&reportType=opd&patientId=${data.patientId}`}
+                size={72}
+                bgColor="#ffffff"
+                fgColor="#000000"
+                className="h-28 w-28 object-fill"
+                title="Patient QR Code"
+              />
+            </div>
           </div>
 
           <fieldset className="m-1 space-y-6 rounded-sm border-t-2 border-gray-200 p-4 text-sm">
@@ -202,28 +213,28 @@ export const PatientHealthCard = React.forwardRef<
             {/* Vital Signs Section */}
             <div className="border border-gray-200">
               <div className="grid grid-cols-7 border-b">
-                {renderVitalRow(t('bp'), data.Vitals?.bp || 'N/A' + ' mmHg')}
+                {renderVitalRow(t('bp'), (data.vitals?.bp || 'N/A') + ' mmHg')}
                 {renderVitalRow(
                   t('pulse'),
-                  data.Vitals?.pulse || 'N/A' + ' bpm',
+                  (data.vitals?.pulse || 'N/A') + ' bpm',
                 )}
                 {renderVitalRow(
                   t('temperature'),
-                  data.Vitals?.temperature || 'N/A' + ' °F',
+                  (data.vitals?.temperature || 'N/A') + ' °F',
                 )}
                 {renderVitalRow(
                   t('respiration'),
-                  data.Vitals?.respiration || 'N/A' + ' rpm',
+                  (data.vitals?.respiration || 'N/A') + ' rpm',
                 )}
                 {renderVitalRow(
                   t('weight'),
-                  data.Vitals?.weight || 'N/A' + ' kg',
+                  (data.vitals?.weight || 'N/A') + ' kg',
                 )}
                 {renderVitalRow(
                   t('height'),
-                  data.Vitals?.height || 'N/A' + ' cm',
+                  (data.vitals?.height || 'N/A') + ' cm',
                 )}
-                {renderVitalRow(t('mucus'), data.Vitals?.mucus || 'N/A')}
+                {renderVitalRow(t('mucus'), data.vitals?.mucus || 'N/A')}
               </div>
             </div>
 
@@ -345,7 +356,11 @@ export const PatientHealthCard = React.forwardRef<
                       params: staffInfo?.fullName,
                     })}
                   </p>
-                  <p className="my-1">{t('ticketDetails.examinier')}</p>
+
+                  <p className="my-1">
+                    {tenum(`userRole.${staffInfo?.role}`) ||
+                      t('ticketDetails.examinier')}
+                  </p>
                 </div>
               </div>
               <p className="text-center">{t('ticketDetails.reminder')}</p>

@@ -11,6 +11,7 @@ import {
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { TOpd } from '@/types/user.types';
 import { useRef } from 'react';
+import { Printer } from 'lucide-react';
 
 export function TicketSheet({
   open,
@@ -41,7 +42,9 @@ export function TicketSheet({
               onClick={() => {
                 print();
               }}
+              className="flex items-center gap-2 px-3"
             >
+              <Printer />
               Print
             </Button>
           </SheetTitle>

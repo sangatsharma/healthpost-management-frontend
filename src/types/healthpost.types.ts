@@ -1,4 +1,4 @@
-import { Status, TUser } from './user.types';
+import { Status, TOpd, TUser } from './user.types';
 
 export type THealthPost = {
   status: Status;
@@ -41,3 +41,44 @@ export type TPatientData = {
   advice: string;
   user: Partial<TUser>;
 };
+
+export type TReferral = {
+  id: string;
+  staffId: string;
+  healthPostId: string;
+  referredHealthPostId: string;
+  referralReason: string | null;
+  patientId: string;
+  opdId: string;
+  referralStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
+  createdAt: string;
+  updatedAt: string;
+  staff: {
+    id: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  };
+  healthPost: {
+    id: string;
+    name: string;
+  };
+  referredHealthPost: {
+    id: string;
+    name: string;
+  };
+  patient: {
+    id: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  };
+  referralNo?: string;
+  opdVisit: Partial<TOpd>;
+};
+export enum ReferralStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
+}

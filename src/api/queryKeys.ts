@@ -24,4 +24,5 @@ export const queryKeys = {
     opds: ['opds'],
     singleOpd: (id: string) => ['opds', id],
   },
+  referral: ['referral'],
 };

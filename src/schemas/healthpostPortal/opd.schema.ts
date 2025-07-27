@@ -13,7 +13,7 @@ export const getOpdSchema = (t: TTypeFunction<'Validation'>) => {
       })
       .trim()
       .min(1, t('required')),
-    Vitals: z
+    vitals: z
       .object({
         bp: z.string().optional(),
         pulse: z.string().optional(),

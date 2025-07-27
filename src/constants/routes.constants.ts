@@ -5,16 +5,14 @@ import {
   FileText,
   Pill,
   UserCheck,
-  Settings,
-  Package,
-  Clipboard,
-  ShoppingCart,
   BarChart3,
-  DollarSign,
   TrendingUp,
   HeartPlusIcon,
   Mail,
   FileInputIcon,
+  UserCog,
+  Clock,
+  Forward,
 } from 'lucide-react';
 import { TUserType } from '@/types/user.types';
 import { TMenuItem, TTypeFunction } from '@/types/global';
@@ -30,13 +28,6 @@ export const getMenuItems = ({
     case 'HP':
       return [
         {
-          key: 'dashboard',
-          icon: Home,
-          label: t('SidebarItems.dashboard'),
-          href: `/hp/dashboard`,
-          permission: Permissions.HEALTH_POST_DASHBOARD,
-        },
-        {
           key: 'patients',
           icon: Users,
           label: t('SidebarItems.clientsRegistration'),
@@ -48,7 +39,14 @@ export const getMenuItems = ({
           icon: FileInputIcon,
           label: t('SidebarItems.opdSection'),
           href: `/hp/opd-section`,
-          permission: Permissions.LAB_RESULTS_UPLOAD,
+          permission: Permissions.PRESCRIBE_MEDICATION,
+        },
+        {
+          key: 'opd-referral-section',
+          icon: Forward,
+          label: t('SidebarItems.referrals'),
+          href: `/hp/referrals`,
+          permission: Permissions.OPD_REFERRALS,
         },
 
         {
@@ -63,7 +61,7 @@ export const getMenuItems = ({
           icon: UserCheck,
           label: t('SidebarItems.staffsmanagement'),
           href: `/hp/staffs`,
-          permission: Permissions.LAB_RESULTS_UPLOAD,
+          permission: Permissions.STAFF_MANAGEMENT,
         },
         {
           key: 'laboratory',
@@ -72,70 +70,70 @@ export const getMenuItems = ({
           href: `/hp/laboratory`,
           permission: Permissions.LAB_RESULTS_UPLOAD,
         },
-        {
-          key: 'pharmacy',
-          icon: Pill,
-          label: 'Pharmacy',
-          submenu: [
-            {
-              key: 'inventory',
-              icon: Package,
-              label: 'Inventory',
-              href: `hp/pharmacy/inventory`,
-              permission: Permissions.MEDICINE_DISPENSE,
-            },
-            {
-              key: 'prescriptions',
-              icon: Clipboard,
-              label: 'Prescriptions',
-              href: `hp/pharmacy/prescribtions`,
-              permission: Permissions.MEDICINE_DISPENSE,
-            },
-            {
-              key: 'dispensing',
-              icon: ShoppingCart,
-              label: 'Dispensing',
-              href: '/pharmacy/dispensing',
-              permission: Permissions.MEDICINE_DISPENSE,
-            },
-          ],
-        },
+        // {
+        //   key: 'pharmacy',
+        //   icon: Pill,
+        //   label: 'Pharmacy',
+        //   submenu: [
+        //     {
+        //       key: 'inventory',
+        //       icon: Package,
+        //       label: 'Inventory',
+        //       href: `hp/pharmacy/inventory`,
+        //       permission: Permissions.MEDICINE_DISPENSE,
+        //     },
+        //     {
+        //       key: 'prescriptions',
+        //       icon: Clipboard,
+        //       label: 'Prescriptions',
+        //       href: `hp/pharmacy/prescribtions`,
+        //       permission: Permissions.MEDICINE_DISPENSE,
+        //     },
+        //     {
+        //       key: 'dispensing',
+        //       icon: ShoppingCart,
+        //       label: 'Dispensing',
+        //       href: '/pharmacy/dispensing',
+        //       permission: Permissions.MEDICINE_DISPENSE,
+        //     },
+        //   ],
+        // },
 
-        {
-          key: 'reports',
-          icon: BarChart3,
-          label: 'Reports',
-          submenu: [
-            {
-              key: 'patient-reports',
-              icon: FileText,
-              label: 'Patient Reports',
-              href: '/reports/patients',
-              permission: Permissions.LAB_RESULTS_VERIFY,
-            },
-            {
-              key: 'financial-reports',
-              icon: DollarSign,
-              label: 'Financial Reports',
-              href: '/reports/financial',
-              permission: Permissions.LAB_RESULTS_VERIFY,
-            },
-            {
-              key: 'health-statistics',
-              icon: TrendingUp,
-              label: 'Health Statistics',
-              href: '/reports/statistics',
-              permission: Permissions.LAB_RESULTS_VERIFY,
-            },
-          ],
-        },
-        {
-          key: 'settings',
-          icon: Settings,
-          label: 'Settings',
-          href: '/settings',
-          permission: Permissions.SYSTEM_CONFIG,
-        },
+        // {
+        //   key: 'reports',
+        //   icon: BarChart3,
+        //   label: 'Reports',
+        //   submenu: [
+        //     {
+        //       key: 'patient-reports',
+        //       icon: FileText,
+        //       label: 'Patient Reports',
+        //       href: '/reports/patients',
+        //       permission: Permissions.LAB_RESULTS_VERIFY,
+        //     },
+        //     {
+        //       key: 'financial-reports',
+        //       icon: DollarSign,
+        //       label: 'Financial Reports',
+        //       href: '/reports/financial',
+        //       permission: Permissions.LAB_RESULTS_VERIFY,
+        //     },
+        //     {
+        //       key: 'health-statistics',
+        //       icon: TrendingUp,
+        //       label: 'Health Statistics',
+        //       href: '/reports/statistics',
+        //       permission: Permissions.LAB_RESULTS_VERIFY,
+        //     },
+        //   ],
+        // },
+        // {
+        //   key: 'settings',
+        //   icon: Settings,
+        //   label: 'Settings',
+        //   href: '/settings',
+        //   permission: Permissions.SYSTEM_CONFIG,
+        // },
       ];
     case 'ADMIN':
       return [
@@ -166,31 +164,73 @@ export const getMenuItems = ({
           icon: Mail,
           label: t('User.email'),
           href: '/admin/email',
-          permission: Permissions.SYSTEM_CONFIG,
+          permission: Permissions.ADMIN_DASHBOARD,
         },
       ];
-    default:
+    case 'PATIENT':
       return [
         {
           key: 'dashboard',
           icon: Home,
-          label: 'Dashboard',
-          href: `/patient/test`,
-          permission: Permissions.PATIENT_DASHBOARD,
+          label: t('SidebarItems.dashboard'),
+          href: `/patient/dashboard`,
+          // permission: Permissions.PATIENT_DASHBOARD,
         },
         {
-          key: 'patients',
-          icon: Users,
-          label: 'Patient Records',
-          href: `/patient/records`,
-          permission: Permissions.PATIENT_RECORDS,
+          key: 'patientProfile',
+          icon: UserCog,
+          label: t('SidebarItems.profile'),
+          href: `/patient/profile`,
+          // permission: Permissions.PATIENT_RECORDS,
         },
         {
-          key: 'settings',
-          icon: Settings,
-          label: 'Settings',
-          href: `/patient/settings`,
-          permission: Permissions.SYSTEM_CONFIG,
+          key: 'patientReports',
+          icon: BarChart3,
+          label: t('SidebarItems.reports'),
+          href: `/patient/reports`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'pregnancy',
+          icon: HeartPlusIcon,
+          label: 'Pregnancy Dashboard',
+          href: `/patient/pregnancy`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'vaccinations',
+          icon: UserCheck,
+          label: 'Vaccination Records',
+          href: `/patient/vaccinations`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'chronic-conditions',
+          icon: TrendingUp,
+          label: 'Chronic Conditions',
+          href: `/patient/chronic-conditions`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'medical-history',
+          icon: FileText,
+          label: 'Medical History',
+          href: `/patient/medical-history`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'medications',
+          icon: Pill,
+          label: 'Medications',
+          href: `/patient/medications`,
+          // permission: Permissions.PATIENT_RECORDS,
+        },
+        {
+          key: 'reminders',
+          icon: Clock,
+          label: 'Reminders',
+          href: `/patient/reminders`,
+          // permission: Permissions.PATIENT_RECORDS,
         },
       ];
   }

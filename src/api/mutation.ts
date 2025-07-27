@@ -4,6 +4,8 @@ import {
   mutateClientInfo,
   mutateHealthPostInfo,
   mutateOpdInfo,
+  mutateReferals,
+  mutateReferalStatus,
   mutateStaffInfo,
 } from './queries';
 import { queryClient } from '@/lib/queryClient';
@@ -20,7 +22,7 @@ export function useHealthPostMutation({
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.healthPost.healthPosts,
+        queryKey: [queryKeys.healthPost.healthPosts],
       });
 
       onSuccess?.();
@@ -90,4 +92,44 @@ export function useOpdMutation({ onSuccess }: { onSuccess?: () => void }) {
   });
 
   return { mutateOpd, isPending };
+}
+
+export function useOpdReferalMutation({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
+  const { mutate: mutateReferal, isPending } = useMutation({
+    mutationKey: queryKeys.referral,
+    mutationFn: mutateReferals,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.referral,
+      });
+      onSuccess?.();
+    },
+  });
+
+  return { mutateReferal, isPending };
+}
+
+export function useReferalStatusMutation({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) {
+  const { mutate: mutateStatus, isPending } = useMutation({
+    mutationFn: mutateReferalStatus,
+    retry: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.referral, 'RECEIVED'],
+      });
+
+      onSuccess?.();
+    },
+  });
+
+  return { mutateStatus, isPending };
 }

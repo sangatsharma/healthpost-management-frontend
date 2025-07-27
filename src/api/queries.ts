@@ -7,9 +7,10 @@ import {
   TUser,
   TUserType,
 } from '@/types/user.types';
-import { THealthPost } from '@/types/healthpost.types';
+import { THealthPost, TReferral } from '@/types/healthpost.types';
 import { TStaffSchema } from '@/schemas/adminPortal/admin.schema';
 import { TOpdSchema } from '@/schemas/healthpostPortal/opd.schema';
+import { TReferalSchema } from '@/schemas/healthpostPortal/referral.schema';
 //function to handle user login
 export const login = async (values: {
   email: string;
@@ -208,15 +209,80 @@ export const mutateOpdInfo = async ({
   }
 };
 
-export const fetchOpds = async ({ clientId }: { clientId?: string }) => {
+export const fetchOpds = async ({ opdId }: { opdId?: string }) => {
   let res;
-  if (clientId) {
+  if (opdId) {
     res = await api.get<TResponse<TOpd[] | TOpd>>(
-      `/opd${clientId ? `/${clientId}` : ''}`,
+      `/opd${opdId ? `/${opdId}` : ''}`,
     );
   } else {
     res = await api.get<TResponse<TOpd[]>>('/opd');
   }
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const fetchPatientAllOpds = async ({
+  clientId,
+}: {
+  clientId: string;
+}) => {
+  const res = await api.get<TResponse<TOpd[]>>(`/opd/patient/${clientId}`);
+
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const mutateReferals = async ({ data }: { data: object }) => {
+  const url = `/opd-referral`;
+  const res = await api.post<TReferalSchema>(url, data);
+
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const fetchReferals = async ({
+  healthPostId,
+  type,
+}: {
+  healthPostId: string;
+  type: 'SENT' | 'RECEIVED';
+}) => {
+  if (!healthPostId) {
+    throw new Error('Health Post ID is required');
+  }
+  const res = await api.get<TResponse<TReferral[]>>(
+    `/opd-referral/healthpost/${healthPostId}?type=${type}`,
+  );
+  if (res.data) {
+    return res.data;
+  }
+};
+export const fetchReferalsByOpd = async ({ opdId }: { opdId: string }) => {
+  const res = await api.get<TResponse<TReferral>>(
+    `/opd-referral/opd${opdId ? `/${opdId}` : ''}`,
+  );
+
+  if (res.data) {
+    return res.data;
+  }
+};
+
+export const mutateReferalStatus = async ({
+  referralId,
+  status,
+}: {
+  referralId: string;
+  status: 'PENDING' | 'COMPLETED' | 'REJECTED' | 'APPROVED';
+}) => {
+  const res = await api.put<TResponse<TReferral>>(`/opd-referral/action`, {
+    referralId,
+    referalStatus: status,
+  });
+
   if (res.data) {
     return res.data;
   }

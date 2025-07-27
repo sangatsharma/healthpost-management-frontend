@@ -32,7 +32,12 @@
       "medicalhistory": "Medical History",
       "clientsRegistration": "Clients",
       "opdSection": "OPD Section",
-      "laboratory": "Laboratory"
+      "laboratory": "Laboratory",
+      "profile": "Profile",
+      "settings": "Settings",
+      "reports": "Reports",
+      "logout": "Logout",
+      "referrals": "Referals"
     },
     "HealthPost": {
       "name": "HealthPost Name",
@@ -213,7 +218,8 @@
     "clientsCreated": "New client created successfully!",
     "clientsUpdated": "Client updated successfully!",
     "clientsDeleted": "Client deleted successfully!",
-    "dataRefreshed": "Data refreshed successfully!"
+    "dataRefreshed": "Data refreshed successfully!",
+    "statusUpdated": "Status updated successfully!"
   },
 
   "FileOperations": {
@@ -294,6 +300,7 @@
     }
   },
   "OpdSection": {
+    "opd": "OPD",
     "formTitle": "OPD Registration Form",
     "formSubtitle": "Please fill out the form below to register a new OPD patient.",
     "newOpdReg": "New OPD Registration",
@@ -332,7 +339,9 @@
     "printTicket": "Print Ticket",
     "healthPostTicket": "Health Post Ticket",
     "allTickets": "All Tickets",
+    "reportType": "Report Type",
     "ticketPreview": "Ticket Preview",
+    "refer": "Refer to another health post",
     "ticketDetails": {
       "title": "Health Service Card",
       "patientName": "Patient Name",
@@ -356,6 +365,33 @@
       "treatment": "Treatment",
       "examinier": "Examiner",
       "reminder": "Please bring this card for follow-up visits and future consultations."
+    }
+  },
+  "Referral": {
+    "referPatient": "Refer {name} to {healthPost}",
+    "confirmReferal": "Are you sure you want to refer this patient to {healthPost}?",
+    "refer": "Refer",
+    "referSuccess": "Patient referred successfully!",
+    "receivedReferals": "Received Referals",
+    "sentReferals": "Sent Referals",
+    "status": "Referral Status",
+    "referredBy": "Referred By",
+    "referralDate": "Referral Date",
+    "referredHealthPost": "Referred Health Post",
+    "referralReason": "Referral Reason",
+    "referredPatient": "Referred Patient",
+    "ticketDetails": {
+      "title": "Referral/Transfer Card",
+      "referralRequest": "Referral Request",
+      "requestDetails": {
+        "afterDesignation": ", who has been receiving services from our institution, requires further treatment/services. Therefore, they are being referred to your institution ",
+        "afterHealthPost": " for the necessary support. The patient's current OPD details and medical information are included with this referral."
+      },
+      "requestFooter": "Please provide the necessary treatment and services to the referred patient.",
+      "markasCompleted": "Mark as Completed",
+      "markasPending": "Mark as Pending",
+      "markasRejected": "Mark as Rejected",
+      "markAsApproved": "Mark as Approved"
     }
   },
   "PatientProfile": {
@@ -712,6 +748,12 @@
       "BEFORE_FOOD": "Before Meal",
       "AFTER_FOOD": "After Meal",
       "ANY_TIME": "Any Time"
+    },
+    "referralStatus": {
+      "PENDING": "Pending",
+      "COMPLETED": "Completed",
+      "REJECTED": "Rejected",
+      "APPROVED": "Approved"
     }
   }
 }

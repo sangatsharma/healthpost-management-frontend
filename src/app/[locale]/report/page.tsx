@@ -1,13 +1,9 @@
-'use client';
-
-import { useUserStore } from '@/zustand/useUserStore';
+import Report from './_components/Report';
 
 export default function Page() {
-  const { user } = useUserStore();
-
   return (
     <div>
-      <h1>Report Page:{user?.fullName.firstName}</h1>
+      <Report />
     </div>
   );
 }

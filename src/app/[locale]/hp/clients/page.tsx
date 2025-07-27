@@ -181,7 +181,7 @@ export default function Page() {
                 : ''
             }
             classNames={{
-              titleClassName: 'text-lg font-semibold',
+              titleClassName: 'text-lg font-medium',
             }}
           />
         );
@@ -195,7 +195,6 @@ export default function Page() {
       id: 'gender',
       hideColumn: true,
     },
-
     {
       map: {
         key: t('User.casteType'),
@@ -343,16 +342,18 @@ export default function Page() {
             showPagination: true,
             hasExport: true,
           }}
-          addButton={{
-            label: ct('addNewClient'),
-            icon: <Plus className="mr-2 h-4 w-4" />,
-            onClick: () =>
-              setIsOpenAddModal({
-                isOpen: true,
-                client: undefined,
-                defaultValues: undefined,
-              }),
-          }}
+          addButton={
+            hasWritePermission && {
+              label: ct('addNewClient'),
+              icon: <Plus className="mr-2 h-4 w-4" />,
+              onClick: () =>
+                setIsOpenAddModal({
+                  isOpen: true,
+                  client: undefined,
+                  defaultValues: undefined,
+                }),
+            }
+          }
           onRowClick={(row) => {
             if (selectedTab !== 'offline') {
               router.push(`/hp/clients/${row.original.id}`);

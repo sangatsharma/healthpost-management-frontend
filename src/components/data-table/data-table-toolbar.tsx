@@ -12,6 +12,8 @@ import { useRouter } from '@/i18n/navigation';
 import { queryClient } from '@/lib/queryClient';
 import { toast } from 'sonner';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { useHasPermission } from '@/hooks/useHasPermission';
+import { Permissions } from '@/zustand/permissions';
 
 interface DataTableToolbarProps<TData> {
   table?: Table<TData>;
@@ -39,6 +41,9 @@ export function DataTableToolbar<TData>({
   const [showSearch, setShowSearch] = useState(false);
   const t = useTypedTranslations('GeneralPages');
   const tToast = useTypedTranslations('Toast');
+
+  const { hasReadPermission } = useHasPermission(Permissions.DATA_EXPORT);
+
   useEffect(() => {
     if (showSearch && ref.current) {
       ref.current?.focus();
@@ -107,7 +112,7 @@ export function DataTableToolbar<TData>({
             {addButton.label}
           </Button>
         )}
-        {hasExport && (
+        {hasExport && hasReadPermission && (
           <Button
             variant={'outline'}
             onClick={() => setSaveModal?.((prev) => !prev)}

@@ -1,14 +1,11 @@
-import { Metadata } from 'next';
-import { pageMetadata } from '@/lib/metadata';
-
-export function generateMetadata(): Metadata {
-  return pageMetadata.patients();
-}
+'use client';
+import type React from 'react';
+import { ProtectedPatientRoute } from './_components/PatientPortalLayout';
 
 export default function PatientLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <ProtectedPatientRoute>{children}</ProtectedPatientRoute>;
 }

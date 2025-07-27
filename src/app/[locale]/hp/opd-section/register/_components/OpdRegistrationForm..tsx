@@ -73,7 +73,7 @@ export default function OpdRegistrationForm() {
         ),
       ),
       patientId: '',
-      Vitals: {
+      vitals: {
         bp: '',
         pulse: '',
         temperature: '',
@@ -316,98 +316,98 @@ export default function OpdRegistrationForm() {
             <div className="col-span-4 grid w-full grid-cols-7 gap-4 pt-2">
               <FormField
                 control={form.control}
-                name="Vitals.bp"
+                name="vitals.bp"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('bp') + ' (mmHg)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('bp')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.bp}
+                      errors={formState.errors.vitals?.bp}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.pulse"
+                name="vitals.pulse"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('pulse') + ' (bpm)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('pulse')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.pulse}
+                      errors={formState.errors.vitals?.pulse}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.temperature"
+                name="vitals.temperature"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('temperature') + ' (°F)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('temperature')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.temperature}
+                      errors={formState.errors.vitals?.temperature}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.respiration"
+                name="vitals.respiration"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('respiration') + ' (breaths/min)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('respiration')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.respiration}
+                      errors={formState.errors.vitals?.respiration}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.height"
+                name="vitals.height"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('height') + ' (cm)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('height')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.height}
+                      errors={formState.errors.vitals?.height}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.weight"
+                name="vitals.weight"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('weight') + ' (kg)'}>
                     <Input
                       {...field}
                       placeholder={tOpd('weight')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.weight}
+                      errors={formState.errors.vitals?.weight}
                     />
                   </FormWrapper>
                 )}
               />
               <FormField
                 control={form.control}
-                name="Vitals.mucus"
+                name="vitals.mucus"
                 render={({ field, formState }) => (
                   <FormWrapper label={tOpd('mucus')}>
                     <Input
                       {...field}
                       placeholder={tOpd('mucus')}
                       className="!w-full flex-1"
-                      errors={formState.errors.Vitals?.mucus}
+                      errors={formState.errors.vitals?.mucus}
                     />
                   </FormWrapper>
                 )}

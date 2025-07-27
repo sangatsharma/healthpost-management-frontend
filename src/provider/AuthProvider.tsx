@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   useEffect(() => {
     if (user.isLoggedIn && pathname.includes('/login')) {
-      router.replace(`/${portal?.toLowerCase() || 'hp'}/dashboard`);
+      router.replace(`/${portal?.toLowerCase() || 'hp'}`);
       return;
     }
     if (typeof window !== 'undefined' && !navigator.onLine) {

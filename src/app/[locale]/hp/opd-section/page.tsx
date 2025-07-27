@@ -21,13 +21,14 @@ import { useQuery } from '@tanstack/react-query';
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRouter } from '@/i18n/navigation';
-import { TicketSheet } from './_components/ticketSheet';
+import { TicketSheet } from './_components/OpdTicketSheet';
 import { useHasPermission } from '@/hooks/useHasPermission';
 import { Permissions } from '@/zustand/permissions';
 import { idbPersister } from '@/lib/idbPersister';
 import { useGlobalAlert } from '@/hooks/useGlobalAlert';
 import { toast } from 'sonner';
 import { queryClient } from '@/lib/queryClient';
+import { ReferalModal } from './_components/ReferModal';
 export default function Page() {
   const [selectedTab, setSelectedTab] = useState<
     'healthpost' | 'all' | 'offline'
@@ -35,6 +36,10 @@ export default function Page() {
   const [sheet, setSheet] = useState({
     open: false,
     data: null as TOpd | null,
+  });
+  const [isOpen, setIsOpen] = useState({
+    opd: null as TOpd | null,
+    open: false,
   });
   const t = useTypedTranslations('GeneralPages');
   const topd = useTypedTranslations('OpdSection');
@@ -59,6 +64,20 @@ export default function Page() {
         });
       },
     },
+    ...(selectedTab === 'healthpost'
+      ? [
+          {
+            name: topd('refer'),
+            icon: Plus,
+            onClick: () => {
+              setIsOpen({
+                opd: row.original,
+                open: true,
+              });
+            },
+          },
+        ]
+      : []),
     ...(selectedTab === 'offline'
       ? [
           {
@@ -237,6 +256,7 @@ export default function Page() {
           <ActionDropdown data={ActionOptions(row)} />
         </div>
       ),
+      hideColumn: !hasWritePermission,
       enableHiding: false,
     },
   ];
@@ -350,6 +370,16 @@ export default function Page() {
           open={sheet.open}
           onOpenChange={() => {
             setSheet(() => ({ data: null, open: false }));
+          }}
+        />
+      )}
+
+      {isOpen?.opd && (
+        <ReferalModal
+          opd={isOpen.opd}
+          isOpen={isOpen.open}
+          handleExit={() => {
+            setIsOpen(() => ({ opd: null, open: false }));
           }}
         />
       )}

@@ -33,6 +33,8 @@ import { TClient } from '@/types/user.types';
 import { cleanNepaliDate } from '@/lib/utils';
 import { ImagePreviewer } from './ImagePreviewer';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
+import { differenceInYears } from 'date-fns';
+import { BSToAD } from 'bikram-sambat-js';
 
 interface PatientProfilePageProps {
   view: 'patient' | 'healthpost';
@@ -192,7 +194,10 @@ export function PatientProfile({ view, patientId }: PatientProfilePageProps) {
                   <div className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-slate-800">
                     <Clock className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                     <span className="text-lg font-medium dark:text-gray-200">
-                      {10} {t('fields.years')}
+                      {data?.dobBs
+                        ? differenceInYears(Date.now(), BSToAD(data?.dobBs))
+                        : 0}{' '}
+                      {t('fields.years')}
                     </span>
                   </div>
                 </div>
