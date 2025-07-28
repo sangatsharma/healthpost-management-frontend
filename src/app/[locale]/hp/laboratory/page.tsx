@@ -120,8 +120,8 @@ const commonParameters = {
   CBC: [
     { parameter: 'Hemoglobin', unit: 'g/dL', referenceRange: '12.0-15.5' },
     { parameter: 'Hematocrit', unit: '%', referenceRange: '36-46' },
-    { parameter: 'WBC Count', unit: '×10³/μL', referenceRange: '4.5-11.0' },
-    { parameter: 'Platelet Count', unit: '×10³/μL', referenceRange: '150-450' },
+    { parameter: 'WBC Count', unit: 'x10³/μL', referenceRange: '4.5-11.0' },
+    { parameter: 'Platelet Count', unit: 'x10³/μL', referenceRange: '150-450' },
   ],
   BMP: [
     { parameter: 'Glucose', unit: 'mg/dL', referenceRange: '70-100' },
@@ -246,7 +246,7 @@ export default function LabReportSystem() {
     <div className="container mx-auto max-w-6xl p-6">
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold text-gray-900">
-          Lab Report Management System
+          Lab Report Management
         </h1>
         <p className="text-gray-600">
           Manage lab test requests and report entries for HealthPost

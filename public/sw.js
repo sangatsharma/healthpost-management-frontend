@@ -49,9 +49,6 @@ const staticAssets = [
   '/images/trash.png',
   '/images/txt-file.png',
   '/images/xls.png',
-
-  // Do NOT include Next.js build files here, as they may not exist at install time
-  // We Are Handling caching of _next/static assets dynamically in the fetch event
 ];
 
 // Install event - cache static resources

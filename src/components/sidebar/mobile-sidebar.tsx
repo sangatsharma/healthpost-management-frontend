@@ -52,7 +52,7 @@ export default function MobileSidebar({
                       HealthPost
                     </h1>
                     <p className="text-xs font-semibold text-emerald-600">
-                      Medical System
+                      Management System
                     </p>
                   </div>
                 </div>

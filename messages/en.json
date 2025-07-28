@@ -8,6 +8,8 @@
     "submit": "Submit",
     "images": "Images",
     "signature": "Signature",
+    "sidebarTitle": "HealthPost",
+    "sidebarSubtitle": "Management System",
     "search": "Search",
     "select": "Select",
     "welcome": "Welcome, {name}!",

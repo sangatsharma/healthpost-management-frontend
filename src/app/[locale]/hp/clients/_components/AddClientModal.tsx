@@ -66,10 +66,10 @@ export default function ClientRegistrationModal({
       setIsSubmitted(true);
       if (defaultValues) {
         await idbPersister.removeOfflineMutation(defaultValues?.key);
-        queryClient.invalidateQueries({
-          queryKey: ['offline-clients-mutations'],
-        });
       }
+      queryClient.invalidateQueries({
+        queryKey: ['offline-clients-mutations'],
+      });
     },
   });
 
@@ -236,6 +236,7 @@ export default function ClientRegistrationModal({
         weight: `${defaultValues.weight}`,
         citizenshipNumber: `${defaultValues.citizenshipNumber}`,
         nationalId: `${defaultValues.nationalId}`,
+        nshiNumber: ` `,
       };
       form.reset(normalized);
     }

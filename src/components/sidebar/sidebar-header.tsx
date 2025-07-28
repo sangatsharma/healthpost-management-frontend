@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Stethoscope } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 interface SidebarHeaderProps {
   isCollapsed: boolean;
@@ -14,11 +15,13 @@ export default function SidebarHeader({
   isCollapsed,
   onToggle,
 }: SidebarHeaderProps) {
+  const t = useTypedTranslations('GeneralPages');
+
   return (
-    <div className="border-border flex h-24 items-center justify-between overflow-clip border-b p-4">
+    <div className="border-border flex h-24 items-center justify-between overflow-clip border-b p-1">
       <div
         className={cn(
-          'flex items-center space-x-3 overflow-x-clip p-4 transition-all duration-300',
+          'flex items-center space-x-3 overflow-x-clip p-2 transition-all duration-300',
           isCollapsed ? 'hidden' : 'flex',
         )}
       >
@@ -26,9 +29,11 @@ export default function SidebarHeader({
           <Stethoscope className="h-6 w-6 text-white" />
         </div>
         <div>
-          <h1 className="text-foreground text-xl font-bold">HealthPost</h1>
+          <h1 className="text-foreground text-xl font-bold">
+            {t('sidebarTitle')}
+          </h1>
           <p className="text-xs font-semibold tracking-wide text-emerald-600">
-            Medical System
+            {t('sidebarSubtitle')}
           </p>
         </div>
       </div>

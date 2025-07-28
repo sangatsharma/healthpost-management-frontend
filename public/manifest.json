@@ -2,7 +2,7 @@
   "name": "Health Post management System",
   "short_name": "HPMS",
   "description": "Healthpost Management & Patient Reports System",
-  "start_url": "/",
+  "start_url": "/np",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
