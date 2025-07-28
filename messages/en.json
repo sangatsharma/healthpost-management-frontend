@@ -26,6 +26,13 @@
       "title": "Access Denied",
       "description": "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
     },
+    "errorPage": {
+      "title": "Whoops! There Was a Problem",
+      "subtitle": " An unexpected error occurred. Try refreshing the page.",
+      "description": "We're sorry, but something went wrong. Please try again later or contact support if the issue persists.",
+      "returnHome": "Return to Home",
+      "tryAgain": "Try Again"
+    },
     "SidebarItems": {
       "dashboard": "Dashboard",
       "healthpost": "Health Posts",

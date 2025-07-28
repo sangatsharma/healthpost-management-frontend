@@ -1,9 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React, { Component, ErrorInfo } from 'react';
 
 import { Button } from './ui/button';
+import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 
 type TProps = {
   children: React.ReactNode;
@@ -37,13 +37,22 @@ export class ErrorBoundary extends Component<TProps, TState> {
     };
   }
 
-  componentDidCatch(_: Error, info: ErrorInfo): void {
+  componentDidCatch(error: Error, info: ErrorInfo): void {
     this.errorDetail = info;
+
+    // Log error for debugging
+    console.error('ErrorBoundary caught an error:', error);
+    console.error('Error info:', info);
+
+    // Update state with error info
+    this.setState({
+      errorInfo: info,
+    });
   }
 
   render(): React.ReactNode {
     if (this.state.hasError) {
-      <ClientErrorPage />;
+      return <ClientErrorPage />;
     }
 
     return this.props.children;
@@ -51,29 +60,26 @@ export class ErrorBoundary extends Component<TProps, TState> {
 }
 
 const ClientErrorPage = () => {
-  const pathname = usePathname();
-
+  const t = useTypedTranslations('GeneralPages');
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center p-4 text-center">
-      <h1 className="mt-6 mb-4 text-4xl font-semibold text-gray-800">
-        Whoops! There Was a Problem
+      <h1 className="mt-6 mb-6 text-5xl font-semibold text-gray-400">
+        {t('errorPage.title')}
       </h1>
 
-      <p className="mb-8 w-full max-w-xl text-lg text-gray-600">
-        Sorry for the inconvenience. <br />
-        An unexpected error occurred. Try refreshing the page. <br />
-        If the issue persists, please contact support and let us know what you
-        were doing when the error occurred.
+      <p className="mb-8 w-full max-w-xl text-xl text-gray-400">
+        {t('errorPage.subtitle')} <br />
+        {t('errorPage.description')}
       </p>
 
       <div className="!mt-2 flex items-center justify-center gap-2">
-        <Link href={pathname}>
-          <Button className="!px-6">Try Again</Button>
-        </Link>
+        <Button onClick={() => window.location.reload()} className="!px-6">
+          {t('errorPage.tryAgain')}
+        </Button>
 
         <Link href="/">
           <Button variant="outline" className="!px-2">
-            Return to Home
+            {t('errorPage.returnHome')}
           </Button>
         </Link>
       </div>
