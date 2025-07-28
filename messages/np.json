@@ -284,7 +284,8 @@
       "motherName": "आमाको पूरा नाम",
       "guardianName": "अभिभावकको पूरा नाम",
       "maritalStatus": "वैवाहिक स्थिति",
-      "spouseName": "पति/पत्नीको पूरा नाम"
+      "spouseName": "पति/पत्नीको पूरा नाम",
+      "familyHistory": "पारिवारिक चिकित्सा इतिहास"
     },
     "healthInfo": {
       "title": "स्वास्थ्य र बैंकिङ जानकारी",

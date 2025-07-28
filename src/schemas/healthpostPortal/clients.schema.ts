@@ -217,6 +217,12 @@ export const getFamilyInfoSchema = (t: TTypeFunction<'Validation'>) => {
       message: t('required'),
       required_error: t('required'),
     }),
+    familyHistory: basicValidator({
+      translationFunction: t,
+      required: false,
+      minLength: 2,
+      maxLength: 100,
+    }),
   });
 };
 

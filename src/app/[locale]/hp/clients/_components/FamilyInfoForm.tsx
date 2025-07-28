@@ -72,6 +72,15 @@ export default function FamilyInfoForm() {
           </FormWrapper>
         )}
       />
+      <FormField
+        control={form.control}
+        name="familyHistory"
+        render={({ field }) => (
+          <FormWrapper label={t('familyInfo.familyHistory')}>
+            <Input {...field} placeholder={t('familyInfo.familyHistory')} />
+          </FormWrapper>
+        )}
+      />
     </div>
   );
 }

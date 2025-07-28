@@ -128,6 +128,7 @@ export default function ClientRegistrationModal({
     bloodGroup: singleData?.bloodGroup || undefined,
     healthPostId: singleData?.healthPostId || user?.healthPostId || '',
     emergencyContact: singleData?.emergencyContact || '',
+    familyHistory: singleData?.familyHistory || '',
   };
 
   const form = useForm<TClientSchema>({
@@ -172,6 +173,7 @@ export default function ClientRegistrationModal({
       profileImage: [],
       email: '',
       emergencyContact: '',
+      familyHistory: '',
     },
     values:
       clientId && !isLoading && isSuccess && singleData
@@ -236,7 +238,7 @@ export default function ClientRegistrationModal({
         weight: `${defaultValues.weight}`,
         citizenshipNumber: `${defaultValues.citizenshipNumber}`,
         nationalId: `${defaultValues.nationalId}`,
-        nshiNumber: ` `,
+        nshiNumber: `null`,
       };
       form.reset(normalized);
     }
