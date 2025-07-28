@@ -254,7 +254,11 @@ export function ImagePreviewer({ children, className }: ImagePreviewerProps) {
   const hasMultipleImages = images.length > 1;
 
   return (
-    <>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div
         className={className}
         onClick={(e) => {
@@ -315,6 +319,6 @@ export function ImagePreviewer({ children, className }: ImagePreviewerProps) {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
