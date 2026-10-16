@@ -106,11 +106,6 @@ src/
   middleware.ts           locale detection and redirect
 ```
 
-## Known limitations
-
-- Offline records are synced by staff from the **Offline** tab rather than automatically in the background.
-- Some patient-portal and dashboard screens still use sample data while their APIs are completed.
-- There is no automated test suite yet.
 
 ## Team
 
