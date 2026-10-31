@@ -12,13 +12,13 @@ Built as a final-year **B.E. Software Engineering** project at Pokhara Universit
 
 Many health posts work on unreliable or intermittent internet. The app is designed so staff can keep working when the connection drops:
 
-| Layer | What it does |
-| --- | --- |
-| **Service worker** (`public/sw.js`) | Pre-caches the app shell and every portal route in both locales; serves pages network-first with a cache fallback, so the UI still loads offline. Registered after login in `ClientWrapper.tsx`. |
-| **Persisted query cache** (`src/lib/idbPersister.ts`) | The TanStack Query cache is persisted to **IndexedDB** for 24 hours, so previously loaded clients, OPD visits and referrals remain readable offline. |
-| **Offline write queue** (`src/api/axios.ts`) | An Axios request interceptor detects `POST/PUT/PATCH/DELETE` calls made while offline and stores them in an IndexedDB `offline-mutations` store instead of failing. `FormData` (including file uploads) is serialized to base64 so attachments survive the queue. |
-| **Review & sync** | Queued client registrations and OPD records appear under an **Offline** tab on their pages. Once back online, staff review each record and sync it to the server; synced entries are removed from the queue. |
-| **Connectivity indicator** (`OfflineIndicator.tsx`) | Shows online / offline state so staff know when they are working from the local queue. |
+| Layer                                                 | What it does                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Service worker** (`public/sw.js`)                   | Pre-caches the app shell and every portal route in both locales; serves pages network-first with a cache fallback, so the UI still loads offline. Registered after login in `ClientWrapper.tsx`.                                                                  |
+| **Persisted query cache** (`src/lib/idbPersister.ts`) | The TanStack Query cache is persisted to **IndexedDB** for 24 hours, so previously loaded clients, OPD visits and referrals remain readable offline.                                                                                                              |
+| **Offline write queue** (`src/api/axios.ts`)          | An Axios request interceptor detects `POST/PUT/PATCH/DELETE` calls made while offline and stores them in an IndexedDB `offline-mutations` store instead of failing. `FormData` (including file uploads) is serialized to base64 so attachments survive the queue. |
+| **Review & sync**                                     | Queued client registrations and OPD records appear under an **Offline** tab on their pages. Once back online, staff review each record and sync it to the server; synced entries are removed from the queue.                                                      |
+| **Connectivity indicator** (`OfflineIndicator.tsx`)   | Shows online / offline state so staff know when they are working from the local queue.                                                                                                                                                                            |
 
 ## Features
 
@@ -38,15 +38,15 @@ Many health posts work on unreliable or intermittent internet. The app is design
 
 ## Tech stack
 
-| Area | Tools |
-| --- | --- |
-| Framework | Next.js 15 (App Router), React 18, TypeScript |
-| UI | Tailwind CSS, shadcn/ui (Radix), lucide-react, Recharts, Tiptap |
-| Data | TanStack Query (with IndexedDB persistence via `idb`), Axios, TanStack Table |
-| State & forms | Zustand, React Hook Form, Zod |
-| i18n & locale | next-intl, bikram-sambat-js, nepali-datepicker-reactjs |
-| Export | jsPDF, jspdf-autotable, react-export-table-to-excel |
-| Tooling | ESLint, Prettier, Husky (lint-staged, commit-message check, pre-push lint and build) |
+| Area          | Tools                                                                                |
+| ------------- | ------------------------------------------------------------------------------------ |
+| Framework     | Next.js 15 (App Router), React 18, TypeScript                                        |
+| UI            | Tailwind CSS, shadcn/ui (Radix), lucide-react, Recharts, Tiptap                      |
+| Data          | TanStack Query (with IndexedDB persistence via `idb`), Axios, TanStack Table         |
+| State & forms | Zustand, React Hook Form, Zod                                                        |
+| i18n & locale | next-intl, bikram-sambat-js, nepali-datepicker-reactjs                               |
+| Export        | jsPDF, jspdf-autotable, react-export-table-to-excel                                  |
+| Tooling       | ESLint, Prettier, Husky (lint-staged, commit-message check, pre-push lint and build) |
 
 ## Getting started
 
@@ -63,6 +63,10 @@ Create a `.env` file in the project root:
 ```env
 # Base URL of the backend API, including the /api prefix
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
+
+# Public URL of this frontend, encoded in printed report QR codes
+# (defaults to https://healthpost.vercel.app)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 Run it:
@@ -75,13 +79,13 @@ npm run dev      # http://localhost:3000, redirects to /en or /np
 
 ### Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format with Prettier |
+| Command          | Description                |
+| ---------------- | -------------------------- |
+| `npm run dev`    | Start the dev server       |
+| `npm run build`  | Production build           |
+| `npm run start`  | Serve the production build |
+| `npm run lint`   | Run ESLint                 |
+| `npm run format` | Format with Prettier       |
 
 ## Project structure
 
@@ -106,12 +110,11 @@ src/
   middleware.ts           locale detection and redirect
 ```
 
-
 ## Team
 
-| Member | Role |
-| --- | --- |
-| [Sangat Sharma](https://github.com/sangatsharma) | Frontend lead: architecture, offline support, portals, i18n |
-| [Saurav Dhakal](https://github.com/sauravdhakal12) | Backend API |
-| [Sudip KC](https://github.com/sudipkc3) | Frontend contributor |
-| [Sandesh Baral](https://github.com/Sandesh-baral) | Frontend contributor |
+| Member                                             | Role                                                        |
+| -------------------------------------------------- | ----------------------------------------------------------- |
+| [Sangat Sharma](https://github.com/sangatsharma)   | Frontend lead: architecture, offline support, portals, i18n |
+| [Saurav Dhakal](https://github.com/sauravdhakal12) | Backend API                                                 |
+| [Sudip KC](https://github.com/sudipkc3)            | Frontend contributor                                        |
+| [Sandesh Baral](https://github.com/Sandesh-baral)  | Frontend contributor                                        |

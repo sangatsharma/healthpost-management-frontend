@@ -194,3 +194,7 @@ export function base64ToFile(base64: string, name: string, type: string): File {
 
   return new File([ab], name, { type });
 }
+
+export function filterStringNull(input?: string): string {
+  return input?.toLowerCase() === 'null' ? '' : (input ?? '');
+}

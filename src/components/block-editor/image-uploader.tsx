@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/popover';
 import { Alert, AlertDescription } from '../ui/alert';
 
-const DEFAULT_UPLOAD_ENDPOINT = 'https://api.healthsync.me/api/common/u';
+const DEFAULT_UPLOAD_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}/common/u`;
 const DEFAULT_MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 export function ImageUploader({

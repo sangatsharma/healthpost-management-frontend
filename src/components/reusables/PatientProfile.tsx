@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 import FetchWrapper from './fetch-wrapper';
 import { TClient } from '@/types/user.types';
-import { cleanNepaliDate } from '@/lib/utils';
+import { cleanNepaliDate, filterStringNull } from '@/lib/utils';
 import { ImagePreviewer } from './ImagePreviewer';
 import { useTypedTranslations } from '@/hooks/useTypedTranslations';
 import { differenceInYears } from 'date-fns';
@@ -96,7 +96,9 @@ export function PatientProfile({ view, patientId }: PatientProfilePageProps) {
             <div className="flex-1 space-y-4 text-center md:text-left">
               <div>
                 <h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-400 dark:to-purple-400">
-                  {data?.firstName} {data?.middleName} {data?.lastName}
+                  {filterStringNull(data?.firstName)}{' '}
+                  {filterStringNull(data?.middleName)}{' '}
+                  {filterStringNull(data?.lastName)}
                 </h1>
                 <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
                   {t('patientCode')}: {data?.patientCode}
@@ -649,7 +651,9 @@ export function PatientProfile({ view, patientId }: PatientProfilePageProps) {
             </div>
             <div className="flex-1">
               <h1 className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl font-bold text-transparent dark:from-indigo-400 dark:to-blue-400">
-                {data?.firstName} {data?.middleName} {data?.lastName}
+                {filterStringNull(data?.firstName)}{' '}
+                {filterStringNull(data?.middleName)}
+                {filterStringNull(data?.lastName)}
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-300">
                 ID: {data?.patientCode}

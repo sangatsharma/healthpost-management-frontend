@@ -132,7 +132,7 @@ export const PatientHealthCard = React.forwardRef<
             /> */}
             <div className="border-[8px] !border-[#009788] p-1">
               <QRCode
-                value={`https://www.healthsync.me/${locale}/report?reportId=${data.id}&reportType=opd&patientId=${data.patientId}`}
+                value={`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthpost.vercel.app'}/${locale}/report?reportId=${data.id}&reportType=opd&patientId=${data.patientId}`}
                 size={72}
                 bgColor="#ffffff"
                 fgColor="#000000"
